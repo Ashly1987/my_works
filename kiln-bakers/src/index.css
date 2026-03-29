@@ -87,6 +87,43 @@ a {
   gap: 10px;
 }
 
+.sidebar-footer {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-footer .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar-user-chip {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-user-chip strong {
+  font-size: 0.78rem;
+  color: #a14c1e;
+}
+
+.sidebar-user-chip span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .nav-item {
   display: flex;
   align-items: center;
@@ -542,6 +579,64 @@ th {
   font-size: 0.83rem;
 }
 
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.auth-tab {
+  border: 1px solid #ffd0b4;
+  background: #fff8f3;
+  color: #9a4d22;
+  border-radius: 10px;
+  padding: 9px 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: #fff;
+  border-color: transparent;
+}
+
+.auth-page-wrap {
+  min-height: calc(100vh - var(--header-h));
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(460px, 94vw);
+}
+
+.admin-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.admin-link-card {
+  border: 1px solid #f3dac7;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fff, #fff4ea);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  color: #a14d1f;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.admin-link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -676,6 +771,16 @@ th {
     overflow-x: auto;
     gap: 8px;
     padding-bottom: 4px;
+  }
+
+  .sidebar-footer {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 8px;
+  }
+
+  .sidebar-user-chip {
+    display: none;
   }
 
   .nav-item {

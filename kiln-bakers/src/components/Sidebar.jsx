@@ -1,11 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
+  Lock,
+  LogOut,
   ShoppingBag,
   LayoutGrid,
   ClipboardList,
   BarChart2,
   Settings,
 } from "lucide-react";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
   { to: "/", label: "Menu / Billing", Icon: ShoppingBag },
@@ -16,6 +20,20 @@ const links = [
 ];
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const { user, isAdmin, signOut } = useAuth();
+  const visibleLinks = isAdmin ? links : links.filter((l) => l.to === "/");
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message || "Failed to sign out");
+    }
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -23,7 +41,7 @@ export default function Sidebar() {
         <span>Bakery POS System</span>
       </div>
       <nav className="sidebar-nav">
-        {links.map(({ to, label, Icon }) => (
+        {visibleLinks.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -35,6 +53,27 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      <div className="sidebar-footer">
+        {user ? (
+          <>
+            <div className="sidebar-user-chip">
+              <strong>{isAdmin ? "Admin" : "Guest"}</strong>
+              <span>{user.email}</span>
+            </div>
+            <button className="btn btn-outline" onClick={handleSignOut}>
+              <LogOut size={15} /> Sign Out
+            </button>
+          </>
+        ) : (
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate("/login")}
+          >
+            <Lock size={15} /> Admin Login
+          </button>
+        )}
+      </div>
     </aside>
   );
 }

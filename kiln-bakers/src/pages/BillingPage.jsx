@@ -6,8 +6,10 @@ import { formatCurrency, computeBill } from "../utils/format";
 import Topbar from "../components/Topbar";
 import QRModal from "../components/QRModal";
 import PrintableBill from "../components/PrintableBill";
+import AuthModal from "../components/AuthModal";
 import { Minus, Plus, X, Printer, QrCode, ShoppingCart } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 export default function BillingPage() {
   const [products, setProducts] = useState([]);
@@ -26,8 +28,11 @@ export default function BillingPage() {
   const [showQR, setShowQR] = useState(false);
   const [lastOrder, setLastOrder] = useState(null);
   const [showPrint, setShowPrint] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingCheckoutAction, setPendingCheckoutAction] = useState(null);
 
   const { cart, addToCart, removeFromCart, updateQty, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const loadData = async () => {
@@ -66,6 +71,13 @@ export default function BillingPage() {
       toast.error("Cart is empty");
       return;
     }
+
+    if (!isAuthenticated) {
+      setPendingCheckoutAction(payNow);
+      setShowAuthModal(true);
+      return;
+    }
+
     try {
       const order = await orderService.add({
         items: cart.map((i) => ({
@@ -339,6 +351,21 @@ export default function BillingPage() {
             order={lastOrder}
             settings={settings}
             onClose={() => setShowPrint(false)}
+          />
+        )}
+
+        {showAuthModal && (
+          <AuthModal
+            onClose={() => {
+              setShowAuthModal(false);
+              setPendingCheckoutAction(null);
+            }}
+            onSuccess={() => {
+              if (pendingCheckoutAction !== null) {
+                handleCheckout(pendingCheckoutAction);
+              }
+              setPendingCheckoutAction(null);
+            }}
           />
         )}
       </div>

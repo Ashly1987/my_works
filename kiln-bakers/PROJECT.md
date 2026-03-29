@@ -34,13 +34,16 @@ kiln-bakers/
 │   ├── assets/
 │   │   └── hero.png
 │   ├── components/
+│   │   ├── AuthModal.jsx        # Checkout sign-in / signup modal
 │   │   ├── PrintableBill.jsx    # Printable/PDF bill layout
 │   │   ├── ProductForm.jsx      # Add / edit product modal form
+│   │   ├── ProtectedRoute.jsx   # Admin-only route guard
 │   │   ├── QRModal.jsx          # UPI QR code payment modal
 │   │   ├── Sidebar.jsx          # Left navigation sidebar
 │   │   ├── Topbar.jsx           # Page top header bar
 │   │   └── WhatsAppButton.jsx   # Floating WhatsApp chat button
 │   ├── context/
+│   │   ├── AuthContext.jsx      # Supabase auth + role state + temp admin login
 │   │   └── CartContext.jsx      # Global cart state (useReducer)
 │   ├── data/
 │   │   ├── seedProducts.js      # 14 default bakery products (auto-seeded)
@@ -48,7 +51,9 @@ kiln-bakers/
 │   ├── lib/
 │   │   └── supabaseClient.js    # Supabase singleton client
 │   ├── pages/
+│   │   ├── AdminDashboard.jsx   # Admin landing page with quick stats
 │   │   ├── BillingPage.jsx      # Menu + cart + checkout (main POS screen)
+│   │   ├── LoginPage.jsx        # Public auth page for admin/guest sign-in
 │   │   ├── OrdersPage.jsx       # Full order history + printable bills
 │   │   ├── ProductsPage.jsx     # Product catalogue manager (CRUD)
 │   │   ├── ReportsPage.jsx      # Monthly revenue reports + bar chart
@@ -130,9 +135,47 @@ These are read by `src/lib/supabaseClient.js` via `import.meta.env`.
 | `whatsapp_number`           | text         | With country code e.g. `+91 98765 43210` |
 | `created_at` / `updated_at` | timestamptz  |                                          |
 
+#### `profiles`
+
+| Column                      | Type        | Notes                              |
+| --------------------------- | ----------- | ---------------------------------- |
+| `id`                        | uuid PK     | References `auth.users(id)`        |
+| `role`                      | text        | `guest` / `admin`, default `guest` |
+| `created_at` / `updated_at` | timestamptz | Auto timestamps                    |
+
 ### RLS Policies
 
-Row Level Security is enabled on all three tables with open `allow_all_*` policies — suitable for a single-owner POS. For multi-tenant or public-facing use, replace with auth-scoped policies.
+Row Level Security is enabled on `products`, `orders`, and `app_settings` with open `allow_all_*` policies — suitable for a single-owner POS.
+
+`profiles` uses authenticated-user policies so each signed-in user can read only their own role row.
+
+### Auth and Role Setup
+
+- Guests can browse the billing/menu page without signing in.
+- Guests are prompted to sign in only when they try to place an order.
+- Admin-only routes are protected in the UI: `/admin`, `/products`, `/orders`, `/reports`, `/settings`.
+- New signups are always created as `guest`.
+- Admin promotion is manual by updating the `profiles.role` value in Supabase.
+- Signed-in sessions auto-logout after 5 minutes of inactivity.
+- Session state is revalidated when the browser tab becomes active again, so cleared sessions are logged out automatically.
+
+### Auth Trigger
+
+`supabase/schema.sql` now creates a `handle_new_user()` trigger on `auth.users`.
+
+On every Supabase signup:
+
+- a `profiles` row is inserted automatically
+- `role` defaults to `guest`
+
+### Temporary Local Admin Login
+
+For development, the app also supports a temporary local admin login:
+
+- username: `admin`
+- password: `admin`
+
+This bypass does not depend on Supabase and stores a local session flag in browser storage. Replace it before production use.
 
 ### First-Run Auto-Seeding
 
@@ -171,29 +214,48 @@ All data access is async, using the Supabase JS client. Column names are snake_c
 ### `/` — Billing (Main POS)
 
 - Displays the product grid (menu tiles, smaller image thumbnails)
+- Public route; guests can browse without logging in
 - Add items to cart; apply discount; select payment method (Cash / UPI)
+- If the user is not signed in, checkout opens `AuthModal.jsx` first
 - UPI triggers a QR modal (`QRModal.jsx`) with live UPI deep-link QR
 - Checkout creates an order in Supabase and clears the cart
 
+### `/login` — Auth Page
+
+- Public sign-in / signup screen
+- Sign in supports Supabase guest/admin users and the temporary `admin/admin` local admin login
+- Signup always creates guest accounts
+- Admin users are redirected to `/admin` after sign-in
+
+### `/admin` — Admin Dashboard
+
+- Admin-only landing page after successful admin sign-in
+- Shows today's order count and revenue
+- Provides quick links to products, orders, reports, and settings
+
 ### `/products` — Product Manager
 
+- Admin-only route
 - Full CRUD for the product catalogue
 - `ProductForm.jsx` modal for add / edit
 - Toggle availability on/off per product
 
 ### `/orders` — Order History
 
+- Admin-only route
 - Lists all past orders with totals, payment method, and status
 - Print / export individual bills as PDF via `PrintableBill.jsx` + jsPDF
 
 ### `/reports` — Monthly Reports
 
+- Admin-only route
 - Month/year picker filters orders via `orderService.getByMonth()`
 - Summary stats: total revenue, order count, average order value
 - Bar chart (Recharts) showing daily revenue for the selected month
 
 ### `/settings` — Settings
 
+- Admin-only route
 - Store name, address, phone
 - GST / tax rate (applied globally at checkout)
 - UPI ID + merchant name (used by QR modal)
@@ -205,11 +267,34 @@ All data access is async, using the Supabase JS client. Column names are snake_c
 
 ### `Sidebar.jsx`
 
-Static nav with `NavLink` active-state highlighting. Links to all 5 routes.
+Role-aware navigation.
+
+- Guests see only `Menu / Billing`
+- Signed-out users see an `Admin Login` button
+- Signed-in admins see all admin routes plus sign out
 
 ### `Topbar.jsx`
 
-Page title bar rendered at the top of each page.
+Page title bar rendered at the top of each page. Also shows current signed-in account and role.
+
+### `AuthContext.jsx`
+
+Central auth/session layer.
+
+- Restores Supabase session on load
+- Fetches user role from `profiles`
+- Supports temporary local admin login (`admin` / `admin`)
+- Automatically logs users out after 5 minutes of inactivity
+- Revalidates the current session on focus, visibility change, and storage updates
+- Exposes `signIn`, `signUp`, `signOut`, `isAuthenticated`, `isAdmin`
+
+### `ProtectedRoute.jsx`
+
+Blocks admin-only pages and redirects non-admin users to `/login`.
+
+### `AuthModal.jsx`
+
+Displayed from the billing page when a guest tries to place an order. Allows sign in or guest account creation without leaving checkout.
 
 ### `CartContext.jsx`
 
@@ -268,19 +353,30 @@ cp .env.example .env
 # 3. Set up the database (run once in Supabase SQL Editor)
 # → Copy and paste the contents of supabase/schema.sql
 
-# 4. Start dev server
+# 4. Optional: for full Supabase role-based admin users,
+# update profiles.role to 'admin' for the required account in Supabase Dashboard
+
+# 5. Start dev server
 npm run dev
 # → http://localhost:5173
 
-# 5. Production build
+# 6. Production build
 npm run build
 ```
+
+### Default Access Modes
+
+- Guest browsing: open the app and use `/`
+- Temporary admin login: sign in with `admin` / `admin`
+- Supabase-backed guest account: create account from the login page or checkout modal
 
 ---
 
 ## Known Limitations / Future Improvements
 
-- **No authentication** — RLS policies are open; any anon user with the URL can read/write. Add Supabase Auth + user-scoped policies for production.
+- **UI-only admin protection** — Admin pages are blocked in the React app, but `products`, `orders`, and `app_settings` still use open RLS policies. Tighten database policies before production.
+- **Temporary local admin bypass** — `admin/admin` is for development convenience only and should be removed before production.
+- **Client-side inactivity timeout only** — Auto logout currently runs in the frontend; add server-side token/session enforcement if stricter control is required.
 - **No real-time sync** — Multiple POS terminals won't auto-update. Add Supabase Realtime subscriptions.
 - **Single store** — `app_settings` is a single-row config (id = 1); not designed for multi-branch.
 - **Image URLs only** — Product images are stored as URLs, not uploaded files. Add Supabase Storage for file uploads.

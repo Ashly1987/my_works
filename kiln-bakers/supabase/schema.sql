@@ -39,6 +39,13 @@ create table if not exists app_settings (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  role text not null default 'guest' check (role in ('guest', 'admin')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- If the table already exists, add the column (safe to run multiple times):
 alter table app_settings add column if not exists whatsapp_number text not null default '';
 
@@ -51,6 +58,26 @@ on conflict (id) do nothing;
 alter table products enable row level security;
 alter table orders enable row level security;
 alter table app_settings enable row level security;
+alter table profiles enable row level security;
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (id, role)
+  values (new.id, 'guest')
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
 
 do $$
 begin
@@ -62,5 +89,16 @@ begin
   end if;
   if not exists (select 1 from pg_policies where tablename = 'app_settings' and policyname = 'allow_all_settings') then
     create policy allow_all_settings on app_settings for all using (true) with check (true);
+  end if;
+  if not exists (select 1 from pg_policies where tablename = 'profiles' and policyname = 'users_can_select_own_profile') then
+    create policy users_can_select_own_profile on profiles
+      for select to authenticated
+      using (auth.uid() = id);
+  end if;
+  if not exists (select 1 from pg_policies where tablename = 'profiles' and policyname = 'users_can_update_own_profile') then
+    create policy users_can_update_own_profile on profiles
+      for update to authenticated
+      using (auth.uid() = id)
+      with check (auth.uid() = id);
   end if;
 end $$;
