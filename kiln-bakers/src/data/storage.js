@@ -27,6 +27,8 @@ const mapProductFromDb = row => ({
 const mapOrderFromDb = row => ({
   id: row.id,
   billNo: row.bill_no,
+  orderedById: row.ordered_by_id || null,
+  orderedByEmail: row.ordered_by_email || '',
   items: row.items,
   subtotal: Number(row.subtotal),
   discountAmt: Number(row.discount_amt),
@@ -146,6 +148,8 @@ export const orderService = {
     const payload = {
       id: `ord_${Date.now()}`,
       bill_no: nextBillNo(),
+      ordered_by_id: order.orderedById || null,
+      ordered_by_email: order.orderedByEmail || null,
       items: order.items,
       subtotal: order.subtotal,
       discount_amt: order.discountAmt,

@@ -21,6 +21,7 @@ Kiln Bakers is a bakery POS application for billing, product management, order t
 - After sign-in, you will be redirected to the admin area.
 - Admin can access Products, Orders, Reports, and Settings.
 - Admin sessions are also logged out automatically after 5 minutes of inactivity.
+- In Order History, admins can see which signed-in user placed each order.
 
 ## Local Setup
 
@@ -34,3 +35,4 @@ Kiln Bakers is a bakery POS application for billing, product management, order t
 - New signups are always created as guest accounts.
 - The `admin/admin` login is a temporary development shortcut and should be replaced before production.
 - The app re-checks session state when the tab becomes active again, so cleared sessions are logged out automatically.
+- Each created order stores the signed-in user ID and email for audit tracking.

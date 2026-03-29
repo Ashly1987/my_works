@@ -107,19 +107,21 @@ These are read by `src/lib/supabaseClient.js` via `import.meta.env`.
 
 #### `orders`
 
-| Column           | Type          | Notes                             |
-| ---------------- | ------------- | --------------------------------- |
-| `id`             | text PK       | `ord_<timestamp>`                 |
-| `bill_no`        | text unique   | `KB-<datetime>`                   |
-| `items`          | jsonb         | Array of cart items               |
-| `subtotal`       | numeric(10,2) |                                   |
-| `discount_amt`   | numeric(10,2) |                                   |
-| `tax_amt`        | numeric(10,2) |                                   |
-| `total`          | numeric(10,2) |                                   |
-| `tax_rate`       | numeric(5,2)  | Snapshot of rate at time of order |
-| `payment_status` | text          | `pending` / `paid`                |
-| `payment_method` | text          | `Cash` / `UPI`                    |
-| `created_at`     | timestamptz   |                                   |
+| Column             | Type          | Notes                             |
+| ------------------ | ------------- | --------------------------------- |
+| `id`               | text PK       | `ord_<timestamp>`                 |
+| `bill_no`          | text unique   | `KB-<datetime>`                   |
+| `ordered_by_id`    | uuid          | `auth.users(id)` of order creator |
+| `ordered_by_email` | text          | Email/identifier snapshot         |
+| `items`            | jsonb         | Array of cart items               |
+| `subtotal`         | numeric(10,2) |                                   |
+| `discount_amt`     | numeric(10,2) |                                   |
+| `tax_amt`          | numeric(10,2) |                                   |
+| `total`            | numeric(10,2) |                                   |
+| `tax_rate`         | numeric(5,2)  | Snapshot of rate at time of order |
+| `payment_status`   | text          | `pending` / `paid`                |
+| `payment_method`   | text          | `Cash` / `UPI`                    |
+| `created_at`       | timestamptz   |                                   |
 
 #### `app_settings`
 
@@ -244,6 +246,7 @@ All data access is async, using the Supabase JS client. Column names are snake_c
 
 - Admin-only route
 - Lists all past orders with totals, payment method, and status
+- Shows who placed each order (`ordered_by_email`)
 - Print / export individual bills as PDF via `PrintableBill.jsx` + jsPDF
 
 ### `/reports` — Monthly Reports

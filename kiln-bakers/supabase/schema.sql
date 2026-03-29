@@ -15,6 +15,8 @@ create table if not exists products (
 create table if not exists orders (
   id text primary key,
   bill_no text not null unique,
+  ordered_by_id uuid references auth.users(id) on delete set null,
+  ordered_by_email text,
   items jsonb not null,
   subtotal numeric(10,2) not null default 0,
   discount_amt numeric(10,2) not null default 0,
@@ -48,6 +50,8 @@ create table if not exists profiles (
 
 -- If the table already exists, add the column (safe to run multiple times):
 alter table app_settings add column if not exists whatsapp_number text not null default '';
+alter table orders add column if not exists ordered_by_id uuid references auth.users(id) on delete set null;
+alter table orders add column if not exists ordered_by_email text;
 
 insert into app_settings (id, store_name, store_address, store_phone, tax_rate, upi_id, upi_name, whatsapp_number)
 values (1, 'Kiln Bakers', '12, Baker Street, Chennai – 600001', '+91 98765 43210', 5, 'kilnbakers@upi', 'Kiln Bakers', '')

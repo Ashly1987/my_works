@@ -32,7 +32,7 @@ export default function BillingPage() {
   const [pendingCheckoutAction, setPendingCheckoutAction] = useState(null);
 
   const { cart, addToCart, removeFromCart, updateQty, clearCart } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     const loadData = async () => {
@@ -80,6 +80,8 @@ export default function BillingPage() {
 
     try {
       const order = await orderService.add({
+        orderedById: user?.id ?? null,
+        orderedByEmail: user?.email ?? null,
         items: cart.map((i) => ({
           id: i.id,
           name: i.name,

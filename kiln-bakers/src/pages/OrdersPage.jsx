@@ -46,6 +46,7 @@ export default function OrdersPage() {
                 <tr>
                   <th>Bill No</th>
                   <th>Date &amp; Time</th>
+                  <th>Ordered By</th>
                   <th>Items</th>
                   <th>Subtotal</th>
                   <th>Total</th>
@@ -57,14 +58,14 @@ export default function OrdersPage() {
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan={8} className="empty-state">
+                    <td colSpan={9} className="empty-state">
                       Loading orders...
                     </td>
                   </tr>
                 )}
                 {!loading && orders.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="empty-state">
+                    <td colSpan={9} className="empty-state">
                       No orders yet.
                     </td>
                   </tr>
@@ -76,6 +77,7 @@ export default function OrdersPage() {
                       <td style={{ whiteSpace: "nowrap" }}>
                         {formatDateTime(o.createdAt)}
                       </td>
+                      <td>{o.orderedByEmail || "—"}</td>
                       <td>
                         {o.items.length} item{o.items.length > 1 ? "s" : ""}
                       </td>
