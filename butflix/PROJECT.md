@@ -1,0 +1,60 @@
+# PROJECT: Butflix Architecture Notes
+
+## Goal
+
+Deliver a 1-2 week MVP with stable architecture that supports incremental feature growth.
+
+## Architecture
+
+- Domain services hold business logic:
+  - identity service
+  - catalog service
+  - activity service
+- Protocol adapters:
+  - REST adapter for browser app
+  - MCP adapter for tool-based access
+- Rule: adapter parity. REST and MCP return equivalent payload shapes where applicable.
+
+## Layer map
+
+1. UI layer (React app)
+2. Orchestration layer (service clients + route handlers)
+3. Domain layer (business logic)
+4. Infrastructure layer (data store, runtime env)
+
+## Current modules
+
+- Identity: backend module retained, frontend login flow temporarily disabled
+- Catalog: list/detail with title-only search and 25-item load-more pagination in browse UI
+- Catalog source strategy: external API adapter (optional) with local-store fallback
+- Playback: watch screen with stream metadata, poster-based external links, and back navigation
+- Activity: backend module retained, frontend history temporarily disabled
+
+## Current frontend mode
+
+- Guest mode is enabled.
+- Protected routes and login UI are removed for now.
+- History page shows a placeholder until auth is re-enabled.
+
+## Incremental growth order
+
+1. Extend domain service
+2. Expose via REST adapter
+3. Expose via MCP adapter
+4. Wire frontend UI
+5. Add contract checks
+
+## External source integration pattern
+
+1. External source adapter maps third-party payloads into domain catalog shape.
+2. Domain catalog service calls external source first.
+3. On source failure, service falls back to local store data.
+4. REST and MCP adapters stay unchanged because they depend on domain service only.
+
+## Immediate backlog
+
+1. Watchlist domain and UI
+2. Admin add/remove content
+3. Metrics and request tracing
+4. Rate limiting and refresh token flow
+5. Move from file store to PostgreSQL

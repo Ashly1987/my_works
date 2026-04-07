@@ -1,0 +1,36 @@
+{
+  "users": [],
+  "content": [
+    {
+      "id": "m1",
+      "title": "The Last Orbit",
+      "description": "A retired pilot returns for one final mission around a decaying station.",
+      "genre": "Sci-Fi",
+      "duration": 6120,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80",
+      "streamUrl": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "createdAt": "2026-04-07T11:20:04.274Z"
+    },
+    {
+      "id": "m2",
+      "title": "Monsoon Street",
+      "description": "Three strangers meet during one endless rainstorm and rewrite their futures.",
+      "genre": "Drama",
+      "duration": 5460,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80",
+      "streamUrl": "https://www.w3schools.com/html/movie.mp4",
+      "createdAt": "2026-04-07T11:20:04.275Z"
+    },
+    {
+      "id": "m3",
+      "title": "Zero Hour Heist",
+      "description": "A crew races against sunrise to pull off a citywide digital robbery.",
+      "genre": "Action",
+      "duration": 5880,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80",
+      "streamUrl": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "createdAt": "2026-04-07T11:20:04.275Z"
+    }
+  ],
+  "watchEvents": []
+}
