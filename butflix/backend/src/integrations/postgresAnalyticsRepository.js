@@ -19,40 +19,40 @@ function createPostgresAnalyticsRepository({ connectionString }) {
   });
 
   let initPromise = null;
+  let lastError = null;
 
-  function ensureInit() {
-    if (!initPromise) {
-      // Migration: rename old 'count' column (SQL keyword conflict) to 'request_count'
-      initPromise = pool
-        .query(
-          `SELECT column_name FROM information_schema.columns
-           WHERE table_schema = 'public'
-           AND table_name = 'analytics_counters'
-           AND column_name = 'count'`,
+  async function ensureInit() {
+    if (initPromise) return initPromise;
+
+    initPromise = (async () => {
+      // Drop old table if it has the reserved 'count' column name that caused silent SQL failures
+      await pool.query(`
+        DO $$
+        BEGIN
+          IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name   = 'analytics_counters'
+              AND column_name  = 'count'
+          ) THEN
+            DROP TABLE public.analytics_counters;
+          END IF;
+        END $$
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS public.analytics_counters (
+          scope            TEXT        NOT NULL,
+          key              TEXT        NOT NULL,
+          request_count    BIGINT      NOT NULL DEFAULT 0,
+          last_recorded_at TIMESTAMPTZ NULL,
+          PRIMARY KEY (scope, key)
         )
-        .then((result) => {
-          if (result.rows.length > 0) {
-            return pool.query(
-              `ALTER TABLE public.analytics_counters RENAME COLUMN "count" TO request_count`,
-            );
-          }
-        })
-        .then(() =>
-          pool.query(`
-            CREATE TABLE IF NOT EXISTS public.analytics_counters (
-              scope TEXT NOT NULL,
-              key TEXT NOT NULL,
-              request_count BIGINT NOT NULL DEFAULT 0,
-              last_recorded_at TIMESTAMPTZ NULL,
-              PRIMARY KEY (scope, key)
-            )
-          `),
-        )
-        .catch((err) => {
-          initPromise = null;
-          throw err;
-        });
-    }
+      `);
+    })().catch((err) => {
+      initPromise = null;
+      lastError = err.message;
+      throw err;
+    });
 
     return initPromise;
   }
@@ -62,23 +62,26 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
     const dayKey = getDayKey(now);
     const monthKey = getMonthKey(now);
-    const timestamp = now.toISOString();
+    const ts = now.toISOString();
 
-    await pool.query(
-      `
-      INSERT INTO public.analytics_counters (scope, key, request_count, last_recorded_at)
-      VALUES
-        ('day', $1, 1, $3::timestamptz),
-        ('month', $2, 1, $3::timestamptz),
-        ('global', '__total__', 1, $3::timestamptz)
+    const upsert = `
+      INSERT INTO public.analytics_counters AS t (scope, key, request_count, last_recorded_at)
+      VALUES ($1, $2, 1, $3::timestamptz)
       ON CONFLICT (scope, key)
-      DO UPDATE
-      SET
-        request_count = analytics_counters.request_count + 1,
-        last_recorded_at = EXCLUDED.last_recorded_at;
-    `,
-      [dayKey, monthKey, timestamp],
-    );
+      DO UPDATE SET
+        request_count    = t.request_count + 1,
+        last_recorded_at = EXCLUDED.last_recorded_at
+    `;
+
+    try {
+      await pool.query(upsert, ["day",    dayKey,      ts]);
+      await pool.query(upsert, ["month",  monthKey,    ts]);
+      await pool.query(upsert, ["global", "__total__", ts]);
+      lastError = null;
+    } catch (err) {
+      lastError = err.message;
+      throw err;
+    }
   }
 
   async function getSummary(now) {
@@ -113,7 +116,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       }
     });
 
-    return {
+    const result = {
       totalRequests,
       today: {
         date: dayKey,
@@ -127,6 +130,8 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       monthly,
       lastRecordedAt,
     };
+    if (lastError) result._error = lastError;
+    return result;
   }
 
   return {
