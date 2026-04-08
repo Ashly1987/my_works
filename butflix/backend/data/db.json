@@ -35,14 +35,14 @@
   "watchEvents": [],
   "analytics": {
     "requests": {
-      "total": 28,
+      "total": 44,
       "daily": {
-        "2026-04-08": 28
+        "2026-04-08": 44
       },
       "monthly": {
-        "2026-04": 28
+        "2026-04": 44
       },
-      "lastRecordedAt": "2026-04-08T12:58:47.187Z"
+      "lastRecordedAt": "2026-04-08T13:23:45.281Z"
     }
   }
 }

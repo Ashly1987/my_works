@@ -133,7 +133,7 @@ a {
   flex-wrap: wrap;
 }
 
-.nav__links a {
+.nav__link {
   padding: 0.6rem 1rem;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -141,6 +141,12 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.76rem;
+}
+
+.nav__link.is-active {
+  border-color: rgba(255, 138, 61, 0.58);
+  background: rgba(255, 138, 61, 0.14);
+  color: var(--accent-soft);
 }
 
 .nav__links a:hover,
@@ -344,6 +350,50 @@ input {
   white-space: nowrap;
 }
 
+.hero__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.hero__control {
+  color: var(--accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+}
+
+.hero__select {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.08);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  min-height: 44px;
+  padding: 0.55rem 1.7rem 0.55rem 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--accent-soft) 50%),
+    linear-gradient(135deg, var(--accent-soft) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 4px),
+    calc(100% - 13px) calc(50% - 4px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+}
+
+.hero__select:focus-visible,
+.hero__search input:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgba(255, 176, 102, 0.9);
+  outline-offset: 2px;
+}
+
 .hero__hint {
   margin: 0;
   color: var(--muted);
@@ -430,6 +480,7 @@ input {
     transform 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease;
+  animation: card-reveal 400ms ease both;
 }
 
 .card:hover {
@@ -652,6 +703,28 @@ input {
   border-radius: 10px;
 }
 
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @media (max-width: 960px) {
   .nav {
     grid-template-columns: 1fr;
@@ -734,8 +807,16 @@ input {
   }
 
   .hero__search input,
-  .hero__search button {
+  .hero__search button,
+  .hero__select,
+  .hero__controls button {
     width: 100%;
+  }
+
+  .hero__controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
   }
 
   .hero__stats {
@@ -810,7 +891,7 @@ input {
     gap: 0.55rem;
   }
 
-  .nav__links a {
+  .nav__link {
     flex: 1 1 calc(50% - 0.55rem);
     text-align: center;
     padding: 0.7rem 0.85rem;

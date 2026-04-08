@@ -25,7 +25,7 @@ Deliver a 1-2 week MVP with stable architecture that supports incremental featur
 ## Current modules
 
 - Identity: backend module retained, frontend login flow temporarily disabled
-- Catalog: list/detail with title-only search and 25-item load-more pagination in browse UI
+- Catalog: list/detail with title search, infinite loading, and client-side genre filtering in browse UI
 - Catalog source strategy: external API adapter (optional) with local-store fallback
 - Playback: watch screen with stream metadata, poster-based external links, and back navigation
 - Activity: backend module retained, frontend history temporarily disabled

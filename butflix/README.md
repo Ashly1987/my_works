@@ -5,7 +5,8 @@ Butflix is a full-stack streaming MVP built with React + Express using an MCP-fi
 ## Implemented in this iteration
 
 - Guest browsing flow (authentication UI disabled for now)
-- Catalog: title-only search with 25-item pages and Load More pagination
+- Catalog: title search with 25-item pages, infinite loading, and client-side genre filtering
+- Browse controls: quick reset and mobile-friendly filter/search controls (44px touch targets)
 - Playback page: video player when source is browser-playable
 - Watch page external-source mode: clickable movie poster + source link
 - Watch page includes Back to Home navigation

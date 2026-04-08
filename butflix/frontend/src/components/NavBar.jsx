@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 export function NavBar() {
   return (
@@ -10,8 +10,22 @@ export function NavBar() {
         </Link>
       </div>
       <nav className="nav__links">
-        <Link to="/">Browse</Link>
-        <Link to="/history">History</Link>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `nav__link${isActive ? " is-active" : ""}`
+          }
+        >
+          Browse
+        </NavLink>
+        <NavLink
+          to="/history"
+          className={({ isActive }) =>
+            `nav__link${isActive ? " is-active" : ""}`
+          }
+        >
+          History
+        </NavLink>
       </nav>
       <div className="nav__status">Guest Mode</div>
     </header>

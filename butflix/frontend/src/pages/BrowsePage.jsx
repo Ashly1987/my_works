@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { VideoCard } from "../components/VideoCard";
 import { apiClient } from "../services/apiClient";
 
@@ -15,6 +15,7 @@ export function BrowsePage() {
   const [error, setError] = useState("");
   const [analytics, setAnalytics] = useState(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("all");
 
   const loadAnalytics = useCallback(async () => {
     try {
@@ -84,8 +85,33 @@ export function BrowsePage() {
     loadCatalog({ nextSearch: debouncedSearch, nextPage: 1, append: false });
   }, [debouncedSearch, loadCatalog]);
 
+  useEffect(() => {
+    setSelectedGenre("all");
+  }, [activeSearch]);
+
   const hasMore = items.length < total;
   const sentinelRef = useRef(null);
+
+  const genreOptions = useMemo(() => {
+    const uniqueGenres = new Set(
+      items
+        .map((item) => String(item.genre || "").trim())
+        .filter((genre) => genre.length > 0),
+    );
+
+    return [
+      "all",
+      ...Array.from(uniqueGenres).sort((a, b) => a.localeCompare(b)),
+    ];
+  }, [items]);
+
+  const visibleItems = useMemo(() => {
+    if (selectedGenre === "all") {
+      return items;
+    }
+
+    return items.filter((item) => item.genre === selectedGenre);
+  }, [items, selectedGenre]);
 
   const handleLoadMore = useCallback(() => {
     if (loadingMore || !hasMore) {
@@ -122,6 +148,12 @@ export function BrowsePage() {
       event.preventDefault();
       handleSearch();
     }
+  }
+
+  function handleResetFilters() {
+    setSearch("");
+    setSelectedGenre("all");
+    loadCatalog({ nextSearch: "", nextPage: 1, append: false });
   }
 
   return (
@@ -163,9 +195,34 @@ export function BrowsePage() {
                 Search
               </button>
             </div>
+
+            <div className="hero__controls">
+              <label className="hero__control" htmlFor="genre-filter">
+                Genre
+              </label>
+              <select
+                id="genre-filter"
+                value={selectedGenre}
+                onChange={(event) => setSelectedGenre(event.target.value)}
+                className="hero__select"
+              >
+                {genreOptions.map((genre) => (
+                  <option key={genre} value={genre}>
+                    {genre === "all" ? "All Genres" : genre}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className="ghost"
+                onClick={handleResetFilters}
+              >
+                Reset
+              </button>
+            </div>
             <p className="hero__hint">
-              {items.length} of {total || items.length} title
-              {(total || items.length) === 1 ? "" : "s"}
+              Showing {visibleItems.length} of {items.length} loaded title
+              {items.length === 1 ? "" : "s"}
               {activeSearch
                 ? ` matched for "${activeSearch}"`
                 : " ready to browse"}
@@ -178,12 +235,15 @@ export function BrowsePage() {
       {error ? <p className="error">{error}</p> : null}
 
       <section className="grid">
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <VideoCard key={item.id} item={item} />
         ))}
       </section>
       {!loading && !error && items.length === 0 ? (
         <p>No films matched your search.</p>
+      ) : null}
+      {!loading && !error && items.length > 0 && visibleItems.length === 0 ? (
+        <p>No loaded titles match this genre yet. Scroll to load more.</p>
       ) : null}
 
       {/* Infinite scroll sentinel */}
