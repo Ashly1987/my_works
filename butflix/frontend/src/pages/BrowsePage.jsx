@@ -14,6 +14,7 @@ export function BrowsePage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [analytics, setAnalytics] = useState(null);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   async function loadAnalytics() {
     try {
@@ -71,8 +72,16 @@ export function BrowsePage() {
   }
 
   useEffect(() => {
-    loadCatalog();
-  }, []);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    loadCatalog({ nextSearch: debouncedSearch, nextPage: 1, append: false });
+  }, [debouncedSearch]);
 
   const hasMore = items.length < total;
   const sentinelRef = useRef(null);
