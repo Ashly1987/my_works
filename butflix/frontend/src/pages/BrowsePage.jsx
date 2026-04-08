@@ -13,6 +13,16 @@ export function BrowsePage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
+  const [analytics, setAnalytics] = useState(null);
+
+  async function loadAnalytics() {
+    try {
+      const summary = await apiClient.getAnalyticsSummary();
+      setAnalytics(summary);
+    } catch {
+      setAnalytics(null);
+    }
+  }
 
   async function loadCatalog({
     nextSearch = "",
@@ -60,6 +70,7 @@ export function BrowsePage() {
 
   useEffect(() => {
     loadCatalog();
+    loadAnalytics();
   }, []);
 
   const hasMore = items.length < total;
@@ -106,24 +117,39 @@ export function BrowsePage() {
             source link or playable media is waiting.
           </p>
         </div>
-        <div className="hero__panel">
-          <div className="hero__search">
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search by title"
-            />
-            <button type="button" onClick={handleSearch}>
-              Search
-            </button>
+        <div className="hero__aside">
+          <div className="hero__stats" aria-live="polite">
+            <article className="hero__stat">
+              <p className="hero__stat-label">Daily Views</p>
+              <p className="hero__stat-value">{analytics?.today?.count || 0}</p>
+            </article>
+            <article className="hero__stat">
+              <p className="hero__stat-label">Total Views</p>
+              <p className="hero__stat-value">
+                {analytics?.totalRequests || 0}
+              </p>
+            </article>
           </div>
-          <p className="hero__hint">
-            {items.length} of {total || items.length} title
-            {(total || items.length) === 1 ? "" : "s"}
-            {activeSearch
-              ? ` matched for "${activeSearch}"`
-              : " ready to browse"}
-          </p>
+
+          <div className="hero__panel">
+            <div className="hero__search">
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search by title"
+              />
+              <button type="button" onClick={handleSearch}>
+                Search
+              </button>
+            </div>
+            <p className="hero__hint">
+              {items.length} of {total || items.length} title
+              {(total || items.length) === 1 ? "" : "s"}
+              {activeSearch
+                ? ` matched for "${activeSearch}"`
+                : " ready to browse"}
+            </p>
+          </div>
         </div>
       </section>
 

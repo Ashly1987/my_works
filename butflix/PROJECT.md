@@ -29,6 +29,7 @@ Deliver a 1-2 week MVP with stable architecture that supports incremental featur
 - Catalog source strategy: external API adapter (optional) with local-store fallback
 - Playback: watch screen with stream metadata, poster-based external links, and back navigation
 - Activity: backend module retained, frontend history temporarily disabled
+- Analytics: backend request counters for daily/monthly totals exposed via REST and MCP
 
 ## Deployment shape
 
@@ -41,9 +42,11 @@ Deliver a 1-2 week MVP with stable architecture that supports incremental featur
 ## Current production constraint
 
 - File-based storage is still used for `users`, `watchEvents`, and fallback `content`
+- File-based storage also holds lightweight analytics counters
 - Free-tier deployment uses `DATA_FILE=/tmp/db.json` so app can boot without a paid disk
 - `tmp` storage is ephemeral, so stored JSON data can reset on restart/redeploy
 - For durable data, upgrade to persistent disk and set `DATA_FILE=/var/data/db.json`
+- Analytics can be made durable without disk by setting `ANALYTICS_DATABASE_URL` to Postgres
 
 ## Current frontend mode
 

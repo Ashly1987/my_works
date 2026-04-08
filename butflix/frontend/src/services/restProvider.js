@@ -59,4 +59,8 @@ export const restProvider = {
     });
     return payload.data;
   },
+  getAnalyticsSummary: async () => {
+    const payload = await request("/api/analytics");
+    return payload.data;
+  },
 };

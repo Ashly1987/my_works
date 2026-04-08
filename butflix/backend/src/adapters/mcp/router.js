@@ -1,12 +1,13 @@
 const express = require("express");
 
-function createMcpRouter({ identityService, catalogService, activityService }) {
+function createMcpRouter({ identityService, catalogService, activityService, analyticsService }) {
   const router = express.Router();
 
   const tools = {
     "identity.register": async ({ email, password }) => identityService.register({ email, password }),
     "identity.login": async ({ email, password }) => identityService.login({ email, password }),
     "identity.validateSession": async ({ token }) => identityService.validateSession(token),
+    "analytics.getSummary": async () => analyticsService.getSummary(),
     "catalog.list": async ({ search, genre, page = 1, limit = 12 }) =>
       catalogService.listCatalog({ search, genre, page, limit }),
     "catalog.detail": async ({ contentId }) => catalogService.getContentById(contentId),

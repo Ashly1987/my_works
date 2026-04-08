@@ -228,6 +228,7 @@ input {
   gap: 1.5rem;
   align-items: end;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .hero h1 {
@@ -240,7 +241,17 @@ input {
 
 .hero__copy {
   display: grid;
+  align-content: end;
   gap: 0.9rem;
+}
+
+.hero__aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 1rem;
+  padding-top: 5rem;
 }
 
 .hero__lede {
@@ -252,7 +263,8 @@ input {
 }
 
 .hero__panel {
-  padding: 1rem;
+  width: 100%;
+  padding: 1.1rem;
   border-radius: 26px;
   border: 1px solid var(--line);
   background: linear-gradient(
@@ -263,16 +275,57 @@ input {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
 
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  width: clamp(150px, 18vw, 220px);
+  margin-left: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.hero__stat {
+  margin: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid rgba(255, 244, 228, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 244, 228, 0.05);
+}
+
+.hero__stat-label,
+.hero__stat-value {
+  margin: 0;
+}
+
+.hero__stat-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.56rem;
+}
+
+.hero__stat-value {
+  margin-top: 0.14rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .hero__search {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.9rem;
+  margin-bottom: 0.85rem;
 }
 
 .hero__hint {
-  margin: 0.9rem 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
   letter-spacing: 0.16em;
+  line-height: 1.5;
   text-transform: uppercase;
 }
 
@@ -607,6 +660,18 @@ input {
     padding: 0.9rem;
   }
 
+  .hero__aside {
+    gap: 0.8rem;
+    align-items: stretch;
+    padding-top: 0;
+  }
+
+  .hero__stats {
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    position: static;
+  }
+
   .watch {
     max-width: 100%;
   }
@@ -646,6 +711,10 @@ input {
 
   .hero__search button {
     width: 100%;
+  }
+
+  .hero__stats {
+    grid-template-columns: 1fr;
   }
 
   .hero__hint {

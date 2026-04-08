@@ -81,6 +81,10 @@ Optional external catalog variables:
 - `EXTERNAL_CATALOG_AUTH_HEADER`
 - `EXTERNAL_CATALOG_AUTH_TOKEN`
 
+Optional persistent analytics variable:
+
+- `ANALYTICS_DATABASE_URL` (Postgres connection string)
+
 ### Important persistence note
 
 Butflix still uses a JSON file store for `users`, `watchEvents`, and fallback `content`.
@@ -96,12 +100,25 @@ For Render:
 
 If you do not attach a disk, deployment will still work, but local file data is not durable.
 
+### Persist analytics across redeploys (free-tier friendly)
+
+Butflix can persist analytics counters in Postgres even when `DATA_FILE=/tmp/db.json`.
+
+Set:
+
+- `ANALYTICS_DATABASE_URL=postgres://...`
+
+When set, backend analytics writes/reads from Postgres and survives redeploys.
+The backend auto-creates `app_private.analytics_counters` (private schema, not `public`).
+If not set, analytics falls back to local JSON file behavior.
+
 ## API endpoints (REST)
 
 - POST /api/auth/register
 - POST /api/auth/login
 - GET /api/catalog
 - GET /api/catalog/:id
+- GET /api/analytics
 - POST /api/activity/watch-events (auth)
 - GET /api/activity/history (auth)
 
@@ -155,6 +172,7 @@ Body format:
 
 Example tool names:
 
+- analytics.getSummary
 - identity.register
 - identity.login
 - identity.validateSession
@@ -162,6 +180,25 @@ Example tool names:
 - catalog.detail
 - activity.recordWatchEvent
 - activity.getHistory
+
+## Lightweight analytics
+
+Butflix now tracks lightweight backend request analytics in the JSON store.
+
+- Daily call counts
+- Monthly call counts
+- Total request count
+- Read access through REST and MCP
+
+REST:
+
+- `GET /api/analytics`
+
+MCP:
+
+- `analytics.getSummary`
+
+Note: on free-tier Render with `DATA_FILE=/tmp/db.json`, analytics reset when the service restarts or redeploys.
 
 ## Next incremental features
 

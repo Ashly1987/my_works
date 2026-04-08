@@ -39,7 +39,39 @@ const initialData = {
     },
   ],
   watchEvents: [],
+  analytics: {
+    requests: {
+      total: 0,
+      daily: {},
+      monthly: {},
+      lastRecordedAt: null,
+    },
+  },
 };
+
+function normalizeData(raw = {}) {
+  const analyticsRequests = raw.analytics?.requests || {};
+
+  return {
+    users: Array.isArray(raw.users) ? raw.users : initialData.users,
+    content: Array.isArray(raw.content) ? raw.content : initialData.content,
+    watchEvents: Array.isArray(raw.watchEvents) ? raw.watchEvents : initialData.watchEvents,
+    analytics: {
+      requests: {
+        total: Number(analyticsRequests.total || 0),
+        daily:
+          analyticsRequests.daily && typeof analyticsRequests.daily === "object"
+            ? analyticsRequests.daily
+            : {},
+        monthly:
+          analyticsRequests.monthly && typeof analyticsRequests.monthly === "object"
+            ? analyticsRequests.monthly
+            : {},
+        lastRecordedAt: analyticsRequests.lastRecordedAt || null,
+      },
+    },
+  };
+}
 
 function ensureDataFile(dataFile) {
   const absolutePath = path.resolve(dataFile);
@@ -61,11 +93,11 @@ function createStore(dataFile) {
 
   function read() {
     const raw = fs.readFileSync(absolutePath, "utf8");
-    return JSON.parse(raw);
+    return normalizeData(JSON.parse(raw));
   }
 
   function write(nextData) {
-    fs.writeFileSync(absolutePath, JSON.stringify(nextData, null, 2));
+    fs.writeFileSync(absolutePath, JSON.stringify(normalizeData(nextData), null, 2));
   }
 
   return { read, write };

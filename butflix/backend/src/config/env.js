@@ -15,6 +15,7 @@ const env = {
   externalCatalogTimeoutMs: Number(process.env.EXTERNAL_CATALOG_TIMEOUT_MS || 4000),
   externalCatalogAuthHeader: process.env.EXTERNAL_CATALOG_AUTH_HEADER || "",
   externalCatalogAuthToken: process.env.EXTERNAL_CATALOG_AUTH_TOKEN || "",
+  analyticsDatabaseUrl: process.env.ANALYTICS_DATABASE_URL || process.env.DATABASE_URL || "",
 };
 
 module.exports = { env };

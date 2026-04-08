@@ -32,6 +32,7 @@ export const mcpProvider = {
     };
   },
   getContentDetail: async (contentId) => callTool("catalog.detail", { contentId }),
+  getAnalyticsSummary: async () => callTool("analytics.getSummary"),
   recordWatchEvent: async ({ token, ...input }) =>
     callTool("activity.recordWatchEvent", {
       token,
