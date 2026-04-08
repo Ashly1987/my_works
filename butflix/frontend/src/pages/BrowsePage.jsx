@@ -60,6 +60,8 @@ export function BrowsePage() {
     } catch (err) {
       setError(err.message);
     } finally {
+      // Keep view counters in sync with backend after each tracked API request.
+      await loadAnalytics();
       if (append) {
         setLoadingMore(false);
       } else {
@@ -70,7 +72,6 @@ export function BrowsePage() {
 
   useEffect(() => {
     loadCatalog();
-    loadAnalytics();
   }, []);
 
   const hasMore = items.length < total;
