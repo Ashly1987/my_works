@@ -23,18 +23,15 @@ function createPostgresAnalyticsRepository({ connectionString }) {
   function ensureInit() {
     if (!initPromise) {
       initPromise = pool
-        .query("CREATE SCHEMA IF NOT EXISTS app_private")
-        .then(() =>
-          pool.query(`
-            CREATE TABLE IF NOT EXISTS app_private.analytics_counters (
-              scope TEXT NOT NULL,
-              key TEXT NOT NULL,
-              count BIGINT NOT NULL DEFAULT 0,
-              last_recorded_at TIMESTAMPTZ NULL,
-              PRIMARY KEY (scope, key)
-            )
-          `),
-        )
+        .query(`
+          CREATE TABLE IF NOT EXISTS public.analytics_counters (
+            scope TEXT NOT NULL,
+            key TEXT NOT NULL,
+            count BIGINT NOT NULL DEFAULT 0,
+            last_recorded_at TIMESTAMPTZ NULL,
+            PRIMARY KEY (scope, key)
+          )
+        `)
         .catch((err) => {
           initPromise = null;
           throw err;
@@ -53,7 +50,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
     await pool.query(
       `
-      INSERT INTO app_private.analytics_counters (scope, key, count, last_recorded_at)
+      INSERT INTO public.analytics_counters (scope, key, count, last_recorded_at)
       VALUES
         ('day', $1, 1, $3::timestamptz),
         ('month', $2, 1, $3::timestamptz),
@@ -74,7 +71,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
     const dayKey = getDayKey(now);
     const monthKey = getMonthKey(now);
     const { rows } = await pool.query(
-      "SELECT scope, key, count, last_recorded_at FROM app_private.analytics_counters",
+      "SELECT scope, key, count, last_recorded_at FROM public.analytics_counters",
     );
 
     const daily = {};
