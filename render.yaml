@@ -30,7 +30,8 @@ services:
       - key: EXTERNAL_CATALOG_AUTH_TOKEN
         sync: false
 
-  - type: static
+  - type: web
+    runtime: static
     name: butflix-frontend
     rootDir: butflix/frontend
     buildCommand: npm install && npm run build
