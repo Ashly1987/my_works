@@ -43,6 +43,58 @@ npm run dev
 
 App default: http://localhost:5173
 
+## Deploy
+
+This repo now includes a Render blueprint at `render.yaml` for deploying both apps from the monorepo:
+
+- `butflix-backend` → Node web service
+- `butflix-frontend` → static site built from Vite
+
+### Recommended hosting
+
+- Backend: Render web service
+- Frontend: Render static site
+
+### Deploy on Render
+
+1. Push the current branch to GitHub.
+2. In Render, create a new Blueprint and point it at this repository.
+3. Render will detect `render.yaml` and propose two services.
+4. Set these required environment variables before deploy:
+
+Backend:
+
+- `JWT_SECRET` → long random secret
+- `CORS_ORIGIN` → your frontend Render URL, for example `https://butflix-frontend.onrender.com`
+- `DATA_FILE` → keep `/var/data/db.json` if you attach a persistent disk
+
+Frontend:
+
+- `VITE_API_BASE` → your backend Render URL, for example `https://butflix-backend.onrender.com`
+
+Optional external catalog variables:
+
+- `EXTERNAL_CATALOG_ENABLED`
+- `EXTERNAL_CATALOG_BASE_URL`
+- `EXTERNAL_CATALOG_LIST_PATH`
+- `EXTERNAL_CATALOG_DETAIL_PATH`
+- `EXTERNAL_CATALOG_AUTH_HEADER`
+- `EXTERNAL_CATALOG_AUTH_TOKEN`
+
+### Important persistence note
+
+Butflix still uses a JSON file store for `users`, `watchEvents`, and fallback `content`.
+
+On most cloud platforms, the local filesystem is ephemeral. That means data can reset on redeploy or restart unless you attach persistent storage.
+
+For Render:
+
+- attach a persistent disk to the backend service
+- mount it at `/var/data`
+- keep `DATA_FILE=/var/data/db.json`
+
+If you do not attach a disk, deployment will still work, but local file data is not durable.
+
 ## API endpoints (REST)
 
 - POST /api/auth/register

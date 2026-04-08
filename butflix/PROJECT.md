@@ -30,6 +30,20 @@ Deliver a 1-2 week MVP with stable architecture that supports incremental featur
 - Playback: watch screen with stream metadata, poster-based external links, and back navigation
 - Activity: backend module retained, frontend history temporarily disabled
 
+## Deployment shape
+
+- Monorepo deployment via Render blueprint in `render.yaml`
+- Backend deploys as a Node web service from `backend/`
+- Frontend deploys as a static Vite build from `frontend/`
+- Frontend talks to backend through `VITE_API_BASE`
+- Backend CORS allow-list must include the deployed frontend origin
+
+## Current production constraint
+
+- File-based storage is still used for `users`, `watchEvents`, and fallback `content`
+- Production deploys need persistent disk storage if JSON data must survive restarts/redeploys
+- Without persistent disk, app behavior is valid but stored local data is ephemeral
+
 ## Current frontend mode
 
 - Guest mode is enabled.
