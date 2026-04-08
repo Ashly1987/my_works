@@ -86,6 +86,7 @@ a {
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding-bottom: 6rem;
 }
 
 .nav {
@@ -355,14 +356,15 @@ input {
 }
 
 .site-footer {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 30;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.6rem;
-  margin-top: auto;
   padding: 0.85rem 2rem;
   border-top: 1px solid var(--line);
   background: rgba(10, 7, 5, 0.88);
@@ -662,14 +664,15 @@ input {
 
   .hero__aside {
     gap: 0.8rem;
-    align-items: stretch;
+    align-items: flex-end;
     padding-top: 0;
   }
 
   .hero__stats {
     grid-template-columns: 1fr 1fr;
-    width: 100%;
-    position: static;
+    width: auto;
+    position: relative;
+    margin-right: 0;
   }
 
   .watch {
@@ -714,7 +717,10 @@ input {
   }
 
   .hero__stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    width: auto;
+    position: relative;
+    margin-top: 0.5rem;
   }
 
   .hero__hint {
