@@ -107,6 +107,13 @@ export function BrowsePage() {
     loadCatalog({ nextSearch: search.trim(), nextPage: 1, append: false });
   }
 
+  function handleSearchKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearch();
+    }
+  }
+
   return (
     <main className="page">
       <section className="hero">
@@ -137,6 +144,7 @@ export function BrowsePage() {
               <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
                 placeholder="Search by title"
               />
               <button type="button" onClick={handleSearch}>

@@ -87,6 +87,7 @@ a {
   display: flex;
   flex-direction: column;
   padding-bottom: 6rem;
+  padding-bottom: max(6rem, calc(6rem + env(safe-area-inset-bottom)));
 }
 
 .nav {
@@ -182,6 +183,11 @@ button {
     transform 180ms ease,
     box-shadow 180ms ease,
     filter 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button.ghost {
@@ -215,12 +221,16 @@ input {
   color: var(--text);
   padding: 0.95rem 1rem;
   font: inherit;
+  font-size: 16px;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
 }
 
 .page {
   position: relative;
   z-index: 1;
-  padding: 2rem clamp(1rem, 3vw, 2.5rem) 5rem;
+  padding: 2rem clamp(1rem, 3vw, 2.5rem) clamp(5rem, 10vb, 8rem);
 }
 
 .hero {
@@ -319,6 +329,17 @@ input {
   display: flex;
   gap: 0.9rem;
   margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.hero__search input {
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+.hero__search button {
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 
 .hero__hint {
@@ -710,8 +731,10 @@ input {
 
   .hero__search {
     flex-direction: column;
+    gap: 0.7rem;
   }
 
+  .hero__search input,
   .hero__search button {
     width: 100%;
   }
