@@ -22,11 +22,20 @@ function getRequestPath(req) {
 function requestAnalytics(analyticsService) {
   return function analyticsMiddleware(req, res, next) {
     const path = getRequestPath(req);
-    if (shouldTrackRequest(path)) {
-      Promise.resolve(analyticsService.recordRequest()).catch((error) => {
-        console.error("Failed to persist analytics request", error);
+    res.on("finish", () => {
+      if (!shouldTrackRequest(path)) {
+        return;
+      }
+
+      // Never block or impact API responses because of analytics persistence.
+      setImmediate(() => {
+        Promise.resolve()
+          .then(() => analyticsService.recordRequest())
+          .catch((error) => {
+            console.error("Failed to persist analytics request", error);
+          });
       });
-    }
+    });
 
     next();
   };

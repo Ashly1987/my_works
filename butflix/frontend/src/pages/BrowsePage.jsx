@@ -16,60 +16,61 @@ export function BrowsePage() {
   const [analytics, setAnalytics] = useState(null);
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  async function loadAnalytics() {
+  const loadAnalytics = useCallback(async () => {
     try {
       const summary = await apiClient.getAnalyticsSummary();
       setAnalytics(summary);
     } catch {
       setAnalytics(null);
     }
-  }
+  }, []);
 
-  async function loadCatalog({
-    nextSearch = "",
-    nextPage = 1,
-    append = false,
-  } = {}) {
-    if (append) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-    }
-    setError("");
-
-    try {
-      const result = await apiClient.listCatalog({
-        search: nextSearch,
-        page: nextPage,
-        limit: PAGE_SIZE,
-      });
-      const nextItems = Array.isArray(result.items) ? result.items : [];
-      const nextTotal = Number(result.meta?.total || nextItems.length);
-
-      setActiveSearch(nextSearch);
-      setPage(Number(result.meta?.page || nextPage));
-      setTotal(nextTotal);
-      setItems((previousItems) => {
-        if (!append) {
-          return nextItems;
-        }
-
-        const seenIds = new Set(previousItems.map((item) => item.id));
-        const appendedItems = nextItems.filter((item) => !seenIds.has(item.id));
-        return [...previousItems, ...appendedItems];
-      });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      // Keep view counters in sync with backend after each tracked API request.
-      await loadAnalytics();
+  const loadCatalog = useCallback(
+    async ({ nextSearch = "", nextPage = 1, append = false } = {}) => {
       if (append) {
-        setLoadingMore(false);
+        setLoadingMore(true);
       } else {
-        setLoading(false);
+        setLoading(true);
       }
-    }
-  }
+      setError("");
+
+      try {
+        const result = await apiClient.listCatalog({
+          search: nextSearch,
+          page: nextPage,
+          limit: PAGE_SIZE,
+        });
+        const nextItems = Array.isArray(result.items) ? result.items : [];
+        const nextTotal = Number(result.meta?.total || nextItems.length);
+
+        setActiveSearch(nextSearch);
+        setPage(Number(result.meta?.page || nextPage));
+        setTotal(nextTotal);
+        setItems((previousItems) => {
+          if (!append) {
+            return nextItems;
+          }
+
+          const seenIds = new Set(previousItems.map((item) => item.id));
+          const appendedItems = nextItems.filter(
+            (item) => !seenIds.has(item.id),
+          );
+          return [...previousItems, ...appendedItems];
+        });
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        // Keep view counters in sync with backend after each tracked API request.
+        await loadAnalytics();
+        if (append) {
+          setLoadingMore(false);
+        } else {
+          setLoading(false);
+        }
+      }
+    },
+    [loadAnalytics],
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -81,7 +82,7 @@ export function BrowsePage() {
 
   useEffect(() => {
     loadCatalog({ nextSearch: debouncedSearch, nextPage: 1, append: false });
-  }, [debouncedSearch]);
+  }, [debouncedSearch, loadCatalog]);
 
   const hasMore = items.length < total;
   const sentinelRef = useRef(null);
@@ -92,7 +93,7 @@ export function BrowsePage() {
     }
 
     loadCatalog({ nextSearch: activeSearch, nextPage: page + 1, append: true });
-  }, [loadingMore, hasMore, activeSearch, page]);
+  }, [loadingMore, hasMore, activeSearch, page, loadCatalog]);
 
   // Infinite scroll: trigger next page when the sentinel enters the viewport
   useEffect(() => {
@@ -135,20 +136,22 @@ export function BrowsePage() {
           </p>
         </div>
         <div className="hero__aside">
-          <div className="hero__stats" aria-live="polite">
-            <article className="hero__stat">
-              <p className="hero__stat-label">Daily Views</p>
-              <p className="hero__stat-value">{analytics?.today?.count || 0}</p>
-            </article>
-            <article className="hero__stat">
-              <p className="hero__stat-label">Total Views</p>
-              <p className="hero__stat-value">
-                {analytics?.totalRequests || 0}
-              </p>
-            </article>
-          </div>
-
           <div className="hero__panel">
+            <div className="hero__stats" aria-live="polite">
+              <article className="hero__stat">
+                <p className="hero__stat-label">Daily Views</p>
+                <p className="hero__stat-value">
+                  {analytics?.today?.count || 0}
+                </p>
+              </article>
+              <article className="hero__stat">
+                <p className="hero__stat-label">Total Views</p>
+                <p className="hero__stat-value">
+                  {analytics?.totalRequests || 0}
+                </p>
+              </article>
+            </div>
+
             <div className="hero__search">
               <input
                 value={search}
