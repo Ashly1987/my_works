@@ -113,6 +113,8 @@ export function BrowsePage() {
     return items.filter((item) => item.genre === selectedGenre);
   }, [items, selectedGenre]);
 
+  const browseReadyCount = Math.min(total || items.length, PAGE_SIZE);
+
   const handleLoadMore = useCallback(() => {
     if (loadingMore || !hasMore) {
       return;
@@ -148,12 +150,6 @@ export function BrowsePage() {
       event.preventDefault();
       handleSearch();
     }
-  }
-
-  function handleResetFilters() {
-    setSearch("");
-    setSelectedGenre("all");
-    loadCatalog({ nextSearch: "", nextPage: 1, append: false });
   }
 
   return (
@@ -195,34 +191,9 @@ export function BrowsePage() {
                 Search
               </button>
             </div>
-
-            <div className="hero__controls">
-              <label className="hero__control" htmlFor="genre-filter">
-                Genre
-              </label>
-              <select
-                id="genre-filter"
-                value={selectedGenre}
-                onChange={(event) => setSelectedGenre(event.target.value)}
-                className="hero__select"
-              >
-                {genreOptions.map((genre) => (
-                  <option key={genre} value={genre}>
-                    {genre === "all" ? "All Genres" : genre}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="button"
-                className="ghost"
-                onClick={handleResetFilters}
-              >
-                Reset
-              </button>
-            </div>
             <p className="hero__hint">
-              Showing {visibleItems.length} of {items.length} loaded title
-              {items.length === 1 ? "" : "s"}
+              {browseReadyCount} of {total || browseReadyCount} title
+              {total === 1 ? "" : "s"}
               {activeSearch
                 ? ` matched for "${activeSearch}"`
                 : " ready to browse"}
@@ -233,6 +204,24 @@ export function BrowsePage() {
 
       {loading ? <p>Loading catalog...</p> : null}
       {error ? <p className="error">{error}</p> : null}
+
+      {!loading && !error && items.length > 0 ? (
+        <section className="genre-tabs" aria-label="Filter by genre">
+          {genreOptions.map((genre) => (
+            <button
+              key={genre}
+              type="button"
+              className={`genre-tabs__item${
+                selectedGenre === genre ? " is-active" : ""
+              }`}
+              onClick={() => setSelectedGenre(genre)}
+              aria-pressed={selectedGenre === genre}
+            >
+              {genre === "all" ? "All" : genre}
+            </button>
+          ))}
+        </section>
+      ) : null}
 
       <section className="grid">
         {visibleItems.map((item) => (
