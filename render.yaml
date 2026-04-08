@@ -18,7 +18,7 @@ services:
       - key: EXTERNAL_CATALOG_ENABLED
         value: true
       - key: EXTERNAL_CATALOG_BASE_URL
-        sync: https://api.tvmaze.com
+        value: https://api.tvmaze.com
       - key: EXTERNAL_CATALOG_LIST_PATH
         value: /shows
       - key: EXTERNAL_CATALOG_DETAIL_PATH
