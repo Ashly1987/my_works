@@ -22,17 +22,23 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
   function ensureInit() {
     if (!initPromise) {
-      initPromise = pool.query(`
-        CREATE SCHEMA IF NOT EXISTS app_private;
-
-        CREATE TABLE IF NOT EXISTS app_private.analytics_counters (
-          scope TEXT NOT NULL,
-          key TEXT NOT NULL,
-          count BIGINT NOT NULL DEFAULT 0,
-          last_recorded_at TIMESTAMPTZ NULL,
-          PRIMARY KEY (scope, key)
-        );
-      `);
+      initPromise = pool
+        .query("CREATE SCHEMA IF NOT EXISTS app_private")
+        .then(() =>
+          pool.query(`
+            CREATE TABLE IF NOT EXISTS app_private.analytics_counters (
+              scope TEXT NOT NULL,
+              key TEXT NOT NULL,
+              count BIGINT NOT NULL DEFAULT 0,
+              last_recorded_at TIMESTAMPTZ NULL,
+              PRIMARY KEY (scope, key)
+            )
+          `),
+        )
+        .catch((err) => {
+          initPromise = null;
+          throw err;
+        });
     }
 
     return initPromise;
@@ -55,7 +61,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       ON CONFLICT (scope, key)
       DO UPDATE
       SET
-        count = app_private.analytics_counters.count + 1,
+        count = analytics_counters.count + 1,
         last_recorded_at = EXCLUDED.last_recorded_at;
     `,
       [dayKey, monthKey, timestamp],
