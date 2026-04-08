@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: butflix-backend
+    env: node
+    rootDir: butflix/backend
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATA_FILE
+        value: /var/data/db.json
+      - key: EXTERNAL_CATALOG_ENABLED
+        value: false
+      - key: EXTERNAL_CATALOG_BASE_URL
+        sync: false
+      - key: EXTERNAL_CATALOG_LIST_PATH
+        value: /api/catalog
+      - key: EXTERNAL_CATALOG_DETAIL_PATH
+        value: /api/catalog/:id
+      - key: EXTERNAL_CATALOG_TIMEOUT_MS
+        value: 4000
+      - key: EXTERNAL_CATALOG_AUTH_HEADER
+        sync: false
+      - key: EXTERNAL_CATALOG_AUTH_TOKEN
+        sync: false
+
+  - type: static
+    name: butflix-frontend
+    rootDir: butflix/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_BASE
+        sync: false
+      - key: VITE_PROVIDER_MODE
+        value: rest
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
