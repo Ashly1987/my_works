@@ -97,6 +97,8 @@ JSON response → React renders cards → scroll down → loads next 25
 | `domain/catalog/`                       | Business logic — get catalog, get one item, search                  |
 | `domain/identity/`                      | Auth logic — register, login, JWT tokens                            |
 | `domain/activity/`                      | Watch history logic                                                 |
+| `adapters/rest/`                        | Express routes — REST API endpoints for web requests                |
+| `adapters/mcp/`                         | Tool-calling adapter — flexible RPC-style interface                 |
 | `integrations/externalCatalogSource.js` | Calls TVMaze and maps its shape to internal format                  |
 | `data/db.json`                          | Local JSON "database" (dev only — not for production)               |
 | `middleware/`                           | Auth guard middleware (validates JWT on protected routes)           |
@@ -117,6 +119,203 @@ JSON response → React renders cards → scroll down → loads next 25
 | `services/config.js`       | Reads `VITE_API_BASE` env var (falls back to `localhost:4000`)       |
 | `services/restProvider.js` | All REST API calls (catalog, detail, search, history)                |
 | `state/`                   | Shared React state / context (auth session, etc.)                    |
+
+---
+
+## Minute 7.5 — How the two adapters work
+
+Butflix has **two ways** to call backend functions:
+
+### REST Adapter (`adapters/rest/`)
+
+Traditional HTTP routes. Frontend makes requests like:
+
+```
+GET  /api/catalog?search=action
+POST /api/auth/login
+POST /api/activity/record-watch
+```
+
+Each endpoint is explicit and standalone.
+
+### MCP Adapter (`adapters/mcp/router.js`)
+
+A **single tool-calling endpoint** that routes flexible function calls. Frontend sends:
+
+```
+POST /tools/call
+{ "tool": "catalog.list", "input": { "search": "action", "page": 1 } }
+{ "tool": "identity.login", "input": { "email": "user@test.com", "password": "..." } }
+{ "tool": "activity.recordWatchEvent", "input": { "token": "...", "contentId": "123" } }
+```
+
+**Why MCP exists:**
+
+- One endpoint handles all function calls
+- Tool names are standardized (e.g., `domain.action`)
+- Easier to extend — add a new tool without creating new routes
+- Built-in authentication for sensitive operations
+- Useful for AI agents that need a structured menu of capabilities
+
+**Which should you use?**
+
+- **REST** → Standard web requests, simpler to reason about
+- **MCP** → Programmatic/AI agent access, or when you want all operations through one channel
+
+Both are available simultaneously. `app.js` wires both into Express.
+
+---
+
+## Minute 7.6 — The TVMaze integration (external data source)
+
+Butflix pulls show data from **TVMaze REST API** (no MCP server involved — they only expose REST).
+
+### The Contract
+
+Your `.env` defines the connection:
+
+```
+EXTERNAL_CATALOG_BASE_URL=https://api.tvmaze.com
+EXTERNAL_CATALOG_LIST_PATH=/shows
+EXTERNAL_CATALOG_DETAIL_PATH=/shows/:id
+EXTERNAL_CATALOG_TIMEOUT_MS=4000
+```
+
+Your backend hits: `GET https://api.tvmaze.com/shows?search=action&page=1&limit=12` (though TVMaze ignores pagination — returns full list).
+
+### TVMaze Response → Your Format
+
+TVMaze returns raw JSON like:
+
+```json
+{
+  "id": 1,
+  "name": "Under the Dome",
+  "genres": ["sci-fi"],
+  "image": { "medium": "url-to-image", "original": "..." },
+  "summary": "<p>A dome falls...</p>"
+}
+```
+
+The **`externalCatalogSource.js`** adapter normalizes it to Butflix's internal schema:
+
+```javascript
+{
+  id: "1",
+  title: "Under the Dome",           // mapped from .name
+  genre: "sci-fi",                   // first genre
+  genres: ["sci-fi"],
+  description: "A dome falls...",    // HTML stripped from .summary
+  posterUrl: "url-to-image",         // mapped from .image.medium
+  streamUrl: "",                     // TVMaze doesn't provide this
+  downloadUrl: ""                    // TVMaze doesn't provide this
+}
+```
+
+### How It Works
+
+1. Frontend requests: `GET /api/catalog?search=action`
+2. Backend's `catalogService` checks `EXTERNAL_CATALOG_ENABLED`
+3. If `true`, calls `externalCatalogSource.listCatalog()`
+4. Adapter fetches from TVMaze, normalizes each item, applies filters
+5. Returns paginated results back to frontend
+6. If TVMaze fails, or if external catalog is disabled, backend falls back to local `data/db.json`
+7. React renders the returned items as cards
+
+### What `data/db.json` actually stores
+
+`data/db.json` is **not** a full backup or cached mirror of TVMaze.
+
+It stores three local collections:
+
+- `users` → registered users
+- `watchEvents` → playback/watch history records
+- `content` → a small seeded local catalog used for demo data and fallback behavior
+
+The `content` array comes from the hardcoded `initialData` object in `backend/src/data/store.js`. On first startup, if the JSON file does not exist, the app creates it and writes that seed data.
+
+Important detail: when TVMaze is enabled, catalog results are fetched live and returned to the client, but they are **not written back** into `data/db.json`.
+
+### Key Features
+
+| Feature                   | How it works                                                                                        |
+| ------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Timeout**               | Requests abort after 4 seconds — prevents hanging if TVMaze is slow                                 |
+| **Field mapping**         | Handles TVMaze's varied field names; gracefully falls back if fields missing                        |
+| **Flexible parsing**      | TVMaze returns array directly; adapter handles wrapped structures (`.data`, `.results`, `.items`)   |
+| **Client-side filtering** | Search and genre filters run locally after fetch (TVMaze returns unfiltered)                        |
+| **Pagination**            | Client-side slicing (TVMaze returns full list; adapter pages it)                                    |
+| **Fallback**              | If `EXTERNAL_CATALOG_ENABLED=false` or TVMaze fails, uses the small local catalog in `data/db.json` |
+
+---
+
+## Minute 7.7 — How external agents use your MCP server
+
+Any external agent (AI, bot, script) can call your MCP tools via the single `POST /tools/call` endpoint.
+
+### Request Format
+
+```json
+POST http://localhost:4000/tools/call
+Content-Type: application/json
+
+{
+  "tool": "catalog.list",
+  "input": {
+    "search": "action",
+    "genre": "sci-fi",
+    "page": 1,
+    "limit": 12
+  }
+}
+```
+
+### Available Tools
+
+| Tool Name                   | Purpose                  | Input                                           | Auth Required |
+| --------------------------- | ------------------------ | ----------------------------------------------- | ------------- |
+| `identity.register`         | Create account           | `{ email, password }`                           | No            |
+| `identity.login`            | Get JWT token            | `{ email, password }`                           | No            |
+| `identity.validateSession`  | Check token validity     | `{ token }`                                     | No            |
+| `catalog.list`              | Search shows             | `{ search?, genre?, page?, limit? }`            | No            |
+| `catalog.detail`            | Get show info            | `{ contentId }`                                 | No            |
+| `activity.recordWatchEvent` | Log watch event          | `{ token, contentId, eventType, positionSec? }` | **Yes**       |
+| `activity.getHistory`       | Get user's watch history | `{ token }`                                     | **Yes**       |
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "requestId": "abc123def456",
+  "data": {
+    "items": [...],
+    "total": 42,
+    "page": 1,
+    "limit": 12
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "error": "Invalid or expired auth token"
+}
+```
+
+### Agent Workflow
+
+1. Agent calls `identity.login` → gets JWT token
+2. Agent stores token (needed for auth-required tools)
+3. Agent calls `catalog.list` with query parameters
+4. Agent processes results, builds recommendations
+5. Agent calls `activity.recordWatchEvent` with token to log user activity
+6. Agent calls `activity.getHistory` to pull watch history for analysis
+
+Each request is stateless — the server doesn't track agent sessions. Include the token in every protected call.
 
 ---
 
