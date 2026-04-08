@@ -66,7 +66,7 @@ Backend:
 
 - `JWT_SECRET` → long random secret
 - `CORS_ORIGIN` → your frontend Render URL, for example `https://butflix-frontend.onrender.com`
-- `DATA_FILE` → keep `/var/data/db.json` if you attach a persistent disk
+- `DATA_FILE` → use `/tmp/db.json` on free tier (default in blueprint)
 
 Frontend:
 
@@ -89,9 +89,10 @@ On most cloud platforms, the local filesystem is ephemeral. That means data can 
 
 For Render:
 
-- attach a persistent disk to the backend service
-- mount it at `/var/data`
-- keep `DATA_FILE=/var/data/db.json`
+- free-tier default: use `DATA_FILE=/tmp/db.json` (app works, data is ephemeral)
+- paid persistent option: attach a persistent disk to backend
+- mount disk at `/var/data`
+- then set `DATA_FILE=/var/data/db.json`
 
 If you do not attach a disk, deployment will still work, but local file data is not durable.
 
