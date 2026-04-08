@@ -16,13 +16,13 @@ services:
       - key: DATA_FILE
         value: /tmp/db.json
       - key: EXTERNAL_CATALOG_ENABLED
-        value: false
+        value: true
       - key: EXTERNAL_CATALOG_BASE_URL
-        sync: false
+        sync: https://api.tvmaze.com
       - key: EXTERNAL_CATALOG_LIST_PATH
-        value: /api/catalog
+        value: /shows
       - key: EXTERNAL_CATALOG_DETAIL_PATH
-        value: /api/catalog/:id
+        value: /shows/:id
       - key: EXTERNAL_CATALOG_TIMEOUT_MS
         value: 4000
       - key: EXTERNAL_CATALOG_AUTH_HEADER
