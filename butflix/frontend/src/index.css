@@ -87,7 +87,6 @@ a {
   display: flex;
   flex-direction: column;
   padding-bottom: 6rem;
-  padding-bottom: max(6rem, calc(6rem + env(safe-area-inset-bottom)));
 }
 
 .nav {
@@ -230,7 +229,7 @@ input {
 .page {
   position: relative;
   z-index: 1;
-  padding: 2rem clamp(1rem, 3vw, 2.5rem) clamp(5rem, 10vb, 8rem);
+  padding: 2rem clamp(1rem, 3vw, 2.5rem) 5rem;
 }
 
 .hero {
@@ -391,6 +390,7 @@ input {
   background: rgba(10, 7, 5, 0.88);
   backdrop-filter: blur(18px);
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.45);
+  padding-bottom: calc(0.85rem + env(safe-area-inset-bottom));
 }
 
 .site-footer__copy {
