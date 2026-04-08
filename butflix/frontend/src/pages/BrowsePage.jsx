@@ -114,6 +114,13 @@ export function BrowsePage() {
   }, [items, selectedGenre]);
 
   const browseReadyCount = Math.min(total || items.length, PAGE_SIZE);
+  const isGenreFiltered = selectedGenre !== "all";
+  const hintPrimaryCount = isGenreFiltered
+    ? visibleItems.length
+    : browseReadyCount;
+  const hintSecondaryCount = isGenreFiltered
+    ? visibleItems.length
+    : total || browseReadyCount;
 
   const handleLoadMore = useCallback(() => {
     if (loadingMore || !hasMore) {
@@ -192,8 +199,9 @@ export function BrowsePage() {
               </button>
             </div>
             <p className="hero__hint">
-              {browseReadyCount} of {total || browseReadyCount} title
-              {total === 1 ? "" : "s"}
+              {hintPrimaryCount} of {hintSecondaryCount} title
+              {hintSecondaryCount === 1 ? "" : "s"}
+              {isGenreFiltered ? ` in ${selectedGenre}` : ""}
               {activeSearch
                 ? ` matched for "${activeSearch}"`
                 : " ready to browse"}
