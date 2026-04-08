@@ -22,16 +22,32 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
   function ensureInit() {
     if (!initPromise) {
+      // Migration: rename old 'count' column (SQL keyword conflict) to 'request_count'
       initPromise = pool
-        .query(`
-          CREATE TABLE IF NOT EXISTS public.analytics_counters (
-            scope TEXT NOT NULL,
-            key TEXT NOT NULL,
-            count BIGINT NOT NULL DEFAULT 0,
-            last_recorded_at TIMESTAMPTZ NULL,
-            PRIMARY KEY (scope, key)
-          )
-        `)
+        .query(
+          `SELECT column_name FROM information_schema.columns
+           WHERE table_schema = 'public'
+           AND table_name = 'analytics_counters'
+           AND column_name = 'count'`,
+        )
+        .then((result) => {
+          if (result.rows.length > 0) {
+            return pool.query(
+              `ALTER TABLE public.analytics_counters RENAME COLUMN "count" TO request_count`,
+            );
+          }
+        })
+        .then(() =>
+          pool.query(`
+            CREATE TABLE IF NOT EXISTS public.analytics_counters (
+              scope TEXT NOT NULL,
+              key TEXT NOT NULL,
+              request_count BIGINT NOT NULL DEFAULT 0,
+              last_recorded_at TIMESTAMPTZ NULL,
+              PRIMARY KEY (scope, key)
+            )
+          `),
+        )
         .catch((err) => {
           initPromise = null;
           throw err;
@@ -50,7 +66,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
     await pool.query(
       `
-      INSERT INTO public.analytics_counters (scope, key, count, last_recorded_at)
+      INSERT INTO public.analytics_counters (scope, key, request_count, last_recorded_at)
       VALUES
         ('day', $1, 1, $3::timestamptz),
         ('month', $2, 1, $3::timestamptz),
@@ -58,7 +74,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       ON CONFLICT (scope, key)
       DO UPDATE
       SET
-        count = analytics_counters.count + 1,
+        request_count = analytics_counters.request_count + 1,
         last_recorded_at = EXCLUDED.last_recorded_at;
     `,
       [dayKey, monthKey, timestamp],
@@ -71,7 +87,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
     const dayKey = getDayKey(now);
     const monthKey = getMonthKey(now);
     const { rows } = await pool.query(
-      "SELECT scope, key, count, last_recorded_at FROM public.analytics_counters",
+      "SELECT scope, key, request_count, last_recorded_at FROM public.analytics_counters",
     );
 
     const daily = {};
@@ -80,7 +96,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
     let lastRecordedAt = null;
 
     rows.forEach((row) => {
-      const value = Number(row.count || 0);
+      const value = Number(row.request_count || 0);
       if (row.scope === "day") {
         daily[row.key] = value;
       } else if (row.scope === "month") {
