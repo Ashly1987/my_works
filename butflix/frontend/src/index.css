@@ -22,6 +22,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background:
     radial-gradient(
       circle at top left,
@@ -70,11 +71,21 @@ a {
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app-shell {
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav {
@@ -291,15 +302,14 @@ input {
 }
 
 .site-footer {
-  position: fixed;
+  position: sticky;
   bottom: 0;
-  left: 0;
-  right: 0;
   z-index: 30;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.6rem;
+  margin-top: auto;
   padding: 0.85rem 2rem;
   border-top: 1px solid var(--line);
   background: rgba(10, 7, 5, 0.88);

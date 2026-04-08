@@ -8,12 +8,14 @@ function App() {
   return (
     <div className="app-shell">
       <NavBar />
-      <Routes>
-        <Route path="/" element={<BrowsePage />} />
-        <Route path="/watch/:id" element={<WatchPage />} />
-        <Route path="/history" element={<HistoryPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <main className="app-main">
+        <Routes>
+          <Route path="/" element={<BrowsePage />} />
+          <Route path="/watch/:id" element={<WatchPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
       <footer className="site-footer">
         <p className="site-footer__copy">
           &copy; {new Date().getFullYear()} Butflix &mdash; Crafted by{" "}
