@@ -32,5 +32,17 @@
       "createdAt": "2026-04-07T11:20:04.275Z"
     }
   ],
-  "watchEvents": []
+  "watchEvents": [],
+  "analytics": {
+    "requests": {
+      "total": 1,
+      "daily": {
+        "2026-04-08": 1
+      },
+      "monthly": {
+        "2026-04": 1
+      },
+      "lastRecordedAt": "2026-04-08T09:47:36.312Z"
+    }
+  }
 }
