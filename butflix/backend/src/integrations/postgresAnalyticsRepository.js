@@ -20,6 +20,8 @@ function createPostgresAnalyticsRepository({ connectionString }) {
 
   let initPromise = null;
   let lastError = null;
+  let writeAttempts = 0;
+  let writeSuccesses = 0;
 
   async function ensureInit() {
     if (initPromise) return initPromise;
@@ -58,6 +60,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
   }
 
   async function incrementRequestCounters(now) {
+    writeAttempts += 1;
     await ensureInit();
 
     const dayKey = getDayKey(now);
@@ -77,6 +80,7 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       await pool.query(upsert, ["day",    dayKey,      ts]);
       await pool.query(upsert, ["month",  monthKey,    ts]);
       await pool.query(upsert, ["global", "__total__", ts]);
+      writeSuccesses += 1;
       lastError = null;
     } catch (err) {
       lastError = err.message;
@@ -129,8 +133,12 @@ function createPostgresAnalyticsRepository({ connectionString }) {
       daily,
       monthly,
       lastRecordedAt,
+      debug: {
+        writeAttempts,
+        writeSuccesses,
+        lastError,
+      },
     };
-    if (lastError) result._error = lastError;
     return result;
   }
 
