@@ -38,6 +38,10 @@ Deliver a 1-2 week MVP with stable architecture that supports incremental featur
 - Frontend deploys as a static Vite build from `frontend/`
 - Frontend talks to backend through `VITE_API_BASE`
 - Backend CORS allow-list must include the deployed frontend origin
+- Optional Vercel mode uses two projects from the same repo:
+  - `backend/` on Vercel serverless (`backend/api/index.js`, `backend/vercel.json`)
+  - `frontend/` on Vercel static Vite (`frontend/vercel.json` SPA rewrites)
+- Render workflow remains unchanged when using the optional Vercel mode
 
 ## Current production constraint
 

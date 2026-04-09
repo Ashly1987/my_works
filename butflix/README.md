@@ -56,6 +56,56 @@ This repo now includes a Render blueprint at `render.yaml` for deploying both ap
 - Backend: Render web service
 - Frontend: Render static site
 
+### Optional full Vercel deployment (frontend + backend)
+
+You can deploy both parts on Vercel without changing Render workflow.
+Use two Vercel projects from this same monorepo:
+
+1. `butflix-backend-vercel` with Root Directory `backend`
+2. `butflix-frontend-vercel` with Root Directory `frontend`
+
+This repo includes Vercel-only config files:
+
+- Backend serverless adapter: `backend/api/index.js`
+- Backend routing config: `backend/vercel.json`
+- Frontend SPA rewrites: `frontend/vercel.json`
+
+These files do not affect Render deployment in `render.yaml`.
+
+#### Backend on Vercel
+
+Project settings:
+
+- Root Directory: `backend`
+- Framework preset: `Other`
+
+Set environment variables:
+
+- `JWT_SECRET`
+- `CORS_ORIGIN` -> your Vercel frontend URL(s)
+- `DATA_FILE=/tmp/db.json` (ephemeral)
+- Optional: `ANALYTICS_DATABASE_URL` for persistent analytics
+- Optional external catalog vars:
+  - `EXTERNAL_CATALOG_ENABLED`
+  - `EXTERNAL_CATALOG_BASE_URL`
+  - `EXTERNAL_CATALOG_LIST_PATH`
+  - `EXTERNAL_CATALOG_DETAIL_PATH`
+  - `EXTERNAL_CATALOG_TIMEOUT_MS`
+  - `EXTERNAL_CATALOG_AUTH_HEADER`
+  - `EXTERNAL_CATALOG_AUTH_TOKEN`
+
+#### Frontend on Vercel
+
+Project settings:
+
+- Root Directory: `frontend`
+- Framework preset: `Vite`
+
+Set environment variables:
+
+- `VITE_API_BASE=https://<your-backend-vercel-domain>`
+- `VITE_PROVIDER_MODE=rest`
+
 ### Deploy on Render
 
 1. Push the current branch to GitHub.
