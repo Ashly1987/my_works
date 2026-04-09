@@ -74,18 +74,30 @@ function normalizeData(raw = {}) {
 }
 
 function ensureDataFile(dataFile) {
-  const absolutePath = path.resolve(dataFile);
-  const dir = path.dirname(absolutePath);
+  function ensureAt(candidatePath) {
+    const absolutePath = path.resolve(candidatePath);
+    const dir = path.dirname(absolutePath);
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    if (!fs.existsSync(absolutePath)) {
+      fs.writeFileSync(absolutePath, JSON.stringify(initialData, null, 2));
+    }
+
+    return absolutePath;
   }
 
-  if (!fs.existsSync(absolutePath)) {
-    fs.writeFileSync(absolutePath, JSON.stringify(initialData, null, 2));
+  try {
+    return ensureAt(dataFile);
+  } catch (error) {
+    const fallbackPath = "/tmp/butflix-db.json";
+    if (error && ["ENOENT", "EROFS", "EACCES"].includes(error.code)) {
+      return ensureAt(fallbackPath);
+    }
+    throw error;
   }
-
-  return absolutePath;
 }
 
 function createStore(dataFile) {

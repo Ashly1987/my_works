@@ -7,7 +7,7 @@ const env = {
   jwtSecret: process.env.JWT_SECRET || "change-me-in-production",
   corsOrigin:
     process.env.CORS_ORIGIN || "http://localhost:5173,http://localhost:5174",
-  dataFile: process.env.DATA_FILE || "./data/db.json",
+  dataFile: process.env.DATA_FILE || (process.env.VERCEL ? "/tmp/butflix-db.json" : "./data/db.json"),
   externalCatalogEnabled: String(process.env.EXTERNAL_CATALOG_ENABLED || "false") === "true",
   externalCatalogBaseUrl: process.env.EXTERNAL_CATALOG_BASE_URL || "",
   externalCatalogListPath: process.env.EXTERNAL_CATALOG_LIST_PATH || "/api/catalog",
