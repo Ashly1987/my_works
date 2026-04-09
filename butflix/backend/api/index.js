@@ -1,1 +1,1 @@
-module.exports = require("../src/app").createApp();
+module.exports = require("../src/app");
