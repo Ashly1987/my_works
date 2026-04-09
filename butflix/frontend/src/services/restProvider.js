@@ -1,6 +1,10 @@
 import { API_BASE } from "./config";
 
 async function request(path, options = {}) {
+  if (!API_BASE) {
+    throw new Error("Missing VITE_API_BASE. Set it to your backend URL.");
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
     headers: {
       "Content-Type": "application/json",
@@ -9,7 +13,21 @@ async function request(path, options = {}) {
     ...options,
   });
 
-  const payload = await response.json();
+  const contentType = response.headers.get("content-type") || "";
+  const responseText = await response.text();
+
+  if (!contentType.includes("application/json")) {
+    const looksLikeHtml = responseText.trimStart().startsWith("<!doctype")
+      || responseText.trimStart().startsWith("<html");
+    if (looksLikeHtml) {
+      throw new Error(
+        `Backend returned HTML instead of JSON. Check VITE_API_BASE (current: ${API_BASE}).`
+      );
+    }
+    throw new Error("Backend returned non-JSON response.");
+  }
+
+  const payload = JSON.parse(responseText);
   if (!response.ok || payload.success === false) {
     throw new Error(payload?.error?.message || "Request failed");
   }
