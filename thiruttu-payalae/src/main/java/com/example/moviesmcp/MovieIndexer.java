@@ -17,6 +17,7 @@ import java.util.regex.Matcher;
 
 public class MovieIndexer {
     private static final Pattern YEAR_PATTERN = Pattern.compile("\\((\\d{4})\\)");
+    private static final Pattern RATING_PATTERN = Pattern.compile("([0-9](?:\\.[0-9])?)\\s*/\\s*10");
     private static final Pattern MOVIE_URL_PATTERN = Pattern.compile("/(?:[^/]+-)?tamil-(?:movie|web-series|dubbed-movie)/?$", Pattern.CASE_INSENSITIVE);
 
     private final String baseUrl;
@@ -67,9 +68,8 @@ public class MovieIndexer {
                 Element strong = latest.selectFirst("strong");
                 String title = strong != null ? strong.text().trim() : anchor.text().trim();
                 String absoluteUrl = toAbsoluteUrl(url, anchor.attr("href").trim());
-                Integer year = extractYear(title);
                 if (!title.isEmpty() && !absoluteUrl.isEmpty()) {
-                    records.add(new MovieRecord(title, absoluteUrl, year, page));
+                    records.add(buildMovieRecord(title, absoluteUrl, page));
                 }
             }
 
@@ -84,9 +84,8 @@ public class MovieIndexer {
                 }
 
                 if (isLikelyMovieUrl(absoluteUrl)) {
-                    Integer year = extractYear(title);
                     if (!title.isEmpty()) {
-                        records.add(new MovieRecord(title, absoluteUrl, year, page));
+                        records.add(buildMovieRecord(title, absoluteUrl, page));
                     }
                     continue;
                 }
@@ -115,6 +114,68 @@ public class MovieIndexer {
             return Integer.parseInt(matcher.group(1));
         }
         return null;
+    }
+
+    private static Double extractRating(String text) {
+        Matcher matcher = RATING_PATTERN.matcher(text);
+        if (matcher.find()) {
+            return Double.parseDouble(matcher.group(1));
+        }
+        return null;
+    }
+
+    private static MovieMetadata fetchMovieMetadata(String movieUrl) {
+        try {
+            Document doc = Jsoup.connect(movieUrl)
+                    .userAgent("Mozilla/5.0 (MCP Movie Indexer)")
+                    .timeout(12_000)
+                    .get();
+
+            String imageUrl = null;
+            Element ogImage = doc.selectFirst("meta[property=og:image][content]");
+            if (ogImage != null) {
+                imageUrl = ogImage.attr("content").trim();
+            }
+            if ((imageUrl == null || imageUrl.isEmpty())) {
+                Element twitterImage = doc.selectFirst("meta[name=twitter:image][content]");
+                if (twitterImage != null) {
+                    imageUrl = twitterImage.attr("content").trim();
+                }
+            }
+            if ((imageUrl == null || imageUrl.isEmpty())) {
+                Element anyImage = doc.selectFirst("main img[src], article img[src], img[src]");
+                if (anyImage != null) {
+                    imageUrl = anyImage.absUrl("src").trim();
+                }
+            }
+
+            Double rating = null;
+            Element ratingMeta = doc.selectFirst("meta[itemprop=ratingValue][content]");
+            if (ratingMeta != null) {
+                String raw = ratingMeta.attr("content").trim();
+                try {
+                    rating = Double.parseDouble(raw);
+                } catch (NumberFormatException ignored) {
+                    rating = null;
+                }
+            }
+            if (rating == null) {
+                rating = extractRating(doc.text());
+            }
+
+            return new MovieMetadata(imageUrl, rating);
+        } catch (IOException e) {
+            return new MovieMetadata(null, null);
+        }
+    }
+
+    private static MovieRecord buildMovieRecord(String title, String absoluteUrl, int page) {
+        Integer year = extractYear(title);
+        MovieMetadata metadata = fetchMovieMetadata(absoluteUrl);
+        return new MovieRecord(title, absoluteUrl, year, page, metadata.imageUrl(), metadata.rating());
+    }
+
+    private record MovieMetadata(String imageUrl, Double rating) {
     }
 
     private static String toAbsoluteUrl(String sourcePage, String href) {
