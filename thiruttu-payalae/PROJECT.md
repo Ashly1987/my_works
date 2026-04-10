@@ -17,14 +17,14 @@ Build a small Java MCP server that can search movie names and return matching li
   - Input: `query` (required), `limit` (optional, default 10)
   - Output: text content and structured results list
 - `refresh_index`
-  - Input: `baseUrl` (optional), `pages` (optional, default 8)
+  - Input: `baseUrl` (optional), `pages` (optional, default 8), `maxDepth` (optional, default 2)
   - Output: upsert summary and crawl parameters
 
 ## Run Modes
 
 - MCP server startup does not run indexing.
 - Server starts immediately and serves search calls from existing SQLite data.
-- Index refresh is manual through the `refresh_index` MCP tool.
+- Index refresh is manual through the `refresh_index` MCP tool, including latest links and nested category folders.
 
 ## Current Constraints
 

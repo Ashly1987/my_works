@@ -153,6 +153,12 @@ public class McpServer {
         pages.put("default", DEFAULT_TOTAL_PAGES);
         refreshProperties.set("pages", pages);
 
+        ObjectNode maxDepth = mapper.createObjectNode();
+        maxDepth.put("type", "integer");
+        maxDepth.put("description", "Folder recursion depth for nested category crawling.");
+        maxDepth.put("default", 2);
+        refreshProperties.set("maxDepth", maxDepth);
+
         refreshInputSchema.set("properties", refreshProperties);
         refreshTool.set("inputSchema", refreshInputSchema);
         tools.add(refreshTool);
@@ -179,12 +185,14 @@ public class McpServer {
         if ("refresh_index".equals(name)) {
             String baseUrl = argumentsNode.path("baseUrl").asText(DEFAULT_LIST_URL).trim();
             int pages = argumentsNode.path("pages").asInt(DEFAULT_TOTAL_PAGES);
+            int maxDepth = argumentsNode.path("maxDepth").asInt(2);
             if (baseUrl.isEmpty()) {
                 baseUrl = DEFAULT_LIST_URL;
             }
             pages = Math.max(1, pages);
+            maxDepth = Math.max(0, maxDepth);
 
-            MovieIndexer indexer = new MovieIndexer(baseUrl, pages);
+            MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth);
             List<MovieRecord> movies = indexer.fetchAllMovies();
             database.upsertMovies(movies);
 
@@ -200,6 +208,7 @@ public class McpServer {
             structured.put("upserted", movies.size());
             structured.put("baseUrl", baseUrl);
             structured.put("pages", pages);
+            structured.put("maxDepth", maxDepth);
             response.set("structuredContent", mapper.valueToTree(structured));
             response.put("isError", false);
             return response;

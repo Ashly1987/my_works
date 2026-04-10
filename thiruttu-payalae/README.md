@@ -74,7 +74,8 @@ Input schema:
       "type": "string",
       "default": "https://moviesda18.com/tamil-2026-movies/"
     },
-    "pages": { "type": "integer", "default": 8 }
+    "pages": { "type": "integer", "default": 8 },
+    "maxDepth": { "type": "integer", "default": 2 }
   }
 }
 ```
@@ -84,11 +85,16 @@ Example tool call arguments:
 ```json
 {
   "baseUrl": "https://moviesda18.com/tamil-2026-movies/",
-  "pages": 8
+  "pages": 8,
+  "maxDepth": 2
 }
 ```
 
-This manually scrapes and upserts latest records into SQLite while the MCP server is running.
+This manually scrapes and upserts latest records into SQLite while the MCP server is running. It now indexes:
+
+- Latest updates links (`main div.latest a[href]`)
+- Category folder links (`main div.f a[href]`)
+- Nested folders up to `maxDepth`
 
 ## Example MCP client config
 
@@ -96,8 +102,9 @@ Use the built jar as stdio command in your MCP-capable client.
 
 ```json
 {
-  "mcpServers": {
+  "servers": {
     "movies-java": {
+      "type": "stdio",
       "command": "java",
       "args": [
         "-jar",
