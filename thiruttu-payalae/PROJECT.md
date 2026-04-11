@@ -27,6 +27,7 @@ Build a Java MCP server and companion website that can search movie names and op
 - Server startup can skip indexing with `--skip-startup-refresh` or `STARTUP_REFRESH=false`.
 - Website starts by default on `127.0.0.1:8080` and reads from same DB.
 - Website tiles now show a Play button and render poster/rating when available (with fallbacks).
+- Website listing is sorted newest-first by year and first-seen timestamp.
 - Index refresh is manual through the `refresh_index` MCP tool, including latest links and nested category folders.
 
 Startup flags:

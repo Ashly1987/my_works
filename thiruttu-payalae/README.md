@@ -161,6 +161,8 @@ Response contains:
 - `totalPages`: number of pages for given `limit`
 - `results`: list of `title`, `url`, `year`, `page`, `imageUrl`, `rating`
 
+Default listing order is newest-first (higher `year`, then latest first-seen records).
+
 ## MCP Tool
 
 Tool name: `search_movie`

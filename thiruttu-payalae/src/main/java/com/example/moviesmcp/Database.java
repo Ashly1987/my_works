@@ -191,9 +191,9 @@ public class Database {
             FROM movies
             WHERE lower(title) LIKE lower(?)
             ORDER BY
-                CASE WHEN image_url IS NOT NULL AND trim(image_url) <> '' THEN 1 ELSE 0 END DESC,
-                CASE WHEN rating IS NOT NULL THEN 1 ELSE 0 END DESC,
-                COALESCE(updated_at, created_at) DESC,
+                CASE WHEN year IS NULL THEN 0 ELSE 1 END DESC,
+                year DESC,
+                created_at DESC,
                 id DESC
             LIMIT ? OFFSET ?
             """;

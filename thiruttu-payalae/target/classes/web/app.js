@@ -251,12 +251,17 @@ function renderMovies(items) {
     sub.textContent = `${yearText} | Indexed from page ${movie.page}`;
 
     const fallbackPoster = buildFallbackPoster(movie.url);
+    const yearPoster = buildYearPosterFallback(movie);
     const posterUrl = movie.imageUrl && movie.imageUrl.trim() ? movie.imageUrl : fallbackPoster;
     if (poster) {
       poster.src = posterUrl;
       poster.alt = `${movie.title} poster`;
       poster.addEventListener("error", () => {
-        poster.src = fallbackPoster;
+        if (poster.src !== fallbackPoster) {
+          poster.src = fallbackPoster;
+          return;
+        }
+        poster.src = yearPoster;
       }, { once: true });
     }
 
@@ -274,6 +279,33 @@ function renderMovies(items) {
 function buildFallbackPoster(movieUrl) {
   const encoded = encodeURIComponent(movieUrl || "");
   return `https://image.thum.io/get/width/560/noanimate/${encoded}`;
+}
+
+function buildYearPosterFallback(movie) {
+  const year = movie.year ? String(movie.year) : "Unknown Year";
+  const safeTitle = escapeXml((movie.title || "Movie").slice(0, 36));
+  const safeYear = escapeXml(year);
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='560' height='800' viewBox='0 0 560 800'>
+    <defs>
+      <linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'>
+        <stop offset='0%' stop-color='#0f5d75'/>
+        <stop offset='100%' stop-color='#1d2a3a'/>
+      </linearGradient>
+    </defs>
+    <rect width='560' height='800' fill='url(#bg)'/>
+    <text x='40' y='380' fill='#f3f7ff' font-size='42' font-family='Sora, Segoe UI, Arial, sans-serif' font-weight='700'>${safeTitle}</text>
+    <text x='40' y='445' fill='#ffd28a' font-size='34' font-family='Sora, Segoe UI, Arial, sans-serif' font-weight='600'>${safeYear}</text>
+  </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function renderMeta() {
