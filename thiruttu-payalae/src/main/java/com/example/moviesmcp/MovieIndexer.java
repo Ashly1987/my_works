@@ -23,15 +23,21 @@ public class MovieIndexer {
     private final String baseUrl;
     private final int maxPagesPerList;
     private final int maxDepth;
+    private final boolean fetchMetadata;
 
     public MovieIndexer(String baseUrl, int maxPagesPerList) {
         this(baseUrl, maxPagesPerList, 2);
     }
 
     public MovieIndexer(String baseUrl, int maxPagesPerList, int maxDepth) {
+        this(baseUrl, maxPagesPerList, maxDepth, true);
+    }
+
+    public MovieIndexer(String baseUrl, int maxPagesPerList, int maxDepth, boolean fetchMetadata) {
         this.baseUrl = baseUrl;
         this.maxPagesPerList = Math.max(1, maxPagesPerList);
         this.maxDepth = Math.max(0, maxDepth);
+        this.fetchMetadata = fetchMetadata;
     }
 
     public List<MovieRecord> fetchAllMovies() throws IOException {
@@ -176,9 +182,9 @@ public class MovieIndexer {
         }
     }
 
-    private static MovieRecord buildMovieRecord(String title, String absoluteUrl, int page) {
+    private MovieRecord buildMovieRecord(String title, String absoluteUrl, int page) {
         Integer year = extractYear(title);
-        MovieMetadata metadata = fetchMovieMetadata(absoluteUrl);
+        MovieMetadata metadata = fetchMetadata ? fetchMovieMetadata(absoluteUrl) : new MovieMetadata(null, null);
         return new MovieRecord(title, absoluteUrl, year, page, metadata.imageUrl(), metadata.rating());
     }
 

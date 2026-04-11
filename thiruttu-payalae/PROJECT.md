@@ -41,6 +41,7 @@ Startup flags:
 - `--startup-pages=<n>` startup refresh page count (1-200)
 - `--startup-max-depth=<n>` startup refresh recursion depth (0-10)
 - `--startup-replace-existing` clears rows before startup refresh upsert
+- `--startup-fetch-metadata` enables per-movie metadata scraping (slower)
 
 Environment variables:
 
@@ -51,6 +52,7 @@ Environment variables:
 - `STARTUP_PAGES` startup refresh page count
 - `STARTUP_MAX_DEPTH` startup refresh recursion depth
 - `STARTUP_REPLACE_EXISTING=true` clears rows before startup refresh
+- `STARTUP_FETCH_METADATA=false` speeds startup refresh by skipping metadata scrape
 
 Helper script:
 
