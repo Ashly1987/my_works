@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +134,7 @@ public class McpServer {
 
         ObjectNode refreshTool = mapper.createObjectNode();
         refreshTool.put("name", "refresh_index");
-        refreshTool.put("description", "Manually scrape and upsert latest movie links into SQLite.");
+        refreshTool.put("description", "Manually scrape and upsert latest movie links into the configured database.");
 
         ObjectNode refreshInputSchema = mapper.createObjectNode();
         refreshInputSchema.put("type", "object");

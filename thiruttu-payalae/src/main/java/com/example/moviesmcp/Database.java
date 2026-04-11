@@ -11,38 +11,79 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+    private enum Dialect {
+        SQLITE,
+        POSTGRES
+    }
+
     private final String jdbcUrl;
+    private final Dialect dialect;
 
     public Database(Path dbFile) {
-        this.jdbcUrl = "jdbc:sqlite:" + dbFile.toAbsolutePath();
+        this("jdbc:sqlite:" + dbFile.toAbsolutePath());
+    }
+
+    public Database(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+        this.dialect = jdbcUrl.startsWith("jdbc:postgresql:") ? Dialect.POSTGRES : Dialect.SQLITE;
     }
 
     public Connection connect() throws SQLException {
+        loadDriver();
         return DriverManager.getConnection(jdbcUrl);
+    }
+
+    private void loadDriver() throws SQLException {
+        String driverClass = dialect == Dialect.POSTGRES ? "org.postgresql.Driver" : "org.sqlite.JDBC";
+        try {
+            Class.forName(driverClass);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("JDBC driver not found: " + driverClass, e);
+        }
     }
 
     public void initialize() throws SQLException {
         try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
-            stmt.execute("""
-                CREATE TABLE IF NOT EXISTS movies (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    title TEXT NOT NULL,
-                    url TEXT NOT NULL UNIQUE,
-                    year INTEGER,
-                    page INTEGER,
-                    image_url TEXT,
-                    rating REAL,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-                """);
+            if (dialect == Dialect.POSTGRES) {
+                stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS movies (
+                        id BIGSERIAL PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        url TEXT NOT NULL UNIQUE,
+                        year INTEGER,
+                        page INTEGER,
+                        image_url TEXT,
+                        rating REAL,
+                        created_at TIMESTAMPTZ DEFAULT NOW()
+                    )
+                    """);
+            } else {
+                stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS movies (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        url TEXT NOT NULL UNIQUE,
+                        year INTEGER,
+                        page INTEGER,
+                        image_url TEXT,
+                        rating REAL,
+                        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """);
+            }
             stmt.execute("CREATE INDEX IF NOT EXISTS idx_movies_title ON movies(title)");
 
-            ensureColumn(stmt, "movies", "image_url", "TEXT");
-            ensureColumn(stmt, "movies", "rating", "REAL");
+            ensureColumn(stmt, "movies", "image_url", "TEXT", dialect);
+            ensureColumn(stmt, "movies", "rating", "REAL", dialect);
         }
     }
 
-    private static void ensureColumn(Statement stmt, String table, String column, String type) throws SQLException {
+    private static void ensureColumn(Statement stmt, String table, String column, String type, Dialect dialect) throws SQLException {
+        if (dialect == Dialect.POSTGRES) {
+            stmt.execute("ALTER TABLE " + table + " ADD COLUMN IF NOT EXISTS " + column + " " + type);
+            return;
+        }
+
         try {
             stmt.execute("ALTER TABLE " + table + " ADD COLUMN " + column + " " + type);
         } catch (SQLException ignored) {

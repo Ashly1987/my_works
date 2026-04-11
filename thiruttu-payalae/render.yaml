@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: movies-mcp-server
+    # If this service lives in a subfolder of a monorepo, set rootDir, for example:
+    # rootDir: apps/movies-mcp-server
+    env: java
+    plan: free
+    buildCommand: mvn -q -DskipTests package
+    startCommand: java -jar target/movies-mcp-server-1.0.0-jar-with-dependencies.jar --web-host=0.0.0.0 --web-port=$PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: STARTUP_REFRESH
+        value: "true"
+
+  # Example additional service entry for multi-project repositories:
+  # - type: web
+  #   name: another-project
+  #   rootDir: apps/another-project
+  #   env: node
+  #   plan: free
+  #   buildCommand: npm ci && npm run build
+  #   startCommand: npm run start
