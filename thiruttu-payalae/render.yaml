@@ -3,10 +3,10 @@ services:
     name: movies-mcp-server
     # If this service lives in a subfolder of a monorepo, set rootDir, for example:
     # rootDir: apps/movies-mcp-server
-    env: java
+    runtime: docker
     plan: free
-    buildCommand: mvn -q -DskipTests package
-    startCommand: java -jar target/movies-mcp-server-1.0.0-jar-with-dependencies.jar --web-host=0.0.0.0 --web-port=$PORT
+    dockerfilePath: Dockerfile
+    dockerContext: .
     envVars:
       - key: DATABASE_URL
         sync: false

@@ -55,6 +55,7 @@ Deployment artifacts:
 - `render.yaml` is included for Render Blueprint deployment.
 - In multi-project repositories, use one root `render.yaml` with separate service entries and `rootDir` per project.
 - Render expects `DATABASE_URL` to be provided (Supabase Postgres JDBC URL).
+- Render deployment for this Java service uses Docker runtime (`runtime: docker`) with `Dockerfile`.
 
 ## Current Constraints
 

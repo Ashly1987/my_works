@@ -117,8 +117,8 @@ If your repository contains multiple projects, keep a single root `render.yaml` 
 
 Render uses:
 
-- Build command: `mvn -q -DskipTests package`
-- Start command: `java -jar target/movies-mcp-server-1.0.0-jar-with-dependencies.jar --web-host=0.0.0.0 --web-port=$PORT`
+- Docker runtime via `Dockerfile` (Blueprint uses `runtime: docker`)
+- App command inside container: `java -jar /app/movies-mcp-server.jar --web-host=0.0.0.0 --web-port=$PORT`
 
 Local helper startup now prints a health line once the web listener is up.
 
