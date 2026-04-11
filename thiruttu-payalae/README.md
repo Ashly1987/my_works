@@ -42,6 +42,9 @@ Script options:
 - `--web-host=127.0.0.1`
 - `--no-web`
 - `--skip-startup-refresh`
+- `--startup-base-url=https://moviesda18.com/tamil-2026-movies/`
+- `--startup-pages=8`
+- `--startup-max-depth=2`
 
 Options:
 
@@ -51,12 +54,18 @@ Options:
 - `--web-host=127.0.0.1` Website bind host
 - `--no-web` Disable website server
 - `--skip-startup-refresh` Disable automatic refresh during startup
+- `--startup-base-url=...` Base URL for startup refresh crawl
+- `--startup-pages=...` Number of list pages to crawl during startup refresh (1-200)
+- `--startup-max-depth=...` Folder recursion depth during startup refresh (0-10)
 
 Environment variables:
 
 - `DATABASE_URL` database URL fallback when `--jdbc-url` is not provided. Supports `jdbc:postgresql://`, `postgresql://`, and `postgres://`.
 - `PORT` Website port fallback for cloud platforms (for example Render)
 - `STARTUP_REFRESH=false` Disable startup refresh without changing command line
+- `STARTUP_BASE_URL` Base URL for startup refresh crawl
+- `STARTUP_PAGES` Number of pages for startup refresh crawl
+- `STARTUP_MAX_DEPTH` Recursion depth for startup refresh crawl
 
 Website URL (default):
 
@@ -64,6 +73,7 @@ Website URL (default):
 
 By default, indexing executes during startup (every restart/deploy) and upserts fresh records.
 Use `--skip-startup-refresh` (or `STARTUP_REFRESH=false`) to disable this behavior.
+Tune crawl coverage by increasing `STARTUP_PAGES` and `STARTUP_MAX_DEPTH`.
 
 For Render/free-tier deployments with ephemeral storage, startup refresh helps repopulate data on each restart.
 

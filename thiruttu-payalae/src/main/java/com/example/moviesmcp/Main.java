@@ -20,7 +20,7 @@ public class Main {
         database.initialize();
 
         if (config.startupRefreshEnabled()) {
-            runStartupRefreshAsync(database);
+            runStartupRefreshAsync(database, config.startupBaseUrl(), config.startupPages(), config.startupMaxDepth());
         }
 
         if (config.webEnabled()) {
@@ -33,11 +33,11 @@ public class Main {
         server.start(System.in, System.out);
     }
 
-    private static void runStartupRefreshAsync(Database database) {
+    private static void runStartupRefreshAsync(Database database, String baseUrl, int pages, int maxDepth) {
         Thread refreshThread = new Thread(() -> {
             try {
                 System.err.println("Startup refresh started in background.");
-                MovieIndexer indexer = new MovieIndexer(DEFAULT_LIST_URL, DEFAULT_TOTAL_PAGES, DEFAULT_MAX_DEPTH);
+                MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth);
                 List<MovieRecord> movies = indexer.fetchAllMovies();
                 database.upsertMovies(movies);
                 System.err.println("Startup refresh completed. Upserted " + movies.size() + " records.");
@@ -50,7 +50,7 @@ public class Main {
     }
 
     private record Config(Path dbPath, String jdbcUrl, boolean webEnabled, String webHost, int webPort,
-                          boolean startupRefreshEnabled) {
+                          boolean startupRefreshEnabled, String startupBaseUrl, int startupPages, int startupMaxDepth) {
         static Config fromArgs(String[] args) {
             Path dbPath = Path.of("movies.db");
             String jdbcUrl = null;
@@ -58,6 +58,9 @@ public class Main {
             String webHost = "127.0.0.1";
             int webPort = 8080;
             boolean startupRefreshEnabled = true;
+            String startupBaseUrl = DEFAULT_LIST_URL;
+            int startupPages = DEFAULT_TOTAL_PAGES;
+            int startupMaxDepth = DEFAULT_MAX_DEPTH;
 
             String envJdbc = System.getenv("DATABASE_URL");
             if (envJdbc != null && !envJdbc.isBlank()) {
@@ -78,6 +81,18 @@ public class Main {
             if (envStartupRefresh != null && !envStartupRefresh.isBlank()) {
                 startupRefreshEnabled = !"false".equalsIgnoreCase(envStartupRefresh.trim());
             }
+            String envStartupBaseUrl = System.getenv("STARTUP_BASE_URL");
+            if (envStartupBaseUrl != null && !envStartupBaseUrl.isBlank()) {
+                startupBaseUrl = envStartupBaseUrl.trim();
+            }
+            String envStartupPages = System.getenv("STARTUP_PAGES");
+            if (envStartupPages != null && !envStartupPages.isBlank()) {
+                startupPages = parseIntRange(envStartupPages, DEFAULT_TOTAL_PAGES, 1, 200);
+            }
+            String envStartupMaxDepth = System.getenv("STARTUP_MAX_DEPTH");
+            if (envStartupMaxDepth != null && !envStartupMaxDepth.isBlank()) {
+                startupMaxDepth = parseIntRange(envStartupMaxDepth, DEFAULT_MAX_DEPTH, 0, 10);
+            }
 
             for (String arg : args) {
                 if (arg.startsWith("--db=")) {
@@ -94,6 +109,20 @@ public class Main {
                 }
                 if (arg.equals("--skip-startup-refresh")) {
                     startupRefreshEnabled = false;
+                }
+                if (arg.startsWith("--startup-base-url=")) {
+                    String parsed = arg.substring("--startup-base-url=".length()).trim();
+                    if (!parsed.isEmpty()) {
+                        startupBaseUrl = parsed;
+                    }
+                }
+                if (arg.startsWith("--startup-pages=")) {
+                    String parsed = arg.substring("--startup-pages=".length()).trim();
+                    startupPages = parseIntRange(parsed, DEFAULT_TOTAL_PAGES, 1, 200);
+                }
+                if (arg.startsWith("--startup-max-depth=")) {
+                    String parsed = arg.substring("--startup-max-depth=".length()).trim();
+                    startupMaxDepth = parseIntRange(parsed, DEFAULT_MAX_DEPTH, 0, 10);
                 }
                 if (arg.startsWith("--web-host=")) {
                     String parsed = arg.substring("--web-host=".length()).trim();
@@ -114,7 +143,20 @@ public class Main {
                 }
             }
 
-            return new Config(dbPath, jdbcUrl, webEnabled, webHost, webPort, startupRefreshEnabled);
+            return new Config(dbPath, jdbcUrl, webEnabled, webHost, webPort,
+                    startupRefreshEnabled, startupBaseUrl, startupPages, startupMaxDepth);
+        }
+
+        private static int parseIntRange(String raw, int fallback, int min, int max) {
+            try {
+                int parsed = Integer.parseInt(raw.trim());
+                if (parsed < min) {
+                    return min;
+                }
+                return Math.min(parsed, max);
+            } catch (NumberFormatException e) {
+                return fallback;
+            }
         }
 
         private static String normalizeJdbcUrl(String rawUrl) {

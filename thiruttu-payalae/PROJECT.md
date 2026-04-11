@@ -37,12 +37,18 @@ Startup flags:
 - `--web-port=<port>` website port
 - `--no-web` disable website server
 - `--skip-startup-refresh` disable refresh during startup
+- `--startup-base-url=<url>` startup refresh base list URL
+- `--startup-pages=<n>` startup refresh page count (1-200)
+- `--startup-max-depth=<n>` startup refresh recursion depth (0-10)
 
 Environment variables:
 
 - `DATABASE_URL` fallback database URL (`jdbc:postgresql://`, `postgresql://`, or `postgres://`)
 - `PORT` fallback website port
 - `STARTUP_REFRESH=false` disables startup refresh
+- `STARTUP_BASE_URL` startup refresh base list URL
+- `STARTUP_PAGES` startup refresh page count
+- `STARTUP_MAX_DEPTH` startup refresh recursion depth
 
 Helper script:
 
@@ -63,4 +69,5 @@ Deployment artifacts:
 - Page count defaults to 8 and is configurable.
 - Maven is required for dependency resolution and packaging.
 - Startup refresh performs live network scraping; startup can be slower depending on target site latency.
+- Crawling "all" links is best-effort and depends on source site structure, availability, and configured pages/depth limits.
 - Supabase project/database must be created in Supabase dashboard; app-side schema/table bootstrap is automatic at first run.

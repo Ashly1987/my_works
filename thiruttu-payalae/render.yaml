@@ -12,6 +12,10 @@ services:
         sync: false
       - key: STARTUP_REFRESH
         value: "true"
+      - key: STARTUP_PAGES
+        value: "30"
+      - key: STARTUP_MAX_DEPTH
+        value: "4"
 
   # Example additional service entry for multi-project repositories:
   # - type: web
