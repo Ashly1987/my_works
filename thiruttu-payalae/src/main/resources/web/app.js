@@ -13,23 +13,17 @@ const results = document.getElementById("results");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const pageLabel = document.getElementById("page-label");
-const refreshStatusEl = document.getElementById("refresh-status");
 const itemTemplate = document.getElementById("result-item-template");
-const kpiTotal = document.getElementById("kpi-total");
-const kpiPage = document.getElementById("kpi-page");
-const kpiPages = document.getElementById("kpi-pages");
-const chips = document.querySelectorAll(".chip");
 const themeToggle = document.getElementById("theme-toggle");
 const revealBlocks = document.querySelectorAll(".reveal-block");
+const THEMES = ["sun", "noir", "aurora", "sepia"];
 let liveSearchTimer = null;
 let requestCounter = 0;
-let refreshStatusTimer = null;
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   state.query = queryInput.value.trim();
   state.page = 1;
-  applyActiveChip(state.query);
   loadMovies();
 });
 
@@ -55,7 +49,6 @@ queryInput.addEventListener("keydown", (event) => {
 
 queryInput.addEventListener("input", () => {
   const nextQuery = queryInput.value.trim();
-  applyActiveChip(nextQuery);
   state.query = nextQuery;
   state.page = 1;
 
@@ -68,34 +61,24 @@ queryInput.addEventListener("input", () => {
   }, 250);
 });
 
-chips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    const nextQuery = chip.dataset.query || "";
-    queryInput.value = nextQuery;
-    state.query = nextQuery;
-    state.page = 1;
-    applyActiveChip(nextQuery);
-    loadMovies();
-  });
-});
-
 if (themeToggle) {
   const persistedTheme = localStorage.getItem("movieAtlasTheme");
-  setTheme(persistedTheme === "noir" ? "noir" : "sun");
+  setTheme(THEMES.includes(persistedTheme) ? persistedTheme : "sun");
 
   themeToggle.addEventListener("click", () => {
-    const isNoir = document.body.dataset.theme === "noir";
-    setTheme(isNoir ? "sun" : "noir");
+    const currentTheme = document.body.dataset.theme || "sun";
+    const nextIndex = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+    setTheme(THEMES[nextIndex]);
   });
 }
 
 function setTheme(theme) {
-  const isNoir = theme === "noir";
-  document.body.dataset.theme = isNoir ? "noir" : "sun";
-  localStorage.setItem("movieAtlasTheme", isNoir ? "noir" : "sun");
+  const selectedTheme = THEMES.includes(theme) ? theme : "sun";
+  document.body.dataset.theme = selectedTheme;
+  localStorage.setItem("movieAtlasTheme", selectedTheme);
   if (themeToggle) {
-    themeToggle.setAttribute("aria-pressed", isNoir ? "true" : "false");
-    themeToggle.textContent = isNoir ? "Switch to Sun Mode" : "Switch to Noir Mode";
+    themeToggle.setAttribute("aria-pressed", "false");
+    themeToggle.textContent = `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)} (tap to switch)`;
   }
 }
 
@@ -144,14 +127,6 @@ function bindCardTilt(card) {
   });
 }
 
-function applyActiveChip(query) {
-  const normalized = query.toLowerCase();
-  chips.forEach((chip) => {
-    const chipQuery = (chip.dataset.query || "").toLowerCase();
-    chip.classList.toggle("active", chipQuery === normalized && normalized.length > 0);
-  });
-}
-
 async function loadMovies() {
   const requestId = ++requestCounter;
   const params = new URLSearchParams({
@@ -187,42 +162,6 @@ async function loadMovies() {
   }
 }
 
-async function loadRefreshStatus() {
-  if (!refreshStatusEl) {
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/refresh-status");
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const payload = await response.json();
-    const status = (payload.status || "idle").toLowerCase();
-    const upserted = Number(payload.lastUpserted || 0);
-    const totalRows = Number(payload.totalRows || 0);
-
-    if (status === "running") {
-      refreshStatusEl.textContent = "Refresh status: running in background...";
-      return;
-    }
-    if (status === "completed") {
-      refreshStatusEl.textContent = `Refresh status: completed (upserted ${upserted} records, total rows ${totalRows}).`;
-      return;
-    }
-    if (status === "failed") {
-      const detail = payload.message ? ` ${payload.message}` : "";
-      refreshStatusEl.textContent = `Refresh status: failed.${detail}`;
-      return;
-    }
-
-    refreshStatusEl.textContent = "Refresh status: idle.";
-  } catch (error) {
-    refreshStatusEl.textContent = `Refresh status: unavailable (${error.message}).`;
-  }
-}
-
 function renderMovies(items) {
   results.innerHTML = "";
 
@@ -248,7 +187,7 @@ function renderMovies(items) {
 
     title.textContent = movie.title;
     const yearText = movie.year ? `Year ${movie.year}` : "Year unknown";
-    sub.textContent = `${yearText} | Indexed from page ${movie.page}`;
+    sub.textContent = yearText;
 
     const fallbackPoster = buildFallbackPoster(movie.url);
     const yearPoster = buildYearPosterFallback(movie);
@@ -318,18 +257,7 @@ function syncPager() {
   pageLabel.textContent = state.totalPages === 0 ? "Page 0" : `Page ${state.page}`;
   prevBtn.disabled = state.page <= 1;
   nextBtn.disabled = state.page >= state.totalPages;
-  if (kpiTotal) {
-    kpiTotal.textContent = String(state.total);
-  }
-  if (kpiPage) {
-    kpiPage.textContent = state.totalPages === 0 ? "0" : String(state.page);
-  }
-  if (kpiPages) {
-    kpiPages.textContent = String(state.totalPages);
-  }
 }
 
 loadMovies();
-loadRefreshStatus();
-refreshStatusTimer = setInterval(loadRefreshStatus, 5000);
 initReveal();

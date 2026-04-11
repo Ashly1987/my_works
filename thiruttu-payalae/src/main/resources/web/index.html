@@ -13,13 +13,27 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <div class="ticker-wrap" role="status" aria-label="Disclaimer banner">
+      <div class="ticker-track">
+        <span
+          >This is strictly for educational purposes... especially the illegal
+          parts!</span
+        >
+        <span aria-hidden="true"
+          >This is strictly for educational purposes... especially the illegal
+          parts!</span
+        >
+      </div>
+    </div>
     <div class="grain"></div>
     <div class="orb orb-a" aria-hidden="true"></div>
     <div class="orb orb-b" aria-hidden="true"></div>
     <main class="shell">
       <header class="hero">
         <div class="topbar">
-          <p class="theme-label">Art Direction</p>
+          <p class="theme-label">
+            Art Direction <span class="by-ash">By ASH</span>
+          </p>
           <button
             id="theme-toggle"
             class="theme-toggle"
@@ -29,49 +43,26 @@
             Switch to Noir Mode
           </button>
         </div>
-        <p class="eyebrow">Curated Stream from SQLite</p>
         <h1><span>Movie</span> Link Atlas</h1>
+        <p class="hero-tagline">Browse. Click. Watch. Learn... maybe</p>
 
-        <form id="search-form" class="search-panel" autocomplete="off">
-          <label for="query">Search title</label>
-          <div class="search-row">
-            <input
-              id="query"
-              name="query"
-              type="search"
-              placeholder="Try: Leo, Vikram, Beast"
-              minlength="1"
-            />
-            <button type="submit">Search</button>
-          </div>
-          <div class="chips" aria-label="Quick searches">
-            <button class="chip" type="button" data-query="Leo">Leo</button>
-            <button class="chip" type="button" data-query="Vikram">
-              Vikram
-            </button>
-            <button class="chip" type="button" data-query="Beast">Beast</button>
-            <button class="chip" type="button" data-query="2024">2024</button>
-          </div>
-        </form>
+        <div class="hero-split">
+          <form id="search-form" class="search-panel" autocomplete="off">
+            <label for="query">Quick lookup</label>
+            <div class="search-row">
+              <input
+                id="query"
+                name="query"
+                type="search"
+                placeholder="Try: Leo, Vikram, Beast"
+                minlength="1"
+              />
+              <button type="submit">Search</button>
+            </div>
+          </form>
+        </div>
 
         <div class="meta" id="meta">Loading records...</div>
-        <div class="refresh-status" id="refresh-status">
-          Refresh status: checking...
-        </div>
-        <div class="kpis" aria-live="polite">
-          <article class="kpi">
-            <p class="kpi-label">Total Matches</p>
-            <p class="kpi-value" id="kpi-total">0</p>
-          </article>
-          <article class="kpi">
-            <p class="kpi-label">Current Page</p>
-            <p class="kpi-value" id="kpi-page">0</p>
-          </article>
-          <article class="kpi">
-            <p class="kpi-label">Pages</p>
-            <p class="kpi-value" id="kpi-pages">0</p>
-          </article>
-        </div>
       </header>
 
       <section class="reveal-block">
