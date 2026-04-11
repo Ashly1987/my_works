@@ -147,10 +147,10 @@ public class Database {
                     results.add(new MovieRecord(
                             rs.getString("title"),
                             rs.getString("url"),
-                            (Integer) rs.getObject("year"),
+                            toInteger(rs.getObject("year")),
                             rs.getInt("page"),
                             rs.getString("image_url"),
-                            (Double) rs.getObject("rating")
+                            toDouble(rs.getObject("rating"))
                     ));
                 }
             }
@@ -200,15 +200,35 @@ public class Database {
                     results.add(new MovieRecord(
                             rs.getString("title"),
                             rs.getString("url"),
-                            (Integer) rs.getObject("year"),
+                            toInteger(rs.getObject("year")),
                             rs.getInt("page"),
                             rs.getString("image_url"),
-                            (Double) rs.getObject("rating")
+                            toDouble(rs.getObject("rating"))
                     ));
                 }
             }
         }
 
         return results;
+    }
+
+    private static Integer toInteger(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.intValue();
+        }
+        return Integer.valueOf(value.toString());
+    }
+
+    private static Double toDouble(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        return Double.valueOf(value.toString());
     }
 }

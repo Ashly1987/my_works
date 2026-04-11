@@ -127,6 +127,15 @@ public class WebServer {
             headers.set("Content-Type", "application/json; charset=utf-8");
             exchange.sendResponseHeaders(500, body.length);
             exchange.getResponseBody().write(body);
+        } catch (RuntimeException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Unhandled server error");
+            error.put("detail", e.getMessage());
+            byte[] body = mapper.writeValueAsBytes(error);
+            Headers headers = exchange.getResponseHeaders();
+            headers.set("Content-Type", "application/json; charset=utf-8");
+            exchange.sendResponseHeaders(500, body.length);
+            exchange.getResponseBody().write(body);
         } finally {
             exchange.close();
         }
