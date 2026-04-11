@@ -45,6 +45,7 @@ Script options:
 - `--startup-base-url=https://moviesda18.com/tamil-2026-movies/`
 - `--startup-pages=8`
 - `--startup-max-depth=2`
+- `--startup-replace-existing`
 
 Options:
 
@@ -57,6 +58,7 @@ Options:
 - `--startup-base-url=...` Base URL for startup refresh crawl
 - `--startup-pages=...` Number of list pages to crawl during startup refresh (1-200)
 - `--startup-max-depth=...` Folder recursion depth during startup refresh (0-10)
+- `--startup-replace-existing` Clear existing rows before startup refresh upsert
 
 Environment variables:
 
@@ -66,6 +68,7 @@ Environment variables:
 - `STARTUP_BASE_URL` Base URL for startup refresh crawl
 - `STARTUP_PAGES` Number of pages for startup refresh crawl
 - `STARTUP_MAX_DEPTH` Recursion depth for startup refresh crawl
+- `STARTUP_REPLACE_EXISTING=true` Clears movies table before startup refresh (useful for one-time full rebuild)
 
 Website URL (default):
 
@@ -74,6 +77,8 @@ Website URL (default):
 By default, indexing executes during startup (every restart/deploy) and upserts fresh records.
 Use `--skip-startup-refresh` (or `STARTUP_REFRESH=false`) to disable this behavior.
 Tune crawl coverage by increasing `STARTUP_PAGES` and `STARTUP_MAX_DEPTH`.
+
+Note: "Upserted X records" means rows processed in that refresh run (inserts + updates). The actual unique catalog size is shown by API `total` and refresh status `total rows`.
 
 For Render/free-tier deployments with ephemeral storage, startup refresh helps repopulate data on each restart.
 

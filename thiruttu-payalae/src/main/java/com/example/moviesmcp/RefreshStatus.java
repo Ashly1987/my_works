@@ -6,6 +6,7 @@ public class RefreshStatus {
     private volatile long startedAtEpochMs;
     private volatile long completedAtEpochMs;
     private volatile int lastUpserted;
+    private volatile int totalRows;
 
     public synchronized void markRunning(String message) {
         this.status = "running";
@@ -13,9 +14,10 @@ public class RefreshStatus {
         this.startedAtEpochMs = System.currentTimeMillis();
     }
 
-    public synchronized void markCompleted(int upserted, String message) {
+    public synchronized void markCompleted(int upserted, int totalRows, String message) {
         this.status = "completed";
         this.lastUpserted = upserted;
+        this.totalRows = totalRows;
         this.message = message;
         this.completedAtEpochMs = System.currentTimeMillis();
     }
@@ -44,5 +46,9 @@ public class RefreshStatus {
 
     public int lastUpserted() {
         return lastUpserted;
+    }
+
+    public int totalRows() {
+        return totalRows;
     }
 }

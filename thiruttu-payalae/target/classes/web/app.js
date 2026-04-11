@@ -201,13 +201,14 @@ async function loadRefreshStatus() {
     const payload = await response.json();
     const status = (payload.status || "idle").toLowerCase();
     const upserted = Number(payload.lastUpserted || 0);
+    const totalRows = Number(payload.totalRows || 0);
 
     if (status === "running") {
       refreshStatusEl.textContent = "Refresh status: running in background...";
       return;
     }
     if (status === "completed") {
-      refreshStatusEl.textContent = `Refresh status: completed (upserted ${upserted} records).`;
+      refreshStatusEl.textContent = `Refresh status: completed (upserted ${upserted} records, total rows ${totalRows}).`;
       return;
     }
     if (status === "failed") {

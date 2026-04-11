@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 public class MovieIndexer {
     private static final Pattern YEAR_PATTERN = Pattern.compile("\\((\\d{4})\\)");
     private static final Pattern RATING_PATTERN = Pattern.compile("([0-9](?:\\.[0-9])?)\\s*/\\s*10");
-    private static final Pattern MOVIE_URL_PATTERN = Pattern.compile("/(?:[^/]+-)?tamil-(?:movie|web-series|dubbed-movie)/?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern MOVIE_URL_PATTERN = Pattern.compile("/(?:[^/]+-)?(?:tamil|telugu|malayalam|hindi)-(?:movie|web-series|dubbed-movie)/?$", Pattern.CASE_INSENSITIVE);
 
     private final String baseUrl;
     private final int maxPagesPerList;
@@ -58,23 +58,8 @@ public class MovieIndexer {
                     .timeout(20_000)
                     .get();
 
-            // Capture "latest updates" links on pages like homepage.
-            Elements latestBlocks = doc.select("main div.latest");
-            for (Element latest : latestBlocks) {
-                Element anchor = latest.selectFirst("a[href]");
-                if (anchor == null) {
-                    continue;
-                }
-                Element strong = latest.selectFirst("strong");
-                String title = strong != null ? strong.text().trim() : anchor.text().trim();
-                String absoluteUrl = toAbsoluteUrl(url, anchor.attr("href").trim());
-                if (!title.isEmpty() && !absoluteUrl.isEmpty()) {
-                    records.add(buildMovieRecord(title, absoluteUrl, page));
-                }
-            }
-
-            // Capture folder and movie links from category blocks.
-            Elements links = doc.select("main div.f a[href]");
+            // Capture links from latest blocks, category blocks, and fallback main anchors.
+            Elements links = doc.select("main div.latest a[href], main div.f a[href], main article a[href], main a[href]");
             for (Element anchor : links) {
                 String title = anchor.text().trim();
                 String href = anchor.attr("href").trim();
@@ -83,10 +68,19 @@ public class MovieIndexer {
                     continue;
                 }
 
+                if (title.isEmpty()) {
+                    title = anchor.attr("title").trim();
+                }
+                if (title.isEmpty()) {
+                    continue;
+                }
+
                 if (isLikelyMovieUrl(absoluteUrl)) {
-                    if (!title.isEmpty()) {
-                        records.add(buildMovieRecord(title, absoluteUrl, page));
-                    }
+                    records.add(buildMovieRecord(title, absoluteUrl, page));
+                    continue;
+                }
+
+                if (!isLikelyFolderUrl(absoluteUrl)) {
                     continue;
                 }
 
@@ -103,6 +97,19 @@ public class MovieIndexer {
             URI uri = new URI(absoluteUrl);
             String path = uri.getPath() == null ? "" : uri.getPath();
             return MOVIE_URL_PATTERN.matcher(path).find();
+        } catch (URISyntaxException e) {
+            return false;
+        }
+    }
+
+    private static boolean isLikelyFolderUrl(String absoluteUrl) {
+        try {
+            URI uri = new URI(absoluteUrl);
+            String path = uri.getPath() == null ? "" : uri.getPath().toLowerCase();
+            if (path.isBlank() || path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".webp") || path.endsWith(".gif")) {
+                return false;
+            }
+            return path.contains("/movies") || path.contains("/category") || path.contains("/tamil-") || path.contains("/home");
         } catch (URISyntaxException e) {
             return false;
         }

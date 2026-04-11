@@ -54,7 +54,8 @@ public class Database {
                         page INTEGER,
                         image_url TEXT,
                         rating REAL,
-                        created_at TIMESTAMPTZ DEFAULT NOW()
+                        created_at TIMESTAMPTZ DEFAULT NOW(),
+                        updated_at TIMESTAMPTZ DEFAULT NOW()
                     )
                     """);
             } else {
@@ -67,7 +68,8 @@ public class Database {
                         page INTEGER,
                         image_url TEXT,
                         rating REAL,
-                        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
                     )
                     """);
             }
@@ -75,6 +77,13 @@ public class Database {
 
             ensureColumn(stmt, "movies", "image_url", "TEXT", dialect);
             ensureColumn(stmt, "movies", "rating", "REAL", dialect);
+            ensureColumn(stmt, "movies", "updated_at", dialect == Dialect.POSTGRES ? "TIMESTAMPTZ DEFAULT NOW()" : "TEXT DEFAULT CURRENT_TIMESTAMP", dialect);
+        }
+    }
+
+    public void clearMovies() throws SQLException {
+        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+            stmt.execute("DELETE FROM movies");
         }
     }
 
@@ -101,7 +110,8 @@ public class Database {
     public void upsertMovies(List<MovieRecord> movies) throws SQLException {
         final String sql = "INSERT INTO movies (title, url, year, page, image_url, rating) VALUES (?, ?, ?, ?, ?, ?) " +
             "ON CONFLICT(url) DO UPDATE SET title = excluded.title, year = excluded.year, page = excluded.page, " +
-            "image_url = COALESCE(excluded.image_url, movies.image_url), rating = COALESCE(excluded.rating, movies.rating)";
+            "image_url = COALESCE(excluded.image_url, movies.image_url), rating = COALESCE(excluded.rating, movies.rating), " +
+            "updated_at = CURRENT_TIMESTAMP";
 
         try (Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
@@ -183,7 +193,7 @@ public class Database {
             ORDER BY
                 CASE WHEN image_url IS NOT NULL AND trim(image_url) <> '' THEN 1 ELSE 0 END DESC,
                 CASE WHEN rating IS NOT NULL THEN 1 ELSE 0 END DESC,
-                created_at DESC,
+                COALESCE(updated_at, created_at) DESC,
                 id DESC
             LIMIT ? OFFSET ?
             """;

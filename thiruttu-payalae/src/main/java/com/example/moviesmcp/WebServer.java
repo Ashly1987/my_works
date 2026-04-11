@@ -157,6 +157,7 @@ public class WebServer {
             payload.put("startedAtEpochMs", refreshStatus.startedAtEpochMs());
             payload.put("completedAtEpochMs", refreshStatus.completedAtEpochMs());
             payload.put("lastUpserted", refreshStatus.lastUpserted());
+            payload.put("totalRows", refreshStatus.totalRows());
 
             byte[] body = mapper.writeValueAsBytes(payload);
             Headers headers = exchange.getResponseHeaders();

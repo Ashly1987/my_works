@@ -21,7 +21,7 @@ public class Main {
         database.initialize();
 
         if (config.startupRefreshEnabled()) {
-            runStartupRefreshAsync(database, refreshStatus, config.startupBaseUrl(), config.startupPages(), config.startupMaxDepth());
+            runStartupRefreshAsync(database, refreshStatus, config.startupBaseUrl(), config.startupPages(), config.startupMaxDepth(), config.startupReplaceExisting());
         }
 
         if (config.webEnabled()) {
@@ -34,16 +34,21 @@ public class Main {
         server.start(System.in, System.out);
     }
 
-    private static void runStartupRefreshAsync(Database database, RefreshStatus refreshStatus, String baseUrl, int pages, int maxDepth) {
+    private static void runStartupRefreshAsync(Database database, RefreshStatus refreshStatus, String baseUrl, int pages,
+                                               int maxDepth, boolean replaceExisting) {
         Thread refreshThread = new Thread(() -> {
             try {
-                refreshStatus.markRunning("Refreshing from " + baseUrl + " (pages=" + pages + ", depth=" + maxDepth + ")");
+                refreshStatus.markRunning("Refreshing from " + baseUrl + " (pages=" + pages + ", depth=" + maxDepth + ", replace=" + replaceExisting + ")");
                 System.err.println("Startup refresh started in background.");
                 MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth);
                 List<MovieRecord> movies = indexer.fetchAllMovies();
+                if (replaceExisting) {
+                    database.clearMovies();
+                }
                 database.upsertMovies(movies);
-                System.err.println("Startup refresh completed. Upserted " + movies.size() + " records.");
-                refreshStatus.markCompleted(movies.size(), "Refresh completed");
+                int totalRows = database.countMovies();
+                System.err.println("Startup refresh completed. Upserted " + movies.size() + " records. Total rows=" + totalRows + ".");
+                refreshStatus.markCompleted(movies.size(), totalRows, "Refresh completed");
             } catch (Exception e) {
                 System.err.println("Startup refresh failed: " + e.getMessage());
                 refreshStatus.markFailed(e.getMessage() != null ? e.getMessage() : "Unknown refresh failure");
@@ -54,7 +59,8 @@ public class Main {
     }
 
     private record Config(Path dbPath, String jdbcUrl, boolean webEnabled, String webHost, int webPort,
-                          boolean startupRefreshEnabled, String startupBaseUrl, int startupPages, int startupMaxDepth) {
+                          boolean startupRefreshEnabled, String startupBaseUrl, int startupPages,
+                          int startupMaxDepth, boolean startupReplaceExisting) {
         static Config fromArgs(String[] args) {
             Path dbPath = Path.of("movies.db");
             String jdbcUrl = null;
@@ -65,6 +71,7 @@ public class Main {
             String startupBaseUrl = DEFAULT_LIST_URL;
             int startupPages = DEFAULT_TOTAL_PAGES;
             int startupMaxDepth = DEFAULT_MAX_DEPTH;
+            boolean startupReplaceExisting = false;
 
             String envJdbc = System.getenv("DATABASE_URL");
             if (envJdbc != null && !envJdbc.isBlank()) {
@@ -97,6 +104,10 @@ public class Main {
             if (envStartupMaxDepth != null && !envStartupMaxDepth.isBlank()) {
                 startupMaxDepth = parseIntRange(envStartupMaxDepth, DEFAULT_MAX_DEPTH, 0, 10);
             }
+            String envStartupReplace = System.getenv("STARTUP_REPLACE_EXISTING");
+            if (envStartupReplace != null && !envStartupReplace.isBlank()) {
+                startupReplaceExisting = "true".equalsIgnoreCase(envStartupReplace.trim());
+            }
 
             for (String arg : args) {
                 if (arg.startsWith("--db=")) {
@@ -113,6 +124,9 @@ public class Main {
                 }
                 if (arg.equals("--skip-startup-refresh")) {
                     startupRefreshEnabled = false;
+                }
+                if (arg.equals("--startup-replace-existing")) {
+                    startupReplaceExisting = true;
                 }
                 if (arg.startsWith("--startup-base-url=")) {
                     String parsed = arg.substring("--startup-base-url=".length()).trim();
@@ -147,8 +161,8 @@ public class Main {
                 }
             }
 
-            return new Config(dbPath, jdbcUrl, webEnabled, webHost, webPort,
-                    startupRefreshEnabled, startupBaseUrl, startupPages, startupMaxDepth);
+                return new Config(dbPath, jdbcUrl, webEnabled, webHost, webPort,
+                    startupRefreshEnabled, startupBaseUrl, startupPages, startupMaxDepth, startupReplaceExisting);
         }
 
         private static int parseIntRange(String raw, int fallback, int min, int max) {

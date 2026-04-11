@@ -40,6 +40,7 @@ Startup flags:
 - `--startup-base-url=<url>` startup refresh base list URL
 - `--startup-pages=<n>` startup refresh page count (1-200)
 - `--startup-max-depth=<n>` startup refresh recursion depth (0-10)
+- `--startup-replace-existing` clears rows before startup refresh upsert
 
 Environment variables:
 
@@ -49,6 +50,7 @@ Environment variables:
 - `STARTUP_BASE_URL` startup refresh base list URL
 - `STARTUP_PAGES` startup refresh page count
 - `STARTUP_MAX_DEPTH` startup refresh recursion depth
+- `STARTUP_REPLACE_EXISTING=true` clears rows before startup refresh
 
 Helper script:
 
@@ -70,4 +72,5 @@ Deployment artifacts:
 - Maven is required for dependency resolution and packaging.
 - Startup refresh performs live network scraping; startup can be slower depending on target site latency.
 - Crawling "all" links is best-effort and depends on source site structure, availability, and configured pages/depth limits.
+- "Upserted" count in logs is processed rows (insert+update), not the final unique row count.
 - Supabase project/database must be created in Supabase dashboard; app-side schema/table bootstrap is automatic at first run.
