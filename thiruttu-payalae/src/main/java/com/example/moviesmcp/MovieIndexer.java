@@ -24,6 +24,8 @@ public class MovieIndexer {
     private final int maxPagesPerList;
     private final int maxDepth;
     private final boolean fetchMetadata;
+    private final int metadataLimit;
+    private int metadataFetchedCount;
 
     public MovieIndexer(String baseUrl, int maxPagesPerList) {
         this(baseUrl, maxPagesPerList, 2);
@@ -34,13 +36,19 @@ public class MovieIndexer {
     }
 
     public MovieIndexer(String baseUrl, int maxPagesPerList, int maxDepth, boolean fetchMetadata) {
+        this(baseUrl, maxPagesPerList, maxDepth, fetchMetadata, Integer.MAX_VALUE);
+    }
+
+    public MovieIndexer(String baseUrl, int maxPagesPerList, int maxDepth, boolean fetchMetadata, int metadataLimit) {
         this.baseUrl = baseUrl;
         this.maxPagesPerList = Math.max(1, maxPagesPerList);
         this.maxDepth = Math.max(0, maxDepth);
         this.fetchMetadata = fetchMetadata;
+        this.metadataLimit = Math.max(0, metadataLimit);
     }
 
     public List<MovieRecord> fetchAllMovies() throws IOException {
+        metadataFetchedCount = 0;
         List<MovieRecord> records = new ArrayList<>();
         Set<String> visitedPages = new HashSet<>();
         Set<String> visitedFolders = new HashSet<>();
@@ -184,7 +192,13 @@ public class MovieIndexer {
 
     private MovieRecord buildMovieRecord(String title, String absoluteUrl, int page) {
         Integer year = extractYear(title);
-        MovieMetadata metadata = fetchMetadata ? fetchMovieMetadata(absoluteUrl) : new MovieMetadata(null, null);
+        MovieMetadata metadata;
+        if (fetchMetadata && metadataFetchedCount < metadataLimit) {
+            metadata = fetchMovieMetadata(absoluteUrl);
+            metadataFetchedCount++;
+        } else {
+            metadata = new MovieMetadata(null, null);
+        }
         return new MovieRecord(title, absoluteUrl, year, page, metadata.imageUrl(), metadata.rating());
     }
 

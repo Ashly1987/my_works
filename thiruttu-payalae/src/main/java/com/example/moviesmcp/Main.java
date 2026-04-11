@@ -22,7 +22,8 @@ public class Main {
 
         if (config.startupRefreshEnabled()) {
             runStartupRefreshAsync(database, refreshStatus, config.startupBaseUrl(), config.startupPages(),
-                    config.startupMaxDepth(), config.startupReplaceExisting(), config.startupFetchMetadata());
+                    config.startupMaxDepth(), config.startupReplaceExisting(),
+                    config.startupFetchMetadata(), config.startupMetadataLimit());
         }
 
         if (config.webEnabled()) {
@@ -36,13 +37,15 @@ public class Main {
     }
 
     private static void runStartupRefreshAsync(Database database, RefreshStatus refreshStatus, String baseUrl, int pages,
-                                               int maxDepth, boolean replaceExisting, boolean fetchMetadata) {
+                               int maxDepth, boolean replaceExisting, boolean fetchMetadata,
+                               int metadataLimit) {
         Thread refreshThread = new Thread(() -> {
             try {
                 refreshStatus.markRunning("Refreshing from " + baseUrl + " (pages=" + pages + ", depth=" + maxDepth
-                        + ", replace=" + replaceExisting + ", metadata=" + fetchMetadata + ")");
+                + ", replace=" + replaceExisting + ", metadata=" + fetchMetadata
+                + ", metadataLimit=" + metadataLimit + ")");
                 System.err.println("Startup refresh started in background.");
-                MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth, fetchMetadata);
+            MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth, fetchMetadata, metadataLimit);
                 List<MovieRecord> movies = indexer.fetchAllMovies();
                 if (replaceExisting) {
                     database.clearMovies();
@@ -62,7 +65,8 @@ public class Main {
 
     private record Config(Path dbPath, String jdbcUrl, boolean webEnabled, String webHost, int webPort,
                           boolean startupRefreshEnabled, String startupBaseUrl, int startupPages,
-                          int startupMaxDepth, boolean startupReplaceExisting, boolean startupFetchMetadata) {
+                          int startupMaxDepth, boolean startupReplaceExisting, boolean startupFetchMetadata,
+                          int startupMetadataLimit) {
         static Config fromArgs(String[] args) {
             Path dbPath = Path.of("movies.db");
             String jdbcUrl = null;
@@ -75,6 +79,7 @@ public class Main {
             int startupMaxDepth = DEFAULT_MAX_DEPTH;
             boolean startupReplaceExisting = false;
             boolean startupFetchMetadata = false;
+            int startupMetadataLimit = 150;
 
             String envJdbc = System.getenv("DATABASE_URL");
             if (envJdbc != null && !envJdbc.isBlank()) {
@@ -115,6 +120,10 @@ public class Main {
             if (envStartupFetchMetadata != null && !envStartupFetchMetadata.isBlank()) {
                 startupFetchMetadata = "true".equalsIgnoreCase(envStartupFetchMetadata.trim());
             }
+            String envStartupMetadataLimit = System.getenv("STARTUP_METADATA_LIMIT");
+            if (envStartupMetadataLimit != null && !envStartupMetadataLimit.isBlank()) {
+                startupMetadataLimit = parseIntRange(envStartupMetadataLimit, 150, 0, 5000);
+            }
 
             for (String arg : args) {
                 if (arg.startsWith("--db=")) {
@@ -137,6 +146,10 @@ public class Main {
                 }
                 if (arg.equals("--startup-fetch-metadata")) {
                     startupFetchMetadata = true;
+                }
+                if (arg.startsWith("--startup-metadata-limit=")) {
+                    String parsed = arg.substring("--startup-metadata-limit=".length()).trim();
+                    startupMetadataLimit = parseIntRange(parsed, 150, 0, 5000);
                 }
                 if (arg.startsWith("--startup-base-url=")) {
                     String parsed = arg.substring("--startup-base-url=".length()).trim();
@@ -173,7 +186,7 @@ public class Main {
 
                 return new Config(dbPath, jdbcUrl, webEnabled, webHost, webPort,
                         startupRefreshEnabled, startupBaseUrl, startupPages, startupMaxDepth,
-                        startupReplaceExisting, startupFetchMetadata);
+                        startupReplaceExisting, startupFetchMetadata, startupMetadataLimit);
         }
 
         private static int parseIntRange(String raw, int fallback, int min, int max) {

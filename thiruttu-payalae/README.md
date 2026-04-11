@@ -47,6 +47,7 @@ Script options:
 - `--startup-max-depth=2`
 - `--startup-replace-existing`
 - `--startup-fetch-metadata`
+- `--startup-metadata-limit=150`
 
 Options:
 
@@ -61,6 +62,7 @@ Options:
 - `--startup-max-depth=...` Folder recursion depth during startup refresh (0-10)
 - `--startup-replace-existing` Clear existing rows before startup refresh upsert
 - `--startup-fetch-metadata` Enable per-movie metadata scraping during startup refresh (slower)
+- `--startup-metadata-limit=...` Maximum movie detail pages to scrape for metadata in one startup run
 
 Environment variables:
 
@@ -72,6 +74,7 @@ Environment variables:
 - `STARTUP_MAX_DEPTH` Recursion depth for startup refresh crawl
 - `STARTUP_REPLACE_EXISTING=true` Clears movies table before startup refresh (useful for one-time full rebuild)
 - `STARTUP_FETCH_METADATA=false` Skip per-movie metadata fetch on startup for faster indexing
+- `STARTUP_METADATA_LIMIT=150` Caps metadata detail-page fetches per startup run
 
 Website URL (default):
 
