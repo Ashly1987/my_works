@@ -1,5 +1,18 @@
 services:
   - type: web
+    name: movies-mcp-server
+    env: java
+    rootDir: thiruttu-payalae
+    buildCommand: mvn -q -DskipTests package
+    startCommand: java -jar target/movies-mcp-server-1.0.0-jar-with-dependencies.jar --web-host=0.0.0.0 --web-port=$PORT
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: STARTUP_REFRESH
+        value: "true"
+
+  - type: web
     name: butflix-backend
     env: node
     rootDir: butflix/backend
