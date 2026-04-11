@@ -20,14 +20,16 @@ import java.util.concurrent.Executors;
 
 public class WebServer {
     private final Database database;
+    private final RefreshStatus refreshStatus;
     private final ObjectMapper mapper = new ObjectMapper();
     private final String host;
     private final int port;
 
     private HttpServer server;
 
-    public WebServer(Database database, String host, int port) {
+    public WebServer(Database database, RefreshStatus refreshStatus, String host, int port) {
         this.database = database;
+        this.refreshStatus = refreshStatus;
         this.host = host;
         this.port = port;
     }
@@ -39,6 +41,7 @@ public class WebServer {
         server.createContext("/styles.css", serveStatic("web/styles.css", "text/css; charset=utf-8"));
         server.createContext("/app.js", serveStatic("web/app.js", "application/javascript; charset=utf-8"));
         server.createContext("/api/movies", this::handleMoviesApi);
+        server.createContext("/api/refresh-status", this::handleRefreshStatusApi);
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
     }
@@ -135,6 +138,31 @@ public class WebServer {
             Headers headers = exchange.getResponseHeaders();
             headers.set("Content-Type", "application/json; charset=utf-8");
             exchange.sendResponseHeaders(500, body.length);
+            exchange.getResponseBody().write(body);
+        } finally {
+            exchange.close();
+        }
+    }
+
+    private void handleRefreshStatusApi(HttpExchange exchange) throws IOException {
+        if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+            sendText(exchange, 405, "Method Not Allowed", "application/json; charset=utf-8");
+            return;
+        }
+
+        try {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("status", refreshStatus.status());
+            payload.put("message", refreshStatus.message());
+            payload.put("startedAtEpochMs", refreshStatus.startedAtEpochMs());
+            payload.put("completedAtEpochMs", refreshStatus.completedAtEpochMs());
+            payload.put("lastUpserted", refreshStatus.lastUpserted());
+
+            byte[] body = mapper.writeValueAsBytes(payload);
+            Headers headers = exchange.getResponseHeaders();
+            headers.set("Content-Type", "application/json; charset=utf-8");
+            headers.set("Cache-Control", "no-cache");
+            exchange.sendResponseHeaders(200, body.length);
             exchange.getResponseBody().write(body);
         } finally {
             exchange.close();

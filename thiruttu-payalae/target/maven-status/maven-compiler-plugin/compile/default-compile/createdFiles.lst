@@ -1,9 +1,9 @@
-com/example/moviesmcp/MovieIndexer.class
 com/example/moviesmcp/Main$Config.class
-com/example/moviesmcp/WebServer.class
-com/example/moviesmcp/Database.class
 com/example/moviesmcp/Main.class
 com/example/moviesmcp/MovieIndexer$MovieMetadata.class
 com/example/moviesmcp/McpServer$FramingMode.class
-com/example/moviesmcp/McpServer.class
 com/example/moviesmcp/MovieRecord.class
+com/example/moviesmcp/MovieIndexer.class
+com/example/moviesmcp/WebServer.class
+com/example/moviesmcp/Database.class
+com/example/moviesmcp/McpServer.class

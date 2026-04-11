@@ -13,6 +13,7 @@ const results = document.getElementById("results");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const pageLabel = document.getElementById("page-label");
+const refreshStatusEl = document.getElementById("refresh-status");
 const itemTemplate = document.getElementById("result-item-template");
 const kpiTotal = document.getElementById("kpi-total");
 const kpiPage = document.getElementById("kpi-page");
@@ -22,6 +23,7 @@ const themeToggle = document.getElementById("theme-toggle");
 const revealBlocks = document.querySelectorAll(".reveal-block");
 let liveSearchTimer = null;
 let requestCounter = 0;
+let refreshStatusTimer = null;
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -185,6 +187,41 @@ async function loadMovies() {
   }
 }
 
+async function loadRefreshStatus() {
+  if (!refreshStatusEl) {
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/refresh-status");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const status = (payload.status || "idle").toLowerCase();
+    const upserted = Number(payload.lastUpserted || 0);
+
+    if (status === "running") {
+      refreshStatusEl.textContent = "Refresh status: running in background...";
+      return;
+    }
+    if (status === "completed") {
+      refreshStatusEl.textContent = `Refresh status: completed (upserted ${upserted} records).`;
+      return;
+    }
+    if (status === "failed") {
+      const detail = payload.message ? ` ${payload.message}` : "";
+      refreshStatusEl.textContent = `Refresh status: failed.${detail}`;
+      return;
+    }
+
+    refreshStatusEl.textContent = "Refresh status: idle.";
+  } catch (error) {
+    refreshStatusEl.textContent = `Refresh status: unavailable (${error.message}).`;
+  }
+}
+
 function renderMovies(items) {
   results.innerHTML = "";
 
@@ -260,4 +297,6 @@ function syncPager() {
 }
 
 loadMovies();
+loadRefreshStatus();
+refreshStatusTimer = setInterval(loadRefreshStatus, 5000);
 initReveal();

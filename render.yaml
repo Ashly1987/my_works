@@ -5,6 +5,10 @@ services:
     rootDir: thiruttu-payalae
     dockerfilePath: thiruttu-payalae/Dockerfile
     dockerContext: thiruttu-payalae
+    buildFilter:
+      paths:
+        - thiruttu-payalae/**
+        - render.yaml
     plan: free
     envVars:
       - key: DATABASE_URL

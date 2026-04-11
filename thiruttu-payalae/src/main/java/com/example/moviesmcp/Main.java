@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         Config config = Config.fromArgs(args);
+        RefreshStatus refreshStatus = new RefreshStatus();
 
         Database database = config.jdbcUrl() != null && !config.jdbcUrl().isBlank()
                 ? new Database(config.jdbcUrl())
@@ -20,11 +21,11 @@ public class Main {
         database.initialize();
 
         if (config.startupRefreshEnabled()) {
-            runStartupRefreshAsync(database, config.startupBaseUrl(), config.startupPages(), config.startupMaxDepth());
+            runStartupRefreshAsync(database, refreshStatus, config.startupBaseUrl(), config.startupPages(), config.startupMaxDepth());
         }
 
         if (config.webEnabled()) {
-            WebServer webServer = new WebServer(database, config.webHost(), config.webPort());
+            WebServer webServer = new WebServer(database, refreshStatus, config.webHost(), config.webPort());
             webServer.start();
             System.err.println("Web UI running at " + webServer.baseUrl());
         }
@@ -33,16 +34,19 @@ public class Main {
         server.start(System.in, System.out);
     }
 
-    private static void runStartupRefreshAsync(Database database, String baseUrl, int pages, int maxDepth) {
+    private static void runStartupRefreshAsync(Database database, RefreshStatus refreshStatus, String baseUrl, int pages, int maxDepth) {
         Thread refreshThread = new Thread(() -> {
             try {
+                refreshStatus.markRunning("Refreshing from " + baseUrl + " (pages=" + pages + ", depth=" + maxDepth + ")");
                 System.err.println("Startup refresh started in background.");
                 MovieIndexer indexer = new MovieIndexer(baseUrl, pages, maxDepth);
                 List<MovieRecord> movies = indexer.fetchAllMovies();
                 database.upsertMovies(movies);
                 System.err.println("Startup refresh completed. Upserted " + movies.size() + " records.");
+                refreshStatus.markCompleted(movies.size(), "Refresh completed");
             } catch (Exception e) {
                 System.err.println("Startup refresh failed: " + e.getMessage());
+                refreshStatus.markFailed(e.getMessage() != null ? e.getMessage() : "Unknown refresh failure");
             }
         }, "startup-refresh");
         refreshThread.setDaemon(true);
