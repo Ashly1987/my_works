@@ -26,6 +26,7 @@ Build a Java MCP server and companion website that can search movie names and op
 - MCP server startup runs indexing by default and upserts latest records.
 - Server startup can skip indexing with `--skip-startup-refresh` or `STARTUP_REFRESH=false`.
 - Website starts by default on `127.0.0.1:8080` and reads from same DB.
+- Website header now includes a modern clickable logo linking back to `/`.
 - Website tiles now show a Play button and render poster/rating when available (with fallbacks).
 - Website listing supports multiple sort modes (Latest, Top Rated, Year, Title) through a sort control in the search panel.
 - `Love Insurance Kompany (2026)` is pinned to top priority in matching result sets.

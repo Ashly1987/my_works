@@ -7,6 +7,7 @@ Small MCP server in Java that:
 - Exposes MCP tools `search_movie` and `refresh_index`
 - Serves a website UI that reads movie links from the same database
 - Tracks website visits (daily and total) with a daily report
+- Shows a modern Thiruttu Verse logo in the header that links to the home page
 
 ## Requirements
 

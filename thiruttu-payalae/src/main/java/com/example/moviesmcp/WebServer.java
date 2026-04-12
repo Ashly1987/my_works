@@ -42,6 +42,7 @@ public class WebServer {
         server.createContext("/styles.css", serveStatic("web/styles.css", "text/css; charset=utf-8"));
         server.createContext("/app.js", serveStatic("web/app.js", "application/javascript; charset=utf-8"));
         server.createContext("/view-report.js", serveStatic("web/view-report.js", "application/javascript; charset=utf-8"));
+        server.createContext("/tv-logo.svg", serveStatic("web/tv-logo.svg", "image/svg+xml; charset=utf-8"));
         server.createContext("/api/movies", this::handleMoviesApi);
         server.createContext("/api/view-stats", this::handleViewStatsApi);
         server.createContext("/api/refresh-status", this::handleRefreshStatusApi);

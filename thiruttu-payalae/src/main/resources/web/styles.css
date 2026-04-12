@@ -227,6 +227,45 @@ body[data-theme="sepia"] .hero {
   margin-bottom: 0.5rem;
 }
 
+.brand-stack {
+  display: grid;
+  gap: 0.22rem;
+  align-items: start;
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+  padding: 0.16rem 0.22rem;
+  transition:
+    transform 0.22s ease,
+    filter 0.22s ease;
+}
+
+.brand-link:hover {
+  transform: translateY(-1px);
+  filter: saturate(1.12);
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(17, 13, 28, 0.2);
+}
+
+.brand-mini {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--text) 82%, var(--brand));
+}
+
 .theme-label {
   margin: 0;
   text-transform: uppercase;
@@ -726,6 +765,28 @@ body[data-theme="noir"] .theme-label {
 }
 
 @media (max-width: 520px) {
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .brand-stack {
+    gap: 0.18rem;
+  }
+
+  .theme-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.09em;
+  }
+
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand-mini {
+    font-size: 0.88rem;
+  }
+
   h1 {
     margin: 0.4rem 0 0.12rem;
     line-height: 1.09;
