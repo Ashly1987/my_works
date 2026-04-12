@@ -38,9 +38,12 @@ public class WebServer {
         server = HttpServer.create(new InetSocketAddress(host, port), 0);
         server.createContext("/", this::serveIndex);
         server.createContext("/index.html", this::serveIndex);
+        server.createContext("/view-report.html", serveStatic("web/view-report.html", "text/html; charset=utf-8"));
         server.createContext("/styles.css", serveStatic("web/styles.css", "text/css; charset=utf-8"));
         server.createContext("/app.js", serveStatic("web/app.js", "application/javascript; charset=utf-8"));
+        server.createContext("/view-report.js", serveStatic("web/view-report.js", "application/javascript; charset=utf-8"));
         server.createContext("/api/movies", this::handleMoviesApi);
+        server.createContext("/api/view-stats", this::handleViewStatsApi);
         server.createContext("/api/refresh-status", this::handleRefreshStatusApi);
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
@@ -61,6 +64,14 @@ public class WebServer {
             sendText(exchange, 405, "Method Not Allowed", "text/plain; charset=utf-8");
             return;
         }
+
+        try {
+            database.incrementPageView();
+        } catch (SQLException e) {
+            sendText(exchange, 500, "Failed to record view count", "text/plain; charset=utf-8");
+            return;
+        }
+
         serveStatic("web/index.html", "text/html; charset=utf-8").handle(exchange);
     }
 
@@ -164,6 +175,43 @@ public class WebServer {
             headers.set("Content-Type", "application/json; charset=utf-8");
             headers.set("Cache-Control", "no-cache");
             exchange.sendResponseHeaders(200, body.length);
+            exchange.getResponseBody().write(body);
+        } finally {
+            exchange.close();
+        }
+    }
+
+    private void handleViewStatsApi(HttpExchange exchange) throws IOException {
+        if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+            sendText(exchange, 405, "Method Not Allowed", "application/json; charset=utf-8");
+            return;
+        }
+
+        URI requestUri = exchange.getRequestURI();
+        Map<String, String> params = parseQuery(requestUri.getRawQuery());
+        int days = parseInt(params.get("days"), 14, 1, 365);
+
+        try {
+            Database.ViewStats stats = database.getViewStats(days);
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("todayViews", stats.todayViews());
+            payload.put("totalViews", stats.totalViews());
+            payload.put("report", stats.report());
+
+            byte[] body = mapper.writeValueAsBytes(payload);
+            Headers headers = exchange.getResponseHeaders();
+            headers.set("Content-Type", "application/json; charset=utf-8");
+            headers.set("Cache-Control", "no-cache");
+            exchange.sendResponseHeaders(200, body.length);
+            exchange.getResponseBody().write(body);
+        } catch (SQLException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Failed to fetch view stats");
+            error.put("detail", e.getMessage());
+            byte[] body = mapper.writeValueAsBytes(error);
+            Headers headers = exchange.getResponseHeaders();
+            headers.set("Content-Type", "application/json; charset=utf-8");
+            exchange.sendResponseHeaders(500, body.length);
             exchange.getResponseBody().write(body);
         } finally {
             exchange.close();

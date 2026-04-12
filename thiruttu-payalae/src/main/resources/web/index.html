@@ -47,22 +47,44 @@
         <p class="hero-tagline">Browse. Click. Watch. Learn... maybe</p>
 
         <div class="hero-split">
-          <form id="search-form" class="search-panel" autocomplete="off">
-            <label for="query">Quick lookup</label>
-            <div class="search-row">
-              <input
-                id="query"
-                name="query"
-                type="search"
-                placeholder="Try: Leo, Vikram, Beast"
-                minlength="1"
-              />
-              <button type="submit">Search</button>
-            </div>
-          </form>
-        </div>
+          <div class="hero-primary">
+            <form id="search-form" class="search-panel" autocomplete="off">
+              <label for="query">Quick lookup</label>
+              <div class="search-row">
+                <input
+                  id="query"
+                  name="query"
+                  type="search"
+                  placeholder="Try: Leo, Vikram, Beast"
+                  minlength="1"
+                />
+                <button type="submit">Search</button>
+              </div>
+            </form>
 
-        <div class="meta" id="meta">Loading records...</div>
+            <div class="meta" id="meta">Loading records...</div>
+          </div>
+
+          <section class="views-panel reveal-block" aria-live="polite">
+            <div class="views-kpis">
+              <article class="view-kpi">
+                <p class="view-kpi-label">Daily Views</p>
+                <p class="view-kpi-value" id="views-today">0</p>
+              </article>
+              <article class="view-kpi">
+                <p class="view-kpi-label">Total Views</p>
+                <p class="view-kpi-value" id="views-total">0</p>
+              </article>
+            </div>
+            <a
+              href="/view-report.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="views-report-link"
+              >Open Views Per Day Report</a
+            >
+          </section>
+        </div>
       </header>
 
       <section class="reveal-block">

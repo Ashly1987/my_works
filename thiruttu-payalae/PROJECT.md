@@ -9,7 +9,7 @@ Build a Java MCP server and companion website that can search movie names and op
 - `MovieIndexer`: Scrapes paginated list pages and extracts title + URL, then attempts to collect image/rating metadata from movie pages.
 - `Database`: Stores records in SQLite or PostgreSQL and supports title search with optional `image_url` and `rating` fields.
 - `McpServer`: Implements MCP over stdio (`initialize`, `tools/list`, `tools/call`, `ping`).
-- `WebServer`: Serves website assets and JSON API (`/api/movies`) from the configured database.
+- `WebServer`: Serves website assets and JSON APIs (`/api/movies`, `/api/view-stats`) from the configured database.
 - `Main`: Bootstraps database, performs startup refresh, and starts MCP server.
 
 ## Tool Exposed
@@ -28,6 +28,8 @@ Build a Java MCP server and companion website that can search movie names and op
 - Website starts by default on `127.0.0.1:8080` and reads from same DB.
 - Website tiles now show a Play button and render poster/rating when available (with fallbacks).
 - Website listing is sorted newest-first by year and first-seen timestamp.
+- Website records page visits and shows daily views, total views, and a per-day report.
+- Home page includes a link to a dedicated views report page with 7/14/30 day filters.
 - Index refresh is manual through the `refresh_index` MCP tool, including latest links and nested category folders.
 
 Startup flags:

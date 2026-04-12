@@ -6,6 +6,7 @@ Small MCP server in Java that:
 - Stores them in SQLite or PostgreSQL (Supabase)
 - Exposes MCP tools `search_movie` and `refresh_index`
 - Serves a website UI that reads movie links from the same database
+- Tracks website visits (daily and total) with a daily report
 
 ## Requirements
 
@@ -148,6 +149,7 @@ Local helper startup now prints a health line once the web listener is up.
 Endpoint:
 
 - `GET /api/movies?query=<text>&page=<n>&limit=<n>`
+- `GET /api/view-stats?days=<n>`
 
 Example:
 
@@ -160,6 +162,17 @@ Response contains:
 - `total`: total matching records
 - `totalPages`: number of pages for given `limit`
 - `results`: list of `title`, `url`, `year`, `page`, `imageUrl`, `rating`
+
+View stats response contains:
+
+- `todayViews`: visit count for current day
+- `totalViews`: cumulative visit count
+- `report`: list of `{ day, views }`, newest day first
+
+Website views report page:
+
+- `GET /view-report.html` opens a detailed report in a new tab
+- Includes quick filters for last `7`, `14`, or `30` days
 
 Default listing order is newest-first (higher `year`, then latest first-seen records).
 

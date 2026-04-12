@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+    public record DailyView(String day, int views) {
+    }
+
+    public record ViewStats(int todayViews, int totalViews, List<DailyView> report) {
+    }
+
     private enum Dialect {
         SQLITE,
         POSTGRES
@@ -74,6 +80,22 @@ public class Database {
                     """);
             }
             stmt.execute("CREATE INDEX IF NOT EXISTS idx_movies_title ON movies(title)");
+
+            if (dialect == Dialect.POSTGRES) {
+                stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS view_counts (
+                        view_date DATE PRIMARY KEY,
+                        view_count INTEGER NOT NULL DEFAULT 0
+                    )
+                    """);
+            } else {
+                stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS view_counts (
+                        view_date TEXT PRIMARY KEY,
+                        view_count INTEGER NOT NULL DEFAULT 0
+                    )
+                    """);
+            }
 
             ensureColumn(stmt, "movies", "image_url", "TEXT", dialect);
             ensureColumn(stmt, "movies", "rating", "REAL", dialect);
@@ -220,6 +242,50 @@ public class Database {
         }
 
         return results;
+    }
+
+    public void incrementPageView() throws SQLException {
+        final String sql = dialect == Dialect.POSTGRES
+            ? "INSERT INTO view_counts (view_date, view_count) VALUES (CURRENT_DATE, 1) ON CONFLICT(view_date) DO UPDATE SET view_count = view_counts.view_count + 1"
+            : "INSERT INTO view_counts (view_date, view_count) VALUES (date('now'), 1) ON CONFLICT(view_date) DO UPDATE SET view_count = view_count + 1";
+
+        try (Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.executeUpdate();
+        }
+    }
+
+    public ViewStats getViewStats(int reportDays) throws SQLException {
+        final String todaySql = dialect == Dialect.POSTGRES
+            ? "SELECT COALESCE(view_count, 0) FROM view_counts WHERE view_date = CURRENT_DATE"
+            : "SELECT COALESCE(view_count, 0) FROM view_counts WHERE view_date = date('now')";
+        final String totalSql = "SELECT COALESCE(SUM(view_count), 0) FROM view_counts";
+        final String reportSql = "SELECT view_date, view_count FROM view_counts ORDER BY view_date DESC LIMIT ?";
+
+        int safeDays = Math.max(1, Math.min(reportDays, 365));
+
+        try (Connection conn = connect()) {
+            int todayViews;
+            try (PreparedStatement ps = conn.prepareStatement(todaySql); ResultSet rs = ps.executeQuery()) {
+                todayViews = rs.next() ? rs.getInt(1) : 0;
+            }
+
+            int totalViews;
+            try (PreparedStatement ps = conn.prepareStatement(totalSql); ResultSet rs = ps.executeQuery()) {
+                totalViews = rs.next() ? rs.getInt(1) : 0;
+            }
+
+            List<DailyView> report = new ArrayList<>();
+            try (PreparedStatement ps = conn.prepareStatement(reportSql)) {
+                ps.setInt(1, safeDays);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        report.add(new DailyView(String.valueOf(rs.getObject("view_date")), rs.getInt("view_count")));
+                    }
+                }
+            }
+
+            return new ViewStats(todayViews, totalViews, report);
+        }
     }
 
     private static Integer toInteger(Object value) {

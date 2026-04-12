@@ -14,6 +14,8 @@ const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const pageLabel = document.getElementById("page-label");
 const itemTemplate = document.getElementById("result-item-template");
+const viewsToday = document.getElementById("views-today");
+const viewsTotal = document.getElementById("views-total");
 const themeToggle = document.getElementById("theme-toggle");
 const revealBlocks = document.querySelectorAll(".reveal-block");
 const THEMES = ["sun", "noir", "aurora", "sepia"];
@@ -259,5 +261,31 @@ function syncPager() {
   nextBtn.disabled = state.page >= state.totalPages;
 }
 
+async function loadViewStats() {
+  if (!viewsToday || !viewsTotal) {
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/view-stats?days=21");
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    viewsToday.textContent = formatCount(payload.todayViews);
+    viewsTotal.textContent = formatCount(payload.totalViews);
+  } catch (error) {
+    viewsToday.textContent = "-";
+    viewsTotal.textContent = "-";
+  }
+}
+
+function formatCount(value) {
+  const numeric = Number(value) || 0;
+  return new Intl.NumberFormat().format(numeric);
+}
+
 loadMovies();
+loadViewStats();
 initReveal();
