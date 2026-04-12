@@ -111,10 +111,12 @@ public class WebServer {
         String query = params.getOrDefault("query", "").trim();
         int limit = parseInt(params.get("limit"), 24, 1, 100);
         int page = parseInt(params.get("page"), 1, 1, 10_000);
+        String sort = normalizeSort(params.get("sort"));
+        boolean pinFeatured = parseBoolean(params.get("pinFeatured"), false);
         int offset = (page - 1) * limit;
 
         try {
-            List<MovieRecord> movies = database.listMovies(query, limit, offset);
+            List<MovieRecord> movies = database.listMovies(query, limit, offset, sort, pinFeatured);
             int total = database.countMoviesByQuery(query);
             int totalPages = total == 0 ? 0 : (int) Math.ceil((double) total / limit);
 
@@ -122,6 +124,8 @@ public class WebServer {
             payload.put("query", query);
             payload.put("page", page);
             payload.put("limit", limit);
+            payload.put("sort", sort);
+            payload.put("pinFeatured", pinFeatured);
             payload.put("total", total);
             payload.put("totalPages", totalPages);
             payload.put("results", movies);
@@ -255,6 +259,30 @@ public class WebServer {
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    private static boolean parseBoolean(String value, boolean defaultValue) {
+        if (value == null || value.isBlank()) {
+            return defaultValue;
+        }
+
+        String normalized = value.trim().toLowerCase();
+        return switch (normalized) {
+            case "1", "true", "yes", "on" -> true;
+            case "0", "false", "no", "off" -> false;
+            default -> defaultValue;
+        };
+    }
+
+    private static String normalizeSort(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return "latest";
+        }
+
+        return switch (raw.trim().toLowerCase()) {
+            case "latest", "year_desc", "year_asc", "title_asc", "title_desc", "rating_desc" -> raw.trim().toLowerCase();
+            default -> "latest";
+        };
     }
 
     private static void sendText(HttpExchange exchange, int status, String message, String contentType) throws IOException {

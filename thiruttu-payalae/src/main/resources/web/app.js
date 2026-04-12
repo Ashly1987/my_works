@@ -1,5 +1,6 @@
 const state = {
   query: "",
+  sort: "latest",
   page: 1,
   limit: 24,
   totalPages: 0,
@@ -13,6 +14,7 @@ const results = document.getElementById("results");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const pageLabel = document.getElementById("page-label");
+const sortSelect = document.getElementById("sort-select");
 const itemTemplate = document.getElementById("result-item-template");
 const viewsToday = document.getElementById("views-today");
 const viewsTotal = document.getElementById("views-total");
@@ -21,6 +23,7 @@ const revealBlocks = document.querySelectorAll(".reveal-block");
 const THEMES = ["sun", "noir", "aurora", "sepia"];
 let liveSearchTimer = null;
 let requestCounter = 0;
+let pinFeaturedOnFirstLoad = true;
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -62,6 +65,15 @@ queryInput.addEventListener("input", () => {
     loadMovies();
   }, 250);
 });
+
+if (sortSelect) {
+  sortSelect.value = state.sort;
+  sortSelect.addEventListener("change", () => {
+    state.sort = sortSelect.value || "latest";
+    state.page = 1;
+    loadMovies();
+  });
+}
 
 if (themeToggle) {
   const persistedTheme = localStorage.getItem("movieAtlasTheme");
@@ -134,8 +146,11 @@ async function loadMovies() {
   const params = new URLSearchParams({
     query: state.query,
     page: String(state.page),
-    limit: String(state.limit)
+    limit: String(state.limit),
+    sort: state.sort,
+    pinFeatured: pinFeaturedOnFirstLoad ? "true" : "false"
   });
+  pinFeaturedOnFirstLoad = false;
 
   meta.textContent = "Loading records...";
 

@@ -154,13 +154,14 @@ Endpoint:
 Example:
 
 ```bash
-curl "http://127.0.0.1:8080/api/movies?query=leo&page=1&limit=12"
+curl "http://127.0.0.1:8080/api/movies?query=leo&page=1&limit=12&sort=rating_desc"
 ```
 
 Response contains:
 
 - `total`: total matching records
 - `totalPages`: number of pages for given `limit`
+- `sort`: active sort key (`latest`, `rating_desc`, `year_desc`, `year_asc`, `title_asc`, `title_desc`)
 - `results`: list of `title`, `url`, `year`, `page`, `imageUrl`, `rating`
 
 View stats response contains:
@@ -174,7 +175,7 @@ Website views report page:
 - `GET /view-report.html` opens a detailed report in a new tab
 - Includes quick filters for last `7`, `14`, or `30` days
 
-Default listing order is newest-first (higher `year`, then latest first-seen records).
+Default listing order is newest-first (higher `year`, then latest first-seen records), with `Love Insurance Kompany (2026)` pinned to the top when it matches the current query.
 
 ## MCP Tool
 

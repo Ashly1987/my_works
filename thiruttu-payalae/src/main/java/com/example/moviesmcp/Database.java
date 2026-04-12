@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+    private static final String PINNED_TITLE = "Love Insurance Kompany (2026)";
+
     public record DailyView(String day, int views) {
     }
 
@@ -207,26 +209,27 @@ public class Database {
         }
     }
 
-    public List<MovieRecord> listMovies(String query, int limit, int offset) throws SQLException {
-        final String sql = """
+    public List<MovieRecord> listMovies(String query, int limit, int offset, String sort, boolean pinFeatured) throws SQLException {
+        String orderBy = resolveOrderBy(sort);
+        String sql = """
             SELECT title, url, year, page, image_url, rating
             FROM movies
             WHERE lower(title) LIKE lower(?)
             ORDER BY
-                CASE WHEN year IS NULL THEN 0 ELSE 1 END DESC,
-                year DESC,
-                created_at DESC,
-                id DESC
+                CASE WHEN ? = 1 AND lower(title) = lower(?) THEN 0 ELSE 1 END ASC,
+                %s
             LIMIT ? OFFSET ?
-            """;
+            """.formatted(orderBy);
 
         String like = "%" + query.trim() + "%";
         List<MovieRecord> results = new ArrayList<>();
 
         try (Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, like);
-            ps.setInt(2, Math.max(1, Math.min(limit, 100)));
-            ps.setInt(3, Math.max(0, offset));
+            ps.setInt(2, pinFeatured ? 1 : 0);
+            ps.setString(3, PINNED_TITLE);
+            ps.setInt(4, Math.max(1, Math.min(limit, 100)));
+            ps.setInt(5, Math.max(0, offset));
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     results.add(new MovieRecord(
@@ -242,6 +245,18 @@ public class Database {
         }
 
         return results;
+    }
+
+    private static String resolveOrderBy(String sort) {
+        String safeSort = sort == null ? "latest" : sort.trim().toLowerCase();
+        return switch (safeSort) {
+            case "title_asc" -> "lower(title) ASC, year DESC, id DESC";
+            case "title_desc" -> "lower(title) DESC, year DESC, id DESC";
+            case "year_asc" -> "CASE WHEN year IS NULL THEN 1 ELSE 0 END ASC, year ASC, lower(title) ASC";
+            case "rating_desc" -> "CASE WHEN rating IS NULL THEN 1 ELSE 0 END ASC, rating DESC, year DESC, id DESC";
+            case "latest", "year_desc" -> "CASE WHEN year IS NULL THEN 1 ELSE 0 END ASC, year DESC, created_at DESC, id DESC";
+            default -> "CASE WHEN year IS NULL THEN 1 ELSE 0 END ASC, year DESC, created_at DESC, id DESC";
+        };
     }
 
     public void incrementPageView() throws SQLException {

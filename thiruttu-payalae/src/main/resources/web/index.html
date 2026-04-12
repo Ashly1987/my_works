@@ -63,6 +63,17 @@
                 />
                 <button type="submit">Search</button>
               </div>
+              <div class="sort-row">
+                <label for="sort-select">Sort</label>
+                <select id="sort-select" name="sort" class="sort-select">
+                  <option value="latest" selected>Latest</option>
+                  <option value="rating_desc">Top Rated</option>
+                  <option value="year_desc">Year: New to Old</option>
+                  <option value="year_asc">Year: Old to New</option>
+                  <option value="title_asc">Title: A to Z</option>
+                  <option value="title_desc">Title: Z to A</option>
+                </select>
+              </div>
             </form>
 
             <div class="meta" id="meta">Loading records...</div>
