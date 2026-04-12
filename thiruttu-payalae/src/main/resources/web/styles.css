@@ -765,6 +765,16 @@ body[data-theme="noir"] .theme-label {
 }
 
 @media (max-width: 520px) {
+  .ticker-wrap {
+    min-height: 36px;
+  }
+
+  .ticker-track span {
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    padding-right: 2.1rem;
+  }
+
   .hero {
     top: 0.3rem;
     padding: 0.58rem;
@@ -772,18 +782,34 @@ body[data-theme="noir"] .theme-label {
   }
 
   .topbar {
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.28rem;
   }
 
   .brand-stack {
-    gap: 0.18rem;
+    display: flex;
+    align-items: center;
+    gap: 0.34rem;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .brand-link {
+    gap: 0.36rem;
+    padding: 0;
+    flex-shrink: 0;
   }
 
   .theme-label {
-    font-size: 0.58rem;
-    letter-spacing: 0.09em;
+    font-size: 0.54rem;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+  }
+
+  .by-ash {
+    margin-left: 0.2rem;
+    padding: 0.1rem 0.34rem;
   }
 
   .brand-logo {
@@ -812,9 +838,10 @@ body[data-theme="noir"] .theme-label {
   }
 
   .theme-toggle {
-    min-height: 40px;
-    padding: 0.44rem 0.62rem;
-    font-size: 0.72rem;
+    min-height: 36px;
+    padding: 0.34rem 0.5rem;
+    font-size: 0.66rem;
+    border-radius: 10px;
   }
 
   .search-panel {
