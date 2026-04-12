@@ -1,3 +1,7 @@
+const THEMES = ["sun", "noir", "aurora", "sepia"];
+const persistedTheme = localStorage.getItem("movieAtlasTheme");
+document.documentElement.dataset.theme = THEMES.includes(persistedTheme) ? persistedTheme : "aurora";
+
 const reportMeta = document.getElementById("report-meta");
 const reportList = document.getElementById("views-report-list");
 const filterButtons = document.querySelectorAll(".report-filter");
