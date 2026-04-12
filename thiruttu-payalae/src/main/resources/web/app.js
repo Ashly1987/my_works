@@ -65,7 +65,7 @@ queryInput.addEventListener("input", () => {
 
 if (themeToggle) {
   const persistedTheme = localStorage.getItem("movieAtlasTheme");
-  setTheme(THEMES.includes(persistedTheme) ? persistedTheme : "sun");
+  setTheme(THEMES.includes(persistedTheme) ? persistedTheme : "aurora");
 
   themeToggle.addEventListener("click", () => {
     const currentTheme = document.body.dataset.theme || "sun";
@@ -75,7 +75,7 @@ if (themeToggle) {
 }
 
 function setTheme(theme) {
-  const selectedTheme = THEMES.includes(theme) ? theme : "sun";
+  const selectedTheme = THEMES.includes(theme) ? theme : "aurora";
   document.body.dataset.theme = selectedTheme;
   localStorage.setItem("movieAtlasTheme", selectedTheme);
   if (themeToggle) {
