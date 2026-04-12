@@ -259,19 +259,17 @@ body[data-theme="sepia"] .hero {
 }
 
 .brand-mini {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 0.96rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: color-mix(in srgb, var(--text) 82%, var(--brand));
-}
-
-.theme-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
   margin: 0;
+  font-family: "Sora", "Segoe UI", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: 0.7rem;
-  opacity: 0.82;
+  font-size: 0.66rem;
+  font-weight: 700;
+  opacity: 0.86;
+  color: color-mix(in srgb, var(--text) 86%, var(--brand));
 }
 
 .by-ash {
@@ -717,7 +715,7 @@ body[data-theme="noir"] .meta,
 body[data-theme="noir"] .stage,
 body[data-theme="noir"] .kpi-label,
 body[data-theme="noir"] .sub,
-body[data-theme="noir"] .theme-label {
+body[data-theme="noir"] .brand-mini {
   color: rgba(234, 242, 255, 0.78);
 }
 
@@ -766,13 +764,13 @@ body[data-theme="noir"] .theme-label {
 
 @media (max-width: 520px) {
   .ticker-wrap {
-    min-height: 36px;
+    min-height: 30px;
   }
 
   .ticker-track span {
-    font-size: 0.62rem;
-    letter-spacing: 0.04em;
-    padding-right: 2.1rem;
+    font-size: 0.54rem;
+    letter-spacing: 0.02em;
+    padding-right: 1.6rem;
   }
 
   .hero {
@@ -801,12 +799,6 @@ body[data-theme="noir"] .theme-label {
     flex-shrink: 0;
   }
 
-  .theme-label {
-    font-size: 0.54rem;
-    letter-spacing: 0.07em;
-    white-space: nowrap;
-  }
-
   .by-ash {
     margin-left: 0.2rem;
     padding: 0.1rem 0.34rem;
@@ -818,7 +810,9 @@ body[data-theme="noir"] .theme-label {
   }
 
   .brand-mini {
-    font-size: 0.82rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
   }
 
   h1 {
