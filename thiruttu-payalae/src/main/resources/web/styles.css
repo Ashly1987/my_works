@@ -259,17 +259,22 @@ body[data-theme="sepia"] .hero {
 }
 
 .brand-mini {
+  margin: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.18rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--text) 82%, var(--brand));
+}
+
+.theme-label {
   margin: 0;
-  font-family: "Sora", "Segoe UI", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: 0.66rem;
-  font-weight: 700;
-  opacity: 0.86;
-  color: color-mix(in srgb, var(--text) 86%, var(--brand));
+  font-size: 0.7rem;
+  opacity: 0.82;
 }
 
 .by-ash {
@@ -310,6 +315,10 @@ body[data-theme="sepia"] .by-ash {
   color: #fff;
   padding: 0.62rem 0.9rem;
   font-size: 0.78rem;
+}
+
+.mobile-more-toggle {
+  display: none;
 }
 
 body[data-theme="noir"] .theme-toggle {
@@ -715,7 +724,8 @@ body[data-theme="noir"] .meta,
 body[data-theme="noir"] .stage,
 body[data-theme="noir"] .kpi-label,
 body[data-theme="noir"] .sub,
-body[data-theme="noir"] .brand-mini {
+body[data-theme="noir"] .brand-mini,
+body[data-theme="noir"] .theme-label {
   color: rgba(234, 242, 255, 0.78);
 }
 
@@ -779,6 +789,46 @@ body[data-theme="noir"] .brand-mini {
     border-radius: 14px;
   }
 
+  .mobile-more-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0.24rem 0.52rem;
+    margin: 0.14rem 0 0.08rem;
+    border: 1px dashed var(--line);
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.62);
+  }
+
+  .hero-lockline,
+  .hero-primary .meta,
+  .views-panel,
+  .theme-toggle {
+    display: none;
+  }
+
+  body.mobile-more-open .hero-lockline {
+    display: block;
+  }
+
+  body.mobile-more-open .hero-primary .meta {
+    display: block;
+  }
+
+  body.mobile-more-open .views-panel {
+    display: block;
+  }
+
+  body.mobile-more-open .theme-toggle {
+    display: inline-flex;
+  }
+
   .topbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -813,11 +863,11 @@ body[data-theme="noir"] .brand-mini {
   }
 
   .brand-mini {
-    font-size: 0.52rem;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.75rem;
+  }
+
+  .theme-label {
+    font-size: 0.6rem;
   }
 
   h1 {
@@ -842,7 +892,7 @@ body[data-theme="noir"] .brand-mini {
     font-size: 0.6rem;
     line-height: 1.15;
     border-radius: 10px;
-    max-width: 104px;
+    max-width: 124px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
