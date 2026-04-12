@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Views Per Day Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Sora:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="grain"></div>
+    <main class="shell">
+      <header class="hero">
+        <h1><span>Views</span> Per Day Report</h1>
+        <p class="hero-tagline">Traffic details for the last 30 days</p>
+        <div class="report-filters" role="group" aria-label="View range">
+          <button type="button" class="report-filter active" data-days="7">
+            7 Days
+          </button>
+          <button type="button" class="report-filter" data-days="14">
+            14 Days
+          </button>
+          <button type="button" class="report-filter" data-days="30">
+            30 Days
+          </button>
+        </div>
+        <p class="meta" id="report-meta">Loading report...</p>
+      </header>
+
+      <section class="views-report-page reveal-block is-visible">
+        <ul id="views-report-list" class="views-report-list">
+          <li class="views-report-empty">Loading view report...</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="/view-report.js" defer></script>
+  </body>
+</html>
