@@ -813,16 +813,32 @@ body[data-theme="noir"] .theme-label {
     display: none;
   }
 
-  body.mobile-more-open .hero-lockline {
-    display: block;
-  }
-
   body.mobile-more-open .hero-primary .meta {
     display: block;
   }
 
   body.mobile-more-open .views-panel {
     display: block;
+    padding: 0.28rem 0.36rem;
+    border-radius: 10px;
+  }
+
+  body.mobile-more-open .views-panel .view-kpi {
+    padding: 0.22rem 0.28rem;
+  }
+
+  body.mobile-more-open .views-panel .view-kpi-label {
+    font-size: 0.6rem;
+  }
+
+  body.mobile-more-open .views-panel .view-kpi-value {
+    font-size: 1.1rem;
+  }
+
+  body.mobile-more-open .views-panel .views-report-link {
+    font-size: 0.62rem;
+    padding: 0.22rem 0.5rem;
+    margin-top: 0.28rem;
   }
 
   body.mobile-more-open .theme-toggle {
