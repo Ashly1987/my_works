@@ -91,8 +91,11 @@ function setTheme(theme) {
   document.body.dataset.theme = selectedTheme;
   localStorage.setItem("movieAtlasTheme", selectedTheme);
   if (themeToggle) {
+    const isMobile = window.matchMedia("(max-width: 520px)").matches;
     themeToggle.setAttribute("aria-pressed", "false");
-    themeToggle.textContent = `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)} (tap to switch)`;
+    themeToggle.textContent = isMobile
+      ? `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)}`
+      : `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)} (tap to switch)`;
   }
 }
 

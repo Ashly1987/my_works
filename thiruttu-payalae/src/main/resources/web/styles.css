@@ -780,17 +780,20 @@ body[data-theme="noir"] .brand-mini {
   }
 
   .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.36rem;
     margin-bottom: 0.28rem;
   }
 
   .brand-stack {
     display: flex;
     align-items: center;
-    gap: 0.34rem;
+    gap: 0.26rem;
     flex-wrap: nowrap;
     min-width: 0;
+    overflow: hidden;
   }
 
   .brand-link {
@@ -810,9 +813,11 @@ body[data-theme="noir"] .brand-mini {
   }
 
   .brand-mini {
-    font-size: 0.58rem;
-    letter-spacing: 0.06em;
+    font-size: 0.52rem;
+    letter-spacing: 0.05em;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   h1 {
@@ -832,10 +837,15 @@ body[data-theme="noir"] .brand-mini {
   }
 
   .theme-toggle {
-    min-height: 36px;
-    padding: 0.34rem 0.5rem;
-    font-size: 0.66rem;
+    min-height: 32px;
+    padding: 0.28rem 0.42rem;
+    font-size: 0.6rem;
+    line-height: 1.15;
     border-radius: 10px;
+    max-width: 104px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .search-panel {
