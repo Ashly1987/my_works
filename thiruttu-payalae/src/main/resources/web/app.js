@@ -19,6 +19,7 @@ const itemTemplate = document.getElementById("result-item-template");
 const viewsToday = document.getElementById("views-today");
 const viewsTotal = document.getElementById("views-total");
 const themeToggle = document.getElementById("theme-toggle");
+const mobileMoreToggle = document.getElementById("mobile-more-toggle");
 const revealBlocks = document.querySelectorAll(".reveal-block");
 const THEMES = ["sun", "noir", "aurora", "sepia"];
 let liveSearchTimer = null;
@@ -84,6 +85,31 @@ if (themeToggle) {
     const nextIndex = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
     setTheme(THEMES[nextIndex]);
   });
+  // Mobile: always add (Switch)
+  const updateThemeButtonText = () => {
+    const theme = document.body.dataset.theme || "aurora";
+    const isMobile = window.matchMedia("(max-width: 520px)").matches;
+    themeToggle.textContent = isMobile
+      ? `Theme: ${theme[0].toUpperCase()}${theme.slice(1)} (Switch)`
+      : `Theme: ${theme[0].toUpperCase()}${theme.slice(1)} (tap to switch)`;
+  };
+  window.addEventListener("resize", updateThemeButtonText);
+  updateThemeButtonText();
+}
+
+if (mobileMoreToggle) {
+  const updateMobileMoreToggle = () => {
+    const open = document.body.classList.contains("mobile-more-open");
+    mobileMoreToggle.setAttribute("aria-expanded", String(open));
+    mobileMoreToggle.textContent = open ? "Less" : "More";
+  };
+
+  mobileMoreToggle.addEventListener("click", () => {
+    document.body.classList.toggle("mobile-more-open");
+    updateMobileMoreToggle();
+  });
+
+  updateMobileMoreToggle();
 }
 
 function setTheme(theme) {
@@ -94,7 +120,7 @@ function setTheme(theme) {
     const isMobile = window.matchMedia("(max-width: 520px)").matches;
     themeToggle.setAttribute("aria-pressed", "false");
     themeToggle.textContent = isMobile
-      ? `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)}`
+      ? `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)} (Switch)`
       : `Theme: ${selectedTheme[0].toUpperCase()}${selectedTheme.slice(1)} (tap to switch)`;
   }
 }
