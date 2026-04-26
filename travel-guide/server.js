@@ -24,6 +24,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // Read the MD framework when the server starts
 const itineraryFramework = fs.readFileSync('UNIVERSAL_TRAVEL_ITINERARY_SKILL.md', 'utf8');
+const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
 
 app.post('/api/generate-itinerary', async (req, res) => {
     try {
@@ -137,6 +138,85 @@ Generate the itinerary for: ${userCountry}.
         res.status(500).json({ error: "Failed to generate itinerary. Please try again later." });
     }
 });
+
+app.post('/api/generate-survival-kit', async (req, res) => {
+    try {
+        const userCountry = req.body.country;
+        if (!userCountry) return res.status(400).json({ error: "Country is required" });
+
+        const dataDir = path.join(__dirname, 'data', 'survival_kit');
+        const safeCountryName = userCountry.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        const filePath = path.join(dataDir, `${safeCountryName}.json`);
+
+        if (fs.existsSync(filePath)) {
+            console.log(`⏩ Serving survival kit for ${userCountry} from cache...`);
+            const cachedData = fs.readFileSync(filePath, 'utf8');
+            return res.json({ survivalKit: JSON.parse(cachedData).survivalKit });
+        }
+
+const prompt = `
+<SYSTEM_INSTRUCTION>
+You are an expert travel planner. You will generate a tailored survival kit by following the provided framework, strictly applying the overrides below.
+</SYSTEM_INSTRUCTION>
+
+<FRAMEWORK_CONTEXT>
+${survivalKitFramework}
+</FRAMEWORK_CONTEXT>
+
+<STRICT_OVERRIDES>
+1. **STARTING LINE:** Do NOT print the country name as plain text at the top. The absolute first line of your output MUST be the H1 header exactly like this: # ${userCountry} TRAVEL SURVIVAL KIT
+2. **REMOVE UPDATED DATE:** Completely omit the "Last Updated: October 26, 2023" line (or any date reference) from the introductory section.
+3. **CONDENSE SECTIONS 11, 12 & 13:** For Sections 11 (Festivals & Events), 12 (Customs & Etiquette), and 13 (Safety & Practical Info), you MUST keep all Markdown tables exactly as detailed in the framework. However, you must drastically shorten all surrounding paragraphs and bullet lists to be extremely brief (1-2 sentences maximum per subsection). 
+4. **THE SAFETY EXCEPTION:** Ignore the shortening rule for the "Personal Safety & Crime Awareness" section. You MUST keep this specific safety section at its full, original, detailed length, preserving all scam warnings, theft advice, and formatting exactly as they are.
+5. **COUNTRY NAME:** Replace [COUNTRY NAME] with ${userCountry}.
+</STRICT_OVERRIDES>
+
+<OUTPUT_FORMAT>
+Output entirely in rich Markdown. Use proper H2 (##) and H3 (###) headers. Use tables and bullet points exactly where requested.
+</OUTPUT_FORMAT>
+
+Generate the survival kit for: ${userCountry}.
+`;
+
+        let generatedSurvivalKit = "";
+
+        try {
+            const flashResponse = await ai.models.generateContent({
+                model: 'gemini-2.5-flash',
+                contents: prompt,
+            });
+            generatedSurvivalKit = flashResponse.text;
+            console.log(`✅ Success: Generated survival kit for ${userCountry} using Flash 2.5 model.`);
+        } catch (flashError) {
+            console.warn(`⚠️ Flash 2.5 model failed. Attempting seamless fallback to flash 3 preview model...`);
+            const proResponse = await ai.models.generateContent({
+                model: 'gemini-3-flash-preview',
+                contents: prompt,
+            });
+            generatedSurvivalKit = proResponse.text;
+            console.log(`✅ Success: Generated survival kit for ${userCountry} using flash 3 preview model fallback.`);
+        }
+
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify({ survivalKit: generatedSurvivalKit }, null, 2), 'utf8');
+        console.log(`💾 Saved new survival kit for ${userCountry} to local cache.`);
+
+        res.json({ survivalKit: generatedSurvivalKit });
+
+    } catch (error) {
+        console.error("❌ Fatal Error: Both models failed.", error);
+        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
+            return res.status(error.status || 503).json({ 
+                error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
+            });
+        }
+        res.status(500).json({ error: "Failed to generate survival kit. Please try again later." });
+    }
+});
+
 import puppeteer from 'puppeteer';
 
 app.post('/api/download-pdf', async (req, res) => {

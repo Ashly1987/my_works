@@ -283,6 +283,7 @@
             class="h-[60px] w-full bg-transparent px-4 text-[15px] font-normal text-monograph-text placeholder:text-[#6d665f] focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert"
           />
           <datalist id="country-list"></datalist>
+          <button id="clear-search" class="hidden px-4 text-[#6d665f] hover:text-monograph-text material-symbols-outlined transition-colors" onclick="clearSearch()">close</button>
         </div>
       </section>
 
@@ -301,9 +302,13 @@
         id="result-container"
         class="hidden mt-16 w-full max-w-[900px] border border-monograph-border bg-monograph-surface p-8 md:p-12 shadow-2xl"
       >
-        <div
-          class="flex justify-end gap-4 mb-8 border-b border-monograph-border pb-6"
-        >
+        <div class="flex justify-between items-center mb-8 border-b border-monograph-border pb-6">
+          <div>
+            <button id="toggle-view-btn" class="px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors">
+              View Survival Kit
+            </button>
+          </div>
+          <div class="flex gap-4">
           <button
             onclick="downloadPDF()"
             class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] uppercase tracking-[0.15em] hover:bg-monograph-border transition-colors"
@@ -316,6 +321,7 @@
           >
             Download Word
           </button>
+        </div>
         </div>
         <div
           id="result"
@@ -363,7 +369,7 @@
               <button type="button" onclick="generateItinerary('Alberta, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Alberta, Canada')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -408,7 +414,7 @@
               <button type="button" onclick="generateItinerary('Bali, Indonesia')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Bali, Indonesia')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -453,7 +459,7 @@
               <button type="button" onclick="generateItinerary('British Columbia, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('British Columbia, Canada')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -498,7 +504,7 @@
               <button type="button" onclick="generateItinerary('California, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('California, USA')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -543,7 +549,7 @@
               <button type="button" onclick="generateItinerary('France')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('France')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -588,7 +594,7 @@
               <button type="button" onclick="generateItinerary('Goa, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Goa, India')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -633,7 +639,7 @@
               <button type="button" onclick="generateItinerary('Greece')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Greece')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -678,7 +684,7 @@
               <button type="button" onclick="generateItinerary('Hawaii, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Hawaii, USA')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -723,7 +729,7 @@
               <button type="button" onclick="generateItinerary('Iceland')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Iceland')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -768,7 +774,7 @@
               <button type="button" onclick="generateItinerary('Italy')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Italy')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -813,7 +819,7 @@
               <button type="button" onclick="generateItinerary('Japan')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Japan')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -858,7 +864,7 @@
               <button type="button" onclick="generateItinerary('Kerala, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Kerala, India')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -903,7 +909,7 @@
               <button type="button" onclick="generateItinerary('Morocco')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Morocco')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -948,7 +954,7 @@
               <button type="button" onclick="generateItinerary('New York, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('New York, USA')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -993,7 +999,7 @@
               <button type="button" onclick="generateItinerary('Quebec, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Quebec, Canada')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -1038,7 +1044,7 @@
               <button type="button" onclick="generateItinerary('Rajasthan, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Rajasthan, India')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -1083,7 +1089,7 @@
               <button type="button" onclick="generateItinerary('South Africa')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('South Africa')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -1128,7 +1134,7 @@
               <button type="button" onclick="generateItinerary('Spain')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('Spain')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -1539,13 +1545,49 @@
         });
       });
 
+      
+      function clearSearch() {
+        const searchInput = document.getElementById("destination-search");
+        searchInput.value = "";
+        document.getElementById("clear-search").classList.add("hidden");
+        
+        document.getElementById("result-container").classList.add("hidden");
+        const grid = document.getElementById("destinations-grid");
+        grid.classList.remove("hidden");
+        
+        const activeTab = document.querySelector(".tab-btn.border-b-2");
+        const tabName = activeTab ? activeTab.id.replace("tab-", "") : "all";
+        
+        const allCards = Array.from(grid.querySelectorAll(".destination-card"));
+        allCards.forEach(card => {
+          if (card.dataset.search.includes("custom curated journey") || card.querySelector(".text-monograph-muted").textContent.includes("Custom Curated Journey")) {
+            card.remove();
+          } else {
+            if (tabName === "all" || tabName === "global" || card.hasAttribute(`data-tab-${tabName}`)) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          }
+        });
+      }
+
       const searchInput = document.getElementById("destination-search");
+      searchInput.addEventListener("input", (e) => {
+        if (e.target.value.trim() !== "") {
+          document.getElementById("clear-search").classList.remove("hidden");
+        } else {
+          clearSearch();
+        }
+      });
+
       const cards = Array.from(document.querySelectorAll(".destination-card"));
 
       let cachedItineraryMarkdown = "";
 
       // Trigger search when user selects a country from the datalist
       searchInput.addEventListener("change", async (event) => {
+        document.getElementById("clear-search").classList.remove("hidden");
         const country = event.target.value.trim();
         if (!country) return;
 
@@ -1655,7 +1697,7 @@
               <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
             </div>
@@ -1717,6 +1759,9 @@
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.itinerary);
             resultContainer.classList.remove("hidden");
+            const toggleBtn = document.getElementById("toggle-view-btn");
+            toggleBtn.innerText = "View Survival Kit";
+            toggleBtn.onclick = () => generateSurvivalKit(countryName);
 
             window.scrollTo({
               top: resultContainer.offsetTop - 40,
@@ -1736,6 +1781,62 @@
         }
       }
 
+
+      async function generateSurvivalKit(countryName) {
+        if (!countryName) return;
+
+        document.getElementById("destination-search").value = countryName;
+
+        const loadingEl = document.getElementById("loading");
+        const resultContainer = document.getElementById("result-container");
+        const grid = document.getElementById("destinations-grid");
+
+        loadingEl.classList.remove("hidden");
+        loadingEl.classList.add("flex");
+        resultContainer.classList.add("hidden");
+        grid.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/generate-survival-kit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: countryName }),
+          });
+
+          if (response.status === 429) {
+            alert("Our service is currently experiencing high demand. Please wait a moment and try again.");
+            grid.classList.remove("hidden");
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.survivalKit) {
+            cachedItineraryMarkdown = data.survivalKit; // Cache it for PDF/Word downloads
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = marked.parse(data.survivalKit);
+            resultContainer.classList.remove("hidden");
+            const toggleBtn = document.getElementById("toggle-view-btn");
+            toggleBtn.innerText = "View Itinerary";
+            toggleBtn.onclick = () => generateItinerary(countryName);
+
+            window.scrollTo({
+              top: resultContainer.offsetTop - 40,
+              behavior: "smooth",
+            });
+          } else {
+            alert("Failed to curate the survival kit.");
+            grid.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Unable to reach the curation service. Please try again.");
+          grid.classList.remove("hidden");
+        } finally {
+          loadingEl.classList.add("hidden");
+          loadingEl.classList.remove("flex");
+        }
+      }
 
       async function downloadPDF() {
         const content = document.getElementById("result").innerHTML;
