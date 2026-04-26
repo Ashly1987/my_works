@@ -1,0 +1,1811 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Monograph | Discover</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Noto+Serif:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0,24&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ["Noto Serif", "serif"],
+              sans: ["Manrope", "sans-serif"],
+            },
+            colors: {
+              monograph: {
+                bg: "#111111",
+                surface: "#171717",
+                surfaceSoft: "#1d1d1d",
+                border: "#2a2a2a",
+                text: "#f3eee7",
+                muted: "#b3a99d",
+                subtle: "#7c746a",
+                tagBg: "#1d2b21",
+                tagBorder: "#34513d",
+                tagText: "#a4d2a7",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(110, 95, 79, 0.14),
+            transparent 34%
+          ),
+          linear-gradient(180deg, #111111 0%, #0d0d0d 100%);
+        color: #f3eee7;
+      }
+
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+
+      .destination-card__art {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .destination-card__art::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.82;
+      }
+
+      .destination-card--kyoto .destination-card__art::before {
+        background:
+          linear-gradient(
+            115deg,
+            rgba(49, 39, 39, 0.94),
+            rgba(49, 39, 39, 0.46) 45%,
+            rgba(79, 60, 63, 0.78)
+          ),
+          radial-gradient(
+            circle at 68% 22%,
+            rgba(255, 246, 240, 0.18) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 72% 27%,
+            rgba(255, 246, 240, 0.14) 0 5%,
+            transparent 5.5%
+          ),
+          radial-gradient(
+            circle at 78% 17%,
+            rgba(255, 246, 240, 0.14) 0 5%,
+            transparent 5.5%
+          ),
+          radial-gradient(
+            circle at 83% 23%,
+            rgba(255, 246, 240, 0.16) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 58% 65%,
+            rgba(138, 92, 102, 0.34) 0 8%,
+            transparent 8.5%
+          ),
+          radial-gradient(
+            circle at 64% 72%,
+            rgba(138, 92, 102, 0.3) 0 7%,
+            transparent 7.5%
+          ),
+          radial-gradient(
+            circle at 70% 60%,
+            rgba(138, 92, 102, 0.28) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 79% 71%,
+            rgba(138, 92, 102, 0.24) 0 7%,
+            transparent 7.5%
+          ),
+          radial-gradient(
+            circle at 87% 58%,
+            rgba(138, 92, 102, 0.22) 0 6%,
+            transparent 6.5%
+          );
+      }
+
+      .destination-card--amalfi .destination-card__art::before {
+        background:
+          linear-gradient(
+            160deg,
+            rgba(33, 41, 49, 0.95),
+            rgba(56, 44, 35, 0.9)
+          ),
+          linear-gradient(
+            145deg,
+            transparent 28%,
+            rgba(255, 255, 255, 0.08) 35%,
+            transparent 43%,
+            transparent 49%,
+            rgba(255, 255, 255, 0.05) 57%,
+            transparent 65%
+          ),
+          linear-gradient(
+            145deg,
+            transparent 52%,
+            rgba(255, 230, 196, 0.08) 58%,
+            transparent 66%
+          );
+      }
+
+      .search-shadow:focus-within {
+        box-shadow: 0 0 0 1px #8e8376;
+      }
+
+      .destination-card {
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          box-shadow 220ms ease;
+      }
+
+      .destination-card:hover {
+        transform: translateY(-4px);
+        border-color: #3d362f;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen font-sans antialiased">
+    <header class="border-b border-monograph-border bg-monograph-surface">
+      <div
+        class="mx-auto flex h-[82px] w-full max-w-[1120px] items-center justify-between px-6 md:px-8"
+      >
+        <div
+          class="font-serif text-[24px] font-semibold italic tracking-[-0.03em] text-monograph-text"
+        >
+          THE MONOGRAPH
+        </div>
+
+        <div class="flex items-center gap-6 text-monograph-text">
+          <button
+            type="button"
+            aria-label="Bookmarks"
+            class="transition-opacity hover:opacity-70"
+          >
+            <span class="material-symbols-outlined text-[26px]">bookmark</span>
+          </button>
+          <button
+            type="button"
+            aria-label="Account"
+            class="transition-opacity hover:opacity-70"
+          >
+            <span class="material-symbols-outlined text-[28px]"
+              >account_circle</span
+            >
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-[1120px] px-6 pb-20 pt-14 md:px-8">
+      <section class="max-w-[560px]">
+        <h1
+          class="font-serif text-[42px] font-normal leading-none tracking-[-0.04em] text-monograph-text md:text-[48px]"
+        >
+          Discover
+        </h1>
+        <p
+          class="mt-4 text-[17px] font-normal leading-[1.55] text-monograph-muted"
+        >
+          Curated experiences for the discerning traveler.
+        </p>
+      </section>
+
+      <section class="mt-12">
+        <div
+          class="flex flex-wrap gap-6 text-[12px] font-semibold uppercase tracking-[0.24em] text-monograph-subtle"
+        >
+          <button
+            type="button"
+            id="tab-all"
+            class="tab-btn border-b-2 border-monograph-text pb-[9px] text-monograph-text"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            id="tab-global"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            Global
+          </button>
+          <button
+            type="button"
+            id="tab-india"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            India
+          </button>
+          <button
+            type="button"
+            id="tab-usa"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            USA
+          </button>
+          <button
+            type="button"
+            id="tab-canada"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            Canada
+          </button>
+        </div>
+      </section>
+
+      <section class="mt-10 max-w-[600px]">
+        <label
+          for="destination-search"
+          class="block text-[12px] uppercase tracking-[0.24em] text-monograph-muted"
+        >
+          Search Destinations
+        </label>
+        <div
+          class="search-shadow mt-3 flex items-center border border-monograph-border bg-monograph-surfaceSoft transition-shadow"
+        >
+          <input
+            id="destination-search"
+            type="text"
+            list="country-list"
+            autocomplete="off"
+            placeholder="Search for a country..."
+            class="h-[60px] w-full bg-transparent px-4 text-[15px] font-normal text-monograph-text placeholder:text-[#6d665f] focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert"
+          />
+          <datalist id="country-list"></datalist>
+        </div>
+      </section>
+
+      <!-- Loading State -->
+      <div id="loading" class="hidden mt-16 flex-col items-center">
+        <div
+          class="h-10 w-10 animate-spin rounded-full border-2 border-monograph-muted border-t-monograph-text mb-4"
+        ></div>
+        <p class="font-serif italic text-monograph-muted text-[18px]">
+          Curating your perfect journey...
+        </p>
+      </div>
+
+      <!-- Result Container -->
+      <div
+        id="result-container"
+        class="hidden mt-16 w-full max-w-[900px] border border-monograph-border bg-monograph-surface p-8 md:p-12 shadow-2xl"
+      >
+        <div
+          class="flex justify-end gap-4 mb-8 border-b border-monograph-border pb-6"
+        >
+          <button
+            onclick="downloadPDF()"
+            class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] uppercase tracking-[0.15em] hover:bg-monograph-border transition-colors"
+          >
+            Download PDF
+          </button>
+          <button
+            onclick="downloadWord()"
+            class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] uppercase tracking-[0.15em] hover:bg-monograph-border transition-colors"
+          >
+            Download Word
+          </button>
+        </div>
+        <div
+          id="result"
+          class="prose prose-invert prose-p:text-[#b3a99d] prose-headings:font-serif prose-headings:font-normal prose-headings:text-[#f3eee7] prose-h1:text-4xl prose-h2:text-2xl prose-h2:border-b prose-h2:border-monograph-border prose-h2:pb-3 prose-a:text-[#a4d2a7] max-w-none"
+        ></div>
+      </div>
+
+                              <section id="destinations-grid" class="mt-9 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="alberta, canada wild rose country"
+          data-tab-canada="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Alberta, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Wild Rose Country</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🌲</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June - August</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,300-$2,600 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Alberta, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="bali, indonesia island of the gods"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#213025] to-[#151c17]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Bali, Indonesia
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Island of the Gods</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🌺</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">April - October</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$500-$1000 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Bali, Indonesia')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="british columbia, canada pacific to rockies"
+          data-tab-all="true" data-tab-canada="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#212931] to-[#382c23]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                British Columbia, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Pacific to Rockies</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🏔️</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June - Sept</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,200-$2,500 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('British Columbia, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="california, usa the golden state"
+          data-tab-all="true" data-tab-usa="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                California, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">The Golden State</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🏄</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">May - Sept</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,500-$3,000 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('California, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="france city of light & wine"
+          data-tab-all="true" data-tab-global="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2d2a33] to-[#1c1a1f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                France
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">City of Light & Wine</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🥐</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June – August</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,620–$3,240 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('France')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="goa, india beach paradise"
+          data-tab-india="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Goa, India
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Beach Paradise</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🏖️</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Nov - Feb</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$700-$1,300 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Goa, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="greece aegean jewel"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#1e2733] to-[#151b24]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Greece
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Aegean Jewel</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🏺</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June - August</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,100-$2,400 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Greece')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="hawaii, usa aloha spirit"
+          data-tab-usa="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#213025] to-[#151c17]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Hawaii, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Aloha Spirit</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🌋</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">April - May</span><span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Sept - Nov</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$2,000-$4,000 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Hawaii, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="iceland land of fire & ice"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Iceland
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Land of Fire & Ice</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🧊</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June – August</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    $2,590-$4,690 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Iceland')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="italy mediterranean charm"
+          data-tab-all="true" data-tab-global="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#212931] to-[#382c23]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Italy
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Mediterranean Charm</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🍋</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">May - Sep</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,300-$2,700 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Italy')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="japan the ancient capital & beyond"
+          data-tab-all="true" data-tab-global="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#312727] to-[#4f3c3f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Japan
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">The Ancient Capital & Beyond</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">⛩️</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">March – May</span><span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Sept – Nov</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$845–$1,950 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Japan')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="kerala, india god's own country"
+          data-tab-all="true" data-tab-india="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#1e2e22] to-[#152418]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Kerala, India
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">God's Own Country</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🌴</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Sept - March</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$600-$1,200 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Kerala, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="morocco the red city & desert"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#33221e] to-[#221614]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Morocco
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">The Red City & Desert</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🐪</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">March - May</span><span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Sept - Nov</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$700-$1,400 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Morocco')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="new york, usa the empire state"
+          data-tab-all="true" data-tab-usa="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                New York, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">The Empire State</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🗽</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">April - June</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,800-$3,500 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('New York, USA')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="quebec, canada french charm"
+          data-tab-all="true" data-tab-canada="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2d2a33] to-[#1c1a1f]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Quebec, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">French Charm</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🍁</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">June - August</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,100-$2,300 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Quebec, Canada')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="rajasthan, india land of kings"
+          data-tab-all="true" data-tab-india="true"
+          style=""
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#33221e] to-[#221614]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Rajasthan, India
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Land of Kings</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">🐪</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Oct - March</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$500-$1,000 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Rajasthan, India')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="south africa the rainbow nation"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#332a22] to-[#1f1b16]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                South Africa
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">The Rainbow Nation</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">⛰️</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">November - March</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$800-$1,600 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('South Africa')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+<article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="spain flamenco & tapas"
+          data-tab-global="true"
+          style="display: none;"
+        >
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                Spain
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Flamenco & Tapas</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">💃</div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">May - June</span><span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">Sept - Oct</span>
+              </div>
+
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ~$1,100-$2,200 <span class="text-monograph-muted text-[14px]">/ 7 Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="generateItinerary('Spain')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="border-t border-monograph-border bg-monograph-surface">
+      <div
+        class="mx-auto flex w-full max-w-[1120px] flex-col gap-5 px-6 py-12 md:px-8 lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="font-serif text-[17px] italic tracking-[0.05em] text-monograph-text"
+        >
+          THE MONOGRAPH
+        </div>
+
+        <nav
+          class="flex flex-wrap gap-6 font-serif text-[15px] italic text-monograph-muted"
+        >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >The Manifesto</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Curators</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Terms</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Inquiry</a
+          >
+        </nav>
+
+        <div class="font-serif text-[13px] italic text-monograph-muted">
+          © 2024 THE MONOGRAPH. A LUXURY TRAVEL CURATION.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const countries = [
+        "Afghanistan",
+        "Alabama, USA",
+        "Alaska, USA",
+        "Albania",
+        "Alberta, Canada",
+        "Algeria",
+        "Andaman and Nicobar Islands, India",
+        "Andorra",
+        "Andhra Pradesh, India",
+        "Angola",
+        "Antigua and Barbuda",
+        "Argentina",
+        "Arizona, USA",
+        "Arkansas, USA",
+        "Armenia",
+        "Arunachal Pradesh, India",
+        "Assam, India",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+        "Bahamas",
+        "Bahrain",
+        "Bali, Indonesia",
+        "Bangladesh",
+        "Barbados",
+        "Belarus",
+        "Belgium",
+        "Belize",
+        "Benin",
+        "Bhutan",
+        "Bihar, India",
+        "Bolivia",
+        "Bosnia and Herzegovina",
+        "Botswana",
+        "Brazil",
+        "British Columbia, Canada",
+        "Brunei",
+        "Bulgaria",
+        "Burkina Faso",
+        "Burundi",
+        "Cabo Verde",
+        "California, USA",
+        "Cambodia",
+        "Cameroon",
+        "Canada",
+        "Central African Republic",
+        "Chad",
+        "Chandigarh, India",
+        "Chhattisgarh, India",
+        "Chile",
+        "China",
+        "Colombia",
+        "Colorado, USA",
+        "Comoros",
+        "Congo (Congo-Brazzaville)",
+        "Connecticut, USA",
+        "Costa Rica",
+        "Croatia",
+        "Cuba",
+        "Cyprus",
+        "Czechia",
+        "Côte d'Ivoire",
+        "Dadra and Nagar Haveli and Daman and Diu, India",
+        "Delaware, USA",
+        "Delhi, India",
+        "Democratic Republic of the Congo",
+        "Denmark",
+        "District of Columbia, USA",
+        "Djibouti",
+        "Dominica",
+        "Dominican Republic",
+        "Ecuador",
+        "Egypt",
+        "El Salvador",
+        "Equatorial Guinea",
+        "Eritrea",
+        "Estonia",
+        "Eswatini",
+        "Ethiopia",
+        "Fiji",
+        "Finland",
+        "Florida, USA",
+        "France",
+        "Gabon",
+        "Gambia",
+        "Georgia",
+        "Georgia, USA",
+        "Germany",
+        "Ghana",
+        "Goa, India",
+        "Greece",
+        "Grenada",
+        "Guatemala",
+        "Guinea",
+        "Guinea-Bissau",
+        "Gujarat, India",
+        "Guyana",
+        "Haiti",
+        "Haryana, India",
+        "Hawaii, USA",
+        "Himachal Pradesh, India",
+        "Honduras",
+        "Hong Kong",
+        "Hungary",
+        "Iceland",
+        "Idaho, USA",
+        "Illinois, USA",
+        "India",
+        "Indiana, USA",
+        "Indonesia",
+        "Iowa, USA",
+        "Iran",
+        "Iraq",
+        "Ireland",
+        "Israel",
+        "Italy",
+        "Jamaica",
+        "Jammu and Kashmir, India",
+        "Japan",
+        "Jharkhand, India",
+        "Jordan",
+        "Kansas, USA",
+        "Karnataka, India",
+        "Kazakhstan",
+        "Kentucky, USA",
+        "Kenya",
+        "Kiribati",
+        "Kosovo",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Ladakh, India",
+        "Lakshadweep, India",
+        "Laos",
+        "Latvia",
+        "Lebanon",
+        "Lesotho",
+        "Liberia",
+        "Libya",
+        "Liechtenstein",
+        "Lithuania",
+        "Louisiana, USA",
+        "Luxembourg",
+        "Macau",
+        "Madagascar",
+        "Madhya Pradesh, India",
+        "Maine, USA",
+        "Maharashtra, India",
+        "Malawi",
+        "Malaysia",
+        "Maldives",
+        "Mali",
+        "Malta",
+        "Manipur, India",
+        "Manitoba, Canada",
+        "Marshall Islands",
+        "Maryland, USA",
+        "Massachusetts, USA",
+        "Mauritania",
+        "Mauritius",
+        "Meghalaya, India",
+        "Mexico",
+        "Michigan, USA",
+        "Micronesia",
+        "Minnesota, USA",
+        "Mississippi, USA",
+        "Missouri, USA",
+        "Mizoram, India",
+        "Moldova",
+        "Monaco",
+        "Mongolia",
+        "Montana, USA",
+        "Montenegro",
+        "Morocco",
+        "Mozambique",
+        "Myanmar",
+        "Nagaland, India",
+        "Namibia",
+        "Nauru",
+        "Nebraska, USA",
+        "Nepal",
+        "Netherlands",
+        "Nevada, USA",
+        "New Brunswick, Canada",
+        "New Hampshire, USA",
+        "New Jersey, USA",
+        "New Mexico, USA",
+        "New York, USA",
+        "New Zealand",
+        "Newfoundland and Labrador, Canada",
+        "Nicaragua",
+        "Niger",
+        "Nigeria",
+        "North Carolina, USA",
+        "North Dakota, USA",
+        "North Korea",
+        "North Macedonia",
+        "Northwest Territories, Canada",
+        "Norway",
+        "Nova Scotia, Canada",
+        "Nunavut, Canada",
+        "Odisha, India",
+        "Ohio, USA",
+        "Oklahoma, USA",
+        "Oman",
+        "Ontario, Canada",
+        "Oregon, USA",
+        "Pakistan",
+        "Palau",
+        "Palestine State",
+        "Panama",
+        "Papua New Guinea",
+        "Paraguay",
+        "Pennsylvania, USA",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Prince Edward Island, Canada",
+        "Puducherry, India",
+        "Punjab, India",
+        "Qatar",
+        "Quebec, Canada",
+        "Rajasthan, India",
+        "Rhode Island, USA",
+        "Romania",
+        "Russia",
+        "Rwanda",
+        "Saint Kitts and Nevis",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+        "Samoa",
+        "San Marino",
+        "Sao Tome and Principe",
+        "Saskatchewan, Canada",
+        "Saudi Arabia",
+        "Senegal",
+        "Serbia",
+        "Seychelles",
+        "Sierra Leone",
+        "Sikkim, India",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "Solomon Islands",
+        "Somalia",
+        "South Africa",
+        "South Carolina, USA",
+        "South Dakota, USA",
+        "South Korea",
+        "South Sudan",
+        "Spain",
+        "Sri Lanka",
+        "Sudan",
+        "Suriname",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+        "Taiwan",
+        "Tajikistan",
+        "Tamil Nadu, India",
+        "Tanzania",
+        "Telangana, India",
+        "Tennessee, USA",
+        "Texas, USA",
+        "Thailand",
+        "Timor-Leste",
+        "Togo",
+        "Tonga",
+        "Trinidad and Tobago",
+        "Tripura, India",
+        "Tunisia",
+        "Turkey",
+        "Turkmenistan",
+        "Tuvalu",
+        "Uganda",
+        "Ukraine",
+        "United Arab Emirates",
+        "United Kingdom",
+        "United States of America",
+        "Uruguay",
+        "Utah, USA",
+        "Uttar Pradesh, India",
+        "Uttarakhand, India",
+        "Uzbekistan",
+        "Vanuatu",
+        "Vatican City",
+        "Venezuela",
+        "Vermont, USA",
+        "Vietnam",
+        "Virginia, USA",
+        "Washington, USA",
+        "West Bengal, India",
+        "West Virginia, USA",
+        "Western Sahara",
+        "Wisconsin, USA",
+        "Wyoming, USA",
+        "Yemen",
+        "Yukon, Canada",
+        "Zambia",
+        "Zimbabwe",
+      ];
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const datalist = document.getElementById("country-list");
+        
+        function populateDatalist(filteredCountries) {
+          datalist.innerHTML = "";
+          filteredCountries.forEach((country) => {
+            const option = document.createElement("option");
+            option.value = country;
+            datalist.appendChild(option);
+          });
+        }
+
+        // Initial populate with all countries
+        populateDatalist(countries);
+
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        tabBtns.forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            // Update active styles
+            tabBtns.forEach(b => {
+              b.className = "tab-btn pb-[11px] transition-colors hover:text-monograph-text text-monograph-subtle";
+            });
+            e.target.className = "tab-btn border-b-2 border-monograph-text pb-[9px] text-monograph-text";
+            
+            const tabId = e.target.id;
+            let filteredCountries = countries;
+            
+            if (tabId === "tab-global") {
+              filteredCountries = countries.filter(c => !c.includes("USA") && !c.includes("India") && !c.includes("Canada") && c !== "United States of America");
+            } else if (tabId === "tab-india") {
+              filteredCountries = countries.filter(c => c.includes("India") && c !== "India");
+            } else if (tabId === "tab-usa") {
+              filteredCountries = countries.filter(c => c.includes("USA") && c !== "USA" && c !== "United States of America");
+            } else if (tabId === "tab-canada") {
+              filteredCountries = countries.filter(c => c.includes("Canada") && c !== "Canada");
+            }
+            
+            populateDatalist(filteredCountries);
+            
+            // Reset UI state
+            const grid = document.getElementById("destinations-grid");
+            const resultContainer = document.getElementById("result-container");
+            
+            grid.classList.remove("hidden");
+            resultContainer.classList.add("hidden");
+            document.getElementById("destination-search").value = "";
+            
+            const allCards = Array.from(grid.querySelectorAll(".destination-card"));
+            
+            const tabName = tabId.replace("tab-", "");
+            allCards.forEach(card => {
+              if (card.dataset.search.includes("custom curated journey") || card.querySelector(".text-monograph-muted").textContent.includes("Custom Curated Journey")) {
+                card.remove();
+              } else {
+                if (card.hasAttribute(`data-tab-${tabName}`)) {
+                  card.style.display = "";
+                } else {
+                  card.style.display = "none";
+                }
+              }
+            });
+          });
+        });
+      });
+
+      const searchInput = document.getElementById("destination-search");
+      const cards = Array.from(document.querySelectorAll(".destination-card"));
+
+      let cachedItineraryMarkdown = "";
+
+      // Trigger search when user selects a country from the datalist
+      searchInput.addEventListener("change", async (event) => {
+        const country = event.target.value.trim();
+        if (!country) return;
+
+        const grid = document.getElementById("destinations-grid");
+        const resultContainer = document.getElementById("result-container");
+        resultContainer.classList.add("hidden");
+
+        const allCards = Array.from(grid.querySelectorAll(".destination-card"));
+        let exactMatch = false;
+        
+        allCards.forEach(card => {
+          if (card.dataset.search.includes(country.toLowerCase())) {
+            card.style.display = "";
+            exactMatch = true;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        if (exactMatch) {
+          grid.classList.remove("hidden");
+          return;
+        }
+
+        const existingCustom = grid.querySelector(`[data-search="${country.toLowerCase()}"]`);
+        if (existingCustom) existingCustom.remove();
+
+        const loadingTileHTML = createTileHTML(country, "Curating...", "Curating...", "7");
+        grid.insertAdjacentHTML("afterbegin", loadingTileHTML);
+        grid.classList.remove("hidden");
+
+        const insertedTile = grid.querySelector(`[data-search="${country.toLowerCase()}"]`);
+        const tagsContainer = insertedTile.querySelector(".mt-2\\.5.flex.flex-wrap.gap-2");
+        const budgetContainer = insertedTile.querySelector(".mt-1\\.5.text-\\[17px\\]");
+        
+        const timeSpan = tagsContainer.querySelector("span");
+
+        try {
+          const response = await fetch("/api/generate-itinerary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: country }),
+          });
+
+          if (response.status === 429) {
+            timeSpan.textContent = "Service Busy";
+            budgetContainer.innerHTML = "Service Busy";
+            return;
+          }
+
+          const data = await response.json();
+          if (data.itinerary) {
+            cachedItineraryMarkdown = data.itinerary;
+            
+            let bestTime = "Year Round";
+            const peakMatch = cachedItineraryMarkdown.match(/\|\s*Peak\s*\|\s*([^|]+)\s*\|/);
+            if (peakMatch && peakMatch[1]) {
+              bestTime = peakMatch[1].trim();
+            }
+
+            let budget = "~$1,500";
+            const budgetMatch = cachedItineraryMarkdown.match(/\|\s*\*\*(?:[0-9]+-Day)?\s*Total\*\*\s*\|.*?\|\s*\*\*(.+?)\*\*\s*\|/);
+            if (budgetMatch && budgetMatch[1]) {
+              budget = budgetMatch[1].trim().replace(/\s*per person/i, "");
+            }
+
+            timeSpan.textContent = bestTime;
+            budgetContainer.innerHTML = `${budget} <span class="text-monograph-muted text-[14px]">/ 7 Days</span>`;
+          } else {
+             timeSpan.textContent = "Failed";
+             budgetContainer.innerHTML = "Failed";
+          }
+        } catch (error) {
+           timeSpan.textContent = "Error";
+           budgetContainer.innerHTML = "Error";
+        }
+      });
+
+      function createTileHTML(name, bestTime, budget, days = "7") {
+        return `<article class="destination-card border border-monograph-border bg-monograph-surface flex flex-col" data-region="global" data-search="${name.toLowerCase()}">
+          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]">
+            <div>
+              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+                ${name}
+              </h2>
+              <p class="mt-1 text-[14px] text-monograph-muted">Custom Curated Journey</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90">✨</div>
+          </div>
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex-1">
+              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">${bestTime}</span>
+              </div>
+              <div class="mt-5 flex gap-3">
+                <div class="w-[2px] bg-monograph-text"></div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
+                  <p class="mt-1.5 text-[17px] text-monograph-text">
+                    ${budget} <span class="text-monograph-muted text-[14px]">/ ${days} Days</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-2">
+              <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+                Itinerary
+              </button>
+              <button type="button" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+                Survival Kit
+              </button>
+            </div>
+          </div>
+        </article>`;
+      }
+
+      function showItinerary(name) {
+        // If the itinerary is already fetched (from custom search), just render it
+        if (cachedItineraryMarkdown && document.getElementById("destination-search").value.trim().toLowerCase() === name.toLowerCase()) {
+          const resultDiv = document.getElementById("result");
+          resultDiv.innerHTML = marked.parse(cachedItineraryMarkdown);
+          
+          document.getElementById("destinations-grid").classList.add("hidden");
+          const resultContainer = document.getElementById("result-container");
+          resultContainer.classList.remove("hidden");
+
+          window.scrollTo({
+            top: resultContainer.offsetTop - 40,
+            behavior: "smooth",
+          });
+        } else {
+          // Fallback if clicked directly on default tiles without searching
+          generateItinerary(name);
+        }
+      }
+
+      async function generateItinerary(countryName) {
+        if (!countryName) return;
+
+        document.getElementById("destination-search").value = countryName;
+
+        const loadingEl = document.getElementById("loading");
+        const resultContainer = document.getElementById("result-container");
+        const grid = document.getElementById("destinations-grid");
+
+        loadingEl.classList.remove("hidden");
+        loadingEl.classList.add("flex");
+        resultContainer.classList.add("hidden");
+        grid.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/generate-itinerary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: countryName }),
+          });
+
+          if (response.status === 429) {
+            alert("Our service is currently experiencing high demand. Please wait a moment and try again.");
+            grid.classList.remove("hidden");
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.itinerary) {
+            cachedItineraryMarkdown = data.itinerary;
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = marked.parse(data.itinerary);
+            resultContainer.classList.remove("hidden");
+
+            window.scrollTo({
+              top: resultContainer.offsetTop - 40,
+              behavior: "smooth",
+            });
+          } else {
+            alert("Failed to curate the itinerary.");
+            grid.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Unable to reach the curation service. Please try again.");
+          grid.classList.remove("hidden");
+        } finally {
+          loadingEl.classList.add("hidden");
+          loadingEl.classList.remove("flex");
+        }
+      }
+
+
+      async function downloadPDF() {
+        const content = document.getElementById("result").innerHTML;
+        const country =
+          document.getElementById("destination-search").value || "Itinerary";
+
+        if (!content.trim()) {
+          alert("Please generate an itinerary first.");
+          return;
+        }
+
+        const response = await fetch("/api/download-pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ htmlContent: content, country: country }),
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Lumiere-${country}.pdf`;
+          a.click();
+        } else {
+          alert("Could not generate high-quality PDF.");
+        }
+      }
+
+      function downloadWord() {
+        const content = document.getElementById("result").innerHTML;
+
+        const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>Lumiere Itinerary</title>
+          <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6; }
+            h1, h2, h3 { color: #b8860b; font-family: 'Georgia', serif; }
+            h1 { text-align: center; margin-bottom: 24px; }
+            h2 { border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-top: 30px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+            th { background-color: #f9f9f9; color: #b8860b; }
+            blockquote { border-left: 3px solid #b8860b; padding-left: 15px; font-style: italic; }
+          </style>
+        </head><body>`;
+
+        const postHtml = "</body></html>";
+        const html = preHtml + content + postHtml;
+
+        const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+
+        const url =
+          "data:application/vnd.ms-word;charset=utf-8," +
+          encodeURIComponent(html);
+        const filename = "Lumiere-Itinerary.doc";
+
+        const downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+          navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+          downloadLink.href = url;
+          downloadLink.download = filename;
+          downloadLink.click();
+        }
+        document.body.removeChild(downloadLink);
+      }
+    </script>
+  </body>
+</html>
