@@ -224,7 +224,7 @@
 
       <section class="mt-12">
         <div
-          class="flex flex-wrap gap-6 text-[12px] font-semibold uppercase tracking-[0.24em] text-monograph-subtle"
+          class="flex flex-wrap gap-6 text-[12px] font-semibold uppercase tracking-[0.1em] text-monograph-subtle"
         >
           <button
             type="button"
@@ -267,7 +267,7 @@
       <section class="mt-10 max-w-[600px]">
         <label
           for="destination-search"
-          class="block text-[12px] uppercase tracking-[0.24em] text-monograph-muted"
+          class="block text-[12px] uppercase tracking-[0.1em] text-monograph-muted"
         >
           Search Destinations
         </label>
@@ -312,9 +312,24 @@
           class="flex justify-between items-center mb-8 border-b border-monograph-border pb-6"
         >
           <div>
-            <button id="view-itinerary-btn" class="hidden px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors">View Itinerary</button>
-            <button id="view-survival-kit-btn" class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors">View Survival Kit</button>
-            <button id="view-visa-btn" class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors">View Visa Info</button>
+            <button
+              id="view-itinerary-btn"
+              class="hidden px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+            >
+              View Itinerary
+            </button>
+            <button
+              id="view-survival-kit-btn"
+              class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+            >
+              View Survival Kit
+            </button>
+            <button
+              id="view-visa-btn"
+              class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+            >
+              View Visa Info
+            </button>
           </div>
           <div class="flex gap-4">
             <button
@@ -349,56 +364,40 @@
           data-tab-global="true"
           style="order: 0"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a3324] to-[#1a2116]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Thailand,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Thailand
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Land of Smiles
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Land of Smiles</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🐘</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Nov - Feb</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$800-$1,500
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$800-$1,500
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -432,56 +431,40 @@
           data-tab-global="true"
           style="order: 1"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#213025] to-[#151c17]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Bali,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Bali, Indonesia
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Island of the Gods
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Island of the Gods</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🌺</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >April - October</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - Oct</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$500-$1000
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$500-$1000
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -515,56 +498,40 @@
           data-tab-usa="true"
           style="order: 2"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/New%20York,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 New York, USA
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                The Empire State
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">The Empire State</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🗽</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >April - June</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - Jun</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,800-$3,500
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,800-$3,500
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -598,56 +565,40 @@
           data-tab-india="true"
           style="order: 3"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Goa,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Goa, India
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Beach Paradise
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Beach Paradise</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🏖️</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Nov - Feb</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$700-$1,300
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$700-$1,300
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -681,59 +632,43 @@
           data-tab-global="true"
           style="order: 4"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#312727] to-[#4f3c3f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Japan,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Japan
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                The Ancient Capital & Beyond
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">The Ancient Capital & Beyond</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">⛩️</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >March – May</span
-                ><span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Sept – Nov</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Mar – May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept – Nov</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$845–$1,950
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$845–$1,950
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -767,56 +702,40 @@
           data-tab-india="true"
           style="order: 5"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#1e2e22] to-[#152418]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Kerala,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Kerala, India
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                God's Own Country
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">God's Own Country</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🌴</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Sept - March</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Mar</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$600-$1,200
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$600-$1,200
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -850,59 +769,43 @@
           data-tab-global="true"
           style="order: 6"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#332a22] to-[#1f1b16]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Vietnam,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Vietnam
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Timeless Charm
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Timeless Charm</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🍜</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Feb - April</span
-                ><span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Aug - Oct</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Feb - Apr</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Aug - Oct</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$600-$1,200
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$600-$1,200
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -936,56 +839,40 @@
           data-tab-global="true"
           style="order: 7"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2d2a33] to-[#1c1a1f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/France,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 France
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                City of Light & Wine
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">City of Light & Wine</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🥐</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June – August</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun – Aug</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,620–$3,240
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,620–$3,240
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1019,56 +906,40 @@
           data-tab-global="true"
           style="order: 8"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#33221e] to-[#221614]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Kenya,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Kenya
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Safari Capital
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Safari Capital</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🦁</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >July - Oct</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jul - Oct</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$2,000-$4,000
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$2,000-$4,000
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1101,54 +972,40 @@
           data-tab-india="true"
           style="display: none; order: 9"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#33221e] to-[#221614]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Rajasthan,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Rajasthan, India
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">Land of Kings</p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Land of Kings</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🐪</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Oct - March</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Oct - Mar</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$500-$1,000
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$500-$1,000
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1181,56 +1038,40 @@
           data-tab-usa="true"
           style="display: none; order: 10"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/California,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 California, USA
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                The Golden State
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">The Golden State</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🏄</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >May - Sept</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Sept</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,500-$3,000
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,500-$3,000
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1263,57 +1104,43 @@
           data-tab-usa="true"
           style="display: none; order: 11"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#213025] to-[#151c17]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Hawaii,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Hawaii, USA
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">Aloha Spirit</p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Aloha Spirit</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🌋</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >April - May</span
-                ><span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Sept - Nov</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Nov</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$2,000-$4,000
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$2,000-$4,000
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1346,56 +1173,40 @@
           data-tab-canada="true"
           style="display: none; order: 12"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#212931] to-[#382c23]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/British%20Columbia,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 British Columbia, Canada
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Pacific to Rockies
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Pacific to Rockies</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🏔️</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June - Sept</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Sept</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,200-$2,500
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,200-$2,500
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1428,54 +1239,40 @@
           data-tab-canada="true"
           style="display: none; order: 13"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2d2a33] to-[#1c1a1f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Quebec,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Quebec, Canada
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">French Charm</p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">French Charm</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🍁</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June - August</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,100-$2,300
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,100-$2,300
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1508,56 +1305,40 @@
           data-tab-canada="true"
           style="display: none; order: 14"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Alberta,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Alberta, Canada
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Wild Rose Country
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Wild Rose Country</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🌲</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June - August</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,300-$2,600
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,300-$2,600
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1590,56 +1371,40 @@
           data-tab-global="true"
           style="display: none; order: 15"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#212931] to-[#382c23]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Italy,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Italy
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Mediterranean Charm
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Mediterranean Charm</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🍋</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >May - Sep</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Sep</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,300-$2,700
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,300-$2,700
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1672,54 +1437,40 @@
           data-tab-global="true"
           style="display: none; order: 16"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#1e2733] to-[#151b24]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Greece,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Greece
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">Aegean Jewel</p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Aegean Jewel</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🏺</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June - August</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,100-$2,400
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,100-$2,400
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1752,56 +1503,40 @@
           data-tab-global="true"
           style="display: none; order: 17"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#332a22] to-[#1f1b16]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/South%20Africa,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 South Africa
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                The Rainbow Nation
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">The Rainbow Nation</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">⛰️</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >November - March</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Mar</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$800-$1,600
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$800-$1,600
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1834,56 +1569,40 @@
           data-tab-global="true"
           style="display: none; order: 18"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#222a30] to-[#161b1f]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Iceland,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Iceland
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Land of Fire & Ice
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Land of Fire & Ice</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🧊</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >June – August</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun – Aug</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    $2,590-$4,690
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  $2,590-$4,690
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -1916,59 +1635,43 @@
           data-tab-global="true"
           style="display: none; order: 19"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#33221e] to-[#221614]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Morocco,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Morocco
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                The Red City & Desert
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">The Red City & Desert</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">🐪</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >March - May</span
-                ><span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Sept - Nov</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Mar - May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Nov</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$700-$1,400
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$700-$1,400
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -2001,59 +1704,43 @@
           data-tab-global="true"
           style="display: none; order: 20"
         >
-          <div
-            class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
-          >
-            <div>
-              <h2
-                class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text"
-              >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/Spain,landmark/all'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 Spain
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">
-                Flamenco & Tapas
-              </p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Flamenco & Tapas</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">💃</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
 
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p
-                class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
-              >
-                Best Time to Visit
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >May - June</span
-                ><span
-                  class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText"
-                  >Sept - Oct</span
-                >
-              </div>
-
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p
-                    class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted"
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Jun</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Oct</span
                   >
-                    Budget Estimation
-                  </p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ~$1,100-$2,200
-                    <span class="text-monograph-muted text-[14px]"
-                      >/ 7 Days</span
-                    >
-                  </p>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$1,100-$2,200
+                </p>
+              </div>
             </div>
-
-            <div
-              class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3"
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
@@ -2597,10 +2284,10 @@
           `[data-search="${country.toLowerCase()}"]`,
         );
         const tagsContainer = insertedTile.querySelector(
-          ".mt-2\\.5.flex.flex-wrap.gap-2",
+          ".mt-3.flex.flex-wrap.gap-2",
         );
         const budgetContainer = insertedTile.querySelector(
-          ".mt-1\\.5.text-\\[17px\\]",
+          ".mt-3.text-\\[17px\\]",
         );
 
         const timeSpan = tagsContainer.querySelector("span");
@@ -2628,6 +2315,25 @@
             );
             if (peakMatch && peakMatch[1]) {
               bestTime = peakMatch[1].trim();
+              // Shorten months to 3 letters
+              const months = {
+                january: "Jan",
+                february: "Feb",
+                march: "Mar",
+                april: "Apr",
+                may: "May",
+                june: "Jun",
+                july: "Jul",
+                august: "Aug",
+                september: "Sep",
+                october: "Oct",
+                november: "Nov",
+                december: "Dec",
+              };
+              bestTime = bestTime.replace(
+                /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/gi,
+                (match) => months[match.toLowerCase()] || match,
+              );
             }
 
             let budget = "~$1,500";
@@ -2651,48 +2357,52 @@
       });
 
       function createTileHTML(name, bestTime, budget, days = "7") {
+        const cleanName = encodeURIComponent(name.split(',')[0].trim());
+        let artStyle = `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/${cleanName},landmark/all'); background-size: cover; background-position: center;"`;
+        let minHeight = "min-h-[180px]";
+
+        if (name.toLowerCase().includes("cambodia")) {
+          artStyle = `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/960px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg'); background-size: cover; background-position: center;"`;
+        }
+
         return `<article class="destination-card border border-monograph-border bg-monograph-surface flex flex-col" data-region="global" data-search="${name.toLowerCase()}">
-          <div class="destination-card__art flex min-h-[100px] items-start justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]">
-            <div>
-              <h2 class="font-serif text-[21px] font-normal leading-tight tracking-[-0.03em] text-monograph-text">
+          <div class="destination-card__art flex ${minHeight} items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" ${artStyle}>
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
                 ${name}
               </h2>
-              <p class="mt-1 text-[14px] text-monograph-muted">Custom Curated Journey</p>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Custom Curated Journey</p>
             </div>
-            <div class="relative z-10 text-[32px] opacity-90">✨</div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
           </div>
+          
           <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
-            <div class="flex-1">
-              <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Best Time to Visit</p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
-                <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2.5 py-1 text-[12px] text-monograph-tagText">${bestTime}</span>
-              </div>
-              <div class="mt-5 flex gap-3">
-                <div class="w-[2px] bg-monograph-text"></div>
-                <div>
-                  <p class="text-[11px] uppercase tracking-[0.24em] text-monograph-muted">Budget Estimation</p>
-                  <p class="mt-1.5 text-[17px] text-monograph-text">
-                    ${budget} <span class="text-monograph-muted text-[14px]">/ ${days} Days</span>
-                  </p>
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap">${bestTime}</span>
                 </div>
               </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ${budget}
+                </p>
+              </div>
             </div>
-            <div class="mt-6 grid gap-3 border-t border-dashed border-[#2e2a27] pt-5 xl:grid-cols-3">
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4">
               <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
                 Itinerary
               </button>
-              <button
-                type="button"
-                onclick="generateSurvivalKit('${name}')"
-                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
-              >
+              <button type="button" onclick="generateSurvivalKit('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Survival Kit
               </button>
-              <button
-                type="button"
-                onclick="generateVisa('${name}')"
-                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
-              >
+              <button type="button" onclick="generateVisa('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
                 Visa
               </button>
             </div>
@@ -2722,7 +2432,8 @@
           const visaBtn = document.getElementById("view-visa-btn");
           visaBtn.classList.remove("hidden");
           visaBtn.onclick = () => generateVisa(name);
-          document.getElementById("result-container").dataset.viewType = "itinerary";
+          document.getElementById("result-container").dataset.viewType =
+            "itinerary";
 
           window.scrollTo({
             top: resultContainer.offsetTop - 40,
@@ -2770,14 +2481,19 @@
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.itinerary);
             resultContainer.classList.remove("hidden");
-            document.getElementById("view-itinerary-btn").classList.add("hidden");
-            const survivalBtn = document.getElementById("view-survival-kit-btn");
+            document
+              .getElementById("view-itinerary-btn")
+              .classList.add("hidden");
+            const survivalBtn = document.getElementById(
+              "view-survival-kit-btn",
+            );
             survivalBtn.classList.remove("hidden");
             survivalBtn.onclick = () => generateSurvivalKit(countryName);
             const visaBtn = document.getElementById("view-visa-btn");
             visaBtn.classList.remove("hidden");
             visaBtn.onclick = () => generateVisa(countryName);
-            document.getElementById("result-container").dataset.viewType = "itinerary";
+            document.getElementById("result-container").dataset.viewType =
+              "itinerary";
 
             window.scrollTo({
               top: resultContainer.offsetTop - 40,
@@ -2833,14 +2549,17 @@
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.survivalKit);
             resultContainer.classList.remove("hidden");
-            document.getElementById("view-survival-kit-btn").classList.add("hidden");
+            document
+              .getElementById("view-survival-kit-btn")
+              .classList.add("hidden");
             const itineraryBtn = document.getElementById("view-itinerary-btn");
             itineraryBtn.classList.remove("hidden");
             itineraryBtn.onclick = () => generateItinerary(countryName);
             const visaBtn = document.getElementById("view-visa-btn");
             visaBtn.classList.remove("hidden");
             visaBtn.onclick = () => generateVisa(countryName);
-            document.getElementById("result-container").dataset.viewType = "survival_kit";
+            document.getElementById("result-container").dataset.viewType =
+              "survival_kit";
 
             window.scrollTo({
               top: resultContainer.offsetTop - 40,
@@ -2860,7 +2579,6 @@
         }
       }
 
-      
       async function generateVisa(countryName) {
         if (!countryName) return;
 
@@ -2884,7 +2602,7 @@
 
           if (response.status === 429) {
             alert(
-              "Our service is currently experiencing high demand. Please wait a moment and try again."
+              "Our service is currently experiencing high demand. Please wait a moment and try again.",
             );
             grid.classList.remove("hidden");
             return;
@@ -2897,18 +2615,21 @@
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.visa);
             resultContainer.classList.remove("hidden");
-            
+
             document.getElementById("view-visa-btn").classList.add("hidden");
-            
+
             const itineraryBtn = document.getElementById("view-itinerary-btn");
             itineraryBtn.classList.remove("hidden");
             itineraryBtn.onclick = () => generateItinerary(countryName);
-            
-            const survivalBtn = document.getElementById("view-survival-kit-btn");
+
+            const survivalBtn = document.getElementById(
+              "view-survival-kit-btn",
+            );
             survivalBtn.classList.remove("hidden");
             survivalBtn.onclick = () => generateSurvivalKit(countryName);
-            
-            document.getElementById("result-container").dataset.viewType = "visa";
+
+            document.getElementById("result-container").dataset.viewType =
+              "visa";
 
             window.scrollTo({
               top: resultContainer.offsetTop - 40,
@@ -2949,10 +2670,12 @@
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          
-          const viewType = document.getElementById("result-container").dataset.viewType || "Itinerary";
+
+          const viewType =
+            document.getElementById("result-container").dataset.viewType ||
+            "Itinerary";
           const docType = viewType;
-          
+
           a.download = `${country}_${docType}.pdf`;
           a.click();
         } else {
@@ -2999,10 +2722,13 @@
         const url =
           "data:application/vnd.ms-word;charset=utf-8," +
           encodeURIComponent(html);
-          
-        const country = document.getElementById("destination-search").value || "Itinerary";
-        const viewType = document.getElementById("result-container").dataset.viewType || "Itinerary";
-          const docType = viewType;
+
+        const country =
+          document.getElementById("destination-search").value || "Itinerary";
+        const viewType =
+          document.getElementById("result-container").dataset.viewType ||
+          "Itinerary";
+        const docType = viewType;
         const filename = `${country}_${docType}.doc`;
 
         const downloadLink = document.createElement("a");
