@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -14,10 +13,8 @@ const __dirname = path.dirname(__filename);
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
 
-// Notice the target directory is now 'survival_kit'
 const dataDir = path.join(__dirname, 'data', 'survival_kit');
 
-// Your full list of countries (including the newly added provinces/states)
 const countries = [
   "Afghanistan", "Alabama, USA", "Alaska, USA", "Albania", "Alberta, Canada", "Algeria", "Andaman and Nicobar Islands, India", 
   "Andorra", "Andhra Pradesh, India", "Angola", "Antigua and Barbuda", "Argentina", "Arizona, USA", "Arkansas, USA", 
@@ -63,6 +60,27 @@ const countries = [
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// HELPER: Exponential Backoff for Rate Limits
+const fetchWithRetry = async (modelName, prompt, retries = 3, delay = 15000) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await ai.models.generateContent({ model: modelName, contents: prompt });
+        } catch (error) {
+            // Check for BOTH 429 Rate Limits and 503 Overloads
+            const isRateLimit = error.status === 429 || error.message.includes('429');
+            const isOverload = error.status === 503 || error.message.includes('503') || error.message.includes('504');
+
+            if ((isRateLimit || isOverload) && i < retries - 1) {
+                console.warn(`⚠️ Server busy (${error.status || '429/503'}) for model ${modelName}. Pausing ${delay / 1000}s before retry ${i + 1}/${retries}...`);
+                await sleep(delay);
+                delay *= 2; // Exponential backoff: 15s -> 30s -> 60s
+            } else {
+                throw error; // If out of retries or it's a permanent error (like 400 Bad Request)
+            }
+        }
+    }
+};
+
 async function runWarmup() {
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
@@ -75,9 +93,8 @@ async function runWarmup() {
             continue;
         }
 
-        console.log(`⏳ Generating Survival Kit for ${country} via Gemini 2.5 Flash...`);
+        console.log(`⏳ Generating Survival Kit for ${country}...`);
         
-        // RESTORED PROMPT: Exactly as in your original file
         const prompt = `
 <SYSTEM_INSTRUCTION>
 You are an expert travel planner. You will generate a tailored survival kit by following the provided framework, strictly applying the overrides below.
@@ -102,33 +119,33 @@ Output entirely in rich Markdown. Use proper H2 (##) and H3 (###) headers. Use t
 Generate the survival kit for: ${country}.
         `;
 
-       // Add a retry counter inside your loop
-let attempts = 0;
-const maxAttempts = 3;
+        try {
+            let resultText = "";
+            try {
+                // First attempt: Gemini 2.5 Flash
+                const response = await fetchWithRetry('gemini-3-flash-preview', prompt);
+                resultText = response.text;
+                console.log(`✅ Success: ${country} Kit (Gemini 2.5 Flash)`);
+            } catch (e) {
+                console.warn(`⚠️ Primary model failed. Attempting fallback to Gemini 3 Flash Preview...`);
+                // Second attempt: Fallback to Gemini 3 Flash Preview
+                const fallback = await fetchWithRetry('gemini-3-flash-preview', prompt);
+                resultText = fallback.text;
+                console.log(`✅ Success: ${country} Kit (Gemini 3 Flash Preview)`);
+            }
 
-while (attempts < maxAttempts) {
-    try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: prompt,
-        });
-        
-        const resultText = response.text;
-        console.log(`✅ Success: ${country} Kit`);
-        fs.writeFileSync(filePath, JSON.stringify({ survivalKit: resultText }, null, 2));
-        break; // Exit the retry loop on success
+            // Save to disk
+            fs.writeFileSync(filePath, JSON.stringify({ survivalKit: resultText }, null, 2));
+            
+            // THE THROTTLE: Force a 10-second wait after EVERY success. 
+            // This guarantees you stay under the 15 Requests Per Minute limit.
+            await sleep(10000); 
 
-    } catch (error) {
-        if (error.message.includes('503') || error.message.includes('504')) {
-            attempts++;
-            console.warn(`⚠️ Server overloaded for ${country}. Retry ${attempts}/${maxAttempts}...`);
-            await sleep(15000 * attempts); // Wait longer with each failure (15s, 30s...)
-        } else {
-            console.error(`❌ Non-retryable error for ${country}:`, error.message);
-            break; 
+        } catch (error) {
+            console.error(`❌ Fatal Error generating kit for ${country}:`, error.message);
+            // Penalty box: If a country totally fails all 6 attempts, wait 1 full minute before moving to the next country
+            await sleep(60000); 
         }
-    }
-}
     }
     console.log("🏁 All survival kits processed!");
 }
