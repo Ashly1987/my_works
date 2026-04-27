@@ -25,6 +25,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 // Read the MD framework when the server starts
 const itineraryFramework = fs.readFileSync('UNIVERSAL_TRAVEL_ITINERARY_SKILL.md', 'utf8');
 const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
+const visaFramework = fs.readFileSync('visa_requirements_generic_template.md', 'utf8');
 
 app.post('/api/generate-itinerary', async (req, res) => {
     try {
@@ -219,6 +220,83 @@ Generate the survival kit for: ${userCountry}.
 
 import puppeteer from 'puppeteer';
 
+
+app.post('/api/generate-visa', async (req, res) => {
+    try {
+        const userCountry = req.body.country;
+        if (!userCountry) return res.status(400).json({ error: "Country is required" });
+
+        const dataDir = path.join(__dirname, 'data', 'visa');
+        const safeCountryName = userCountry.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        const filePath = path.join(dataDir, `${safeCountryName}.json`);
+
+        if (fs.existsSync(filePath)) {
+            console.log(`⏩ Serving visa for ${userCountry} from cache...`);
+            const cachedData = fs.readFileSync(filePath, 'utf8');
+            return res.json({ visa: JSON.parse(cachedData).visa });
+        }
+
+const prompt = `
+<SYSTEM_INSTRUCTION>
+You are an expert travel planner and visa consultant. You will generate tailored visa requirements for the requested country by following the provided framework, strictly applying the overrides below.
+</SYSTEM_INSTRUCTION>
+
+<FRAMEWORK_CONTEXT>
+${visaFramework}
+</FRAMEWORK_CONTEXT>
+
+<STRICT_OVERRIDES>
+1. Replace [COUNTRY NAME] with ${userCountry}.
+2. Ensure the requirements accurately reflect the real-world visa policy for Indian Passport Holders traveling to ${userCountry} as of the current year.
+3. Keep the format concise, using Markdown headers, lists, and bold text as in the template.
+</STRICT_OVERRIDES>
+
+<OUTPUT_FORMAT>
+Output entirely in rich Markdown. Use proper H2 (##) and H3 (###) headers. Use tables and bullet points exactly where requested.
+</OUTPUT_FORMAT>
+
+Generate the visa requirements for: ${userCountry}.
+`;
+
+        let generatedVisa = "";
+
+        try {
+            const flashResponse = await ai.models.generateContent({
+                model: 'gemini-2.5-flash',
+                contents: prompt,
+            });
+            generatedVisa = flashResponse.text;
+            console.log(`✅ Success: Generated visa requirements for ${userCountry} using Flash 2.5 model.`);
+        } catch (flashError) {
+            console.warn(`⚠️ Flash 2.5 model failed. Attempting seamless fallback to flash 3 preview model...`);
+            const proResponse = await ai.models.generateContent({
+                model: 'gemini-2.5-flash',
+                contents: prompt,
+            });
+            generatedVisa = proResponse.text;
+            console.log(`✅ Success: Generated visa requirements for ${userCountry} using flash 3 preview model fallback.`);
+        }
+
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify({ visa: generatedVisa }, null, 2), 'utf8');
+        console.log(`💾 Saved new visa requirements for ${userCountry} to local cache.`);
+
+        res.json({ visa: generatedVisa });
+
+    } catch (error) {
+        console.error("❌ Fatal Error: Both models failed.", error);
+        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
+            return res.status(error.status || 503).json({ 
+                error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
+            });
+        }
+        res.status(500).json({ error: "Failed to generate visa requirements. Please try again later." });
+    }
+});
+
 app.post('/api/download-pdf', async (req, res) => {
     const { htmlContent, country } = req.body;
     
@@ -246,10 +324,19 @@ app.post('/api/download-pdf', async (req, res) => {
             </html>
         `);
 
+        const footerHtml = `
+            <div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">
+                COPYRIGHT &copy; 2026 ASH - INSTA: <a href="https://www.instagram.com/ashlydeedward?igsh=MmQ1cG9uMTlmNWc1&amp;utm_source=qr" style="color: #999999; text-decoration: underline;">@ASHTAGRAM</a>
+            </div>
+        `;
+
         const pdf = await page.pdf({
             format: 'A4',
-            margin: { top: '0.5in', right: '0.5in', bottom: '0.5in', left: '0.5in' },
-            printBackground: true
+            margin: { top: '0.5in', right: '0.5in', bottom: '0.8in', left: '0.5in' },
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: '<div></div>',
+            footerTemplate: footerHtml
         });
 
         await browser.close();
