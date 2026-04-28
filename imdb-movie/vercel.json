@@ -1,7 +1,5 @@
 {
   "functions": {
-    "api/search.js": {
-      "runtime": "nodejs18.x"
-    }
+    "api/search.js": {}
   }
 }
