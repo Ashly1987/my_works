@@ -556,25 +556,23 @@ button svg {
 }
 
 .quick-searches button {
-  min-height: 34px;
-  border: 1px solid rgba(143, 227, 196, 0.22);
-  padding: 0 11px;
-  color: rgba(237, 248, 239, 0.86);
-  background: rgba(143, 227, 196, 0.08);
+  min-height: 28px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
   font: inherit;
-  font-size: 0.76rem;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: normal;
   cursor: pointer;
-  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease, background 180ms ease;
+  transition: all 180ms ease;
 }
 
 .quick-searches button:hover,
 .quick-searches button:focus-visible {
-  border-color: rgba(215, 181, 109, 0.48);
-  color: #ffe29a;
-  background: rgba(215, 181, 109, 0.12);
-  transform: translateY(-2px);
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .results {
