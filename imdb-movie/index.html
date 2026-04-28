@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuickFlix</title>
+    <link
+      rel="icon"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="%2304120e"/><circle cx="32" cy="32" r="24" fill="%23d7b56d"/><circle cx="32" cy="32" r="7" fill="%2304120e"/><circle cx="32" cy="14" r="5" fill="%2304120e"/><circle cx="50" cy="32" r="5" fill="%2304120e"/><circle cx="32" cy="50" r="5" fill="%2304120e"/><circle cx="14" cy="32" r="5" fill="%2304120e"/><circle cx="32" cy="32" r="29" fill="none" stroke="%238fe3c4" stroke-width="3"/></svg>'
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,7 +27,12 @@
         </div>
 
         <div class="hero-topline">
-          <p class="eyebrow">QuickFlix</p>
+          <div class="brand-mark" aria-label="QuickFlix">
+            <span class="brand-logo brand-logo--reel" aria-hidden="true">
+              <span class="brand-logo__play"></span>
+            </span>
+            <span class="eyebrow">QuickFlix</span>
+          </div>
           <div class="utility-rail">
             <aside class="views-panel" aria-labelledby="views-title">
               <div class="views-panel__head">
@@ -86,7 +95,7 @@
                 id="movie-input"
                 name="movie"
                 type="search"
-                placeholder="Search for your favorite film"
+                placeholder="Try Vickram, Inception, The Matrix"
                 autocomplete="off"
                 required
               />
@@ -104,6 +113,11 @@
                 </svg>
               </button>
             </div>
+            <div class="quick-searches" aria-label="Quick movie searches">
+              <button type="button" data-movie="Vikram">Vikram</button>
+              <button type="button" data-movie="Inception">Inception</button>
+              <button type="button" data-movie="The Matrix">The Matrix</button>
+            </div>
             <p class="hint">Results are sourced from IMDb suggestions.</p>
           </form>
         </div>
@@ -115,6 +129,10 @@
         </div>
         <div class="tile-grid" id="results"></div>
       </section>
+
+      <footer class="site-footer">
+        <p>Copyright &copy;<span id="copyright-year">2026</span> ASH</p>
+      </footer>
     </main>
 
     <template id="movie-card-template">
@@ -127,6 +145,7 @@
           <div class="movie-meta">
             <span class="movie-type"></span>
             <span class="movie-year"></span>
+            <span class="movie-rating" hidden></span>
           </div>
           <h2 class="movie-title"></h2>
           <p class="movie-cast"></p>
@@ -143,13 +162,14 @@
 
     <script>
       window.QUICKFLIX_FIREBASE_CONFIG = {
-        apiKey: "",
-        authDomain: "",
-        projectId: "",
-        storageBucket: "",
-        messagingSenderId: "",
-        appId: "",
+        apiKey: "AIzaSyBwGNGPgTBComJB_2caHmFVybcauQiIBjQ",
+        authDomain: "quickflix-48b7d.firebaseapp.com",
+        projectId: "quickflix-48b7d",
+        storageBucket: "quickflix-48b7d.firebasestorage.app",
+        messagingSenderId: "53331035927",
+        appId: "1:53331035927:web:1d74cea32b978b7b051952",
       };
+      window.QUICKFLIX_OMDB_API_KEY = "1a249e6a";
     </script>
     <script type="module" src="app.js"></script>
   </body>

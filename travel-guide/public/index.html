@@ -359,6 +359,73 @@
         <article
           class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
           data-region="global"
+          data-search="cambodia kingdom of wonder"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: -1"
+        >
+          <div class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/960px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg'); background-size: cover; background-position: center;">
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
+                Cambodia
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Kingdom of Wonder</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ~$840-$1,750
+                </p>
+              </div>
+            </div>
+            
+            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Cambodia')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Cambodia')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Cambodia')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
           data-search="thailand land of smiles"
           data-tab-all="true"
           data-tab-global="true"
@@ -2582,6 +2649,16 @@
       async function generateVisa(countryName) {
         if (!countryName) return;
 
+        let apiCountryName = countryName;
+        const lowerName = countryName.toLowerCase();
+        if (lowerName.includes(", usa") || lowerName === "usa") {
+          apiCountryName = "USA";
+        } else if (lowerName.includes(", india") || lowerName === "india") {
+          apiCountryName = "India";
+        } else if (lowerName.includes(", canada") || lowerName === "canada") {
+          apiCountryName = "Canada";
+        }
+
         document.getElementById("destination-search").value = countryName;
 
         const loadingEl = document.getElementById("loading");
@@ -2597,7 +2674,7 @@
           const response = await fetch("/api/generate-visa", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ country: countryName }),
+            body: JSON.stringify({ country: apiCountryName }),
           });
 
           if (response.status === 429) {

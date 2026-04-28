@@ -3,6 +3,7 @@ const input = document.querySelector("#movie-input");
 const statusEl = document.querySelector("#status");
 const resultsEl = document.querySelector("#results");
 const template = document.querySelector("#movie-card-template");
+const quickSearchButtons = document.querySelectorAll(".quick-searches button");
 const dailyViewsEl = document.querySelector("#daily-views");
 const totalViewsEl = document.querySelector("#total-views");
 const reportButton = document.querySelector("#report-button");
@@ -10,10 +11,11 @@ const reportPanel = document.querySelector("#report-panel");
 const views7El = document.querySelector("#views-7");
 const views14El = document.querySelector("#views-14");
 const views30El = document.querySelector("#views-30");
+const copyrightYearEl = document.querySelector("#copyright-year");
 
 const VIEWS_KEY = "playimdb-view-recorder";
 const FIREBASE_VIEWS_COLLECTION = "quickflixViews";
-const FIREBASE_SDK_VERSION = "10.12.5";
+const FIREBASE_SDK_VERSION = "12.12.1";
 
 let firebaseClientPromise;
 
@@ -160,6 +162,8 @@ const getPosterUrl = (image) => {
 const getImdbUrl = (id) => `https://www.imdb.com/title/${id}/`;
 const getPlayUrl = (id) => getImdbUrl(id).replace("www.imdb.com", "www.playimdb.com");
 
+const hasOmdbConfig = () => Boolean(window.QUICKFLIX_OMDB_API_KEY);
+
 const normalizeResult = (item) => ({
   id: item.id,
   title: item.l || "Untitled",
@@ -167,7 +171,29 @@ const normalizeResult = (item) => ({
   type: item.qid ? item.qid.replace(/-/g, " ") : item.q || "Title",
   cast: item.s || "IMDb title details",
   poster: getPosterUrl(item.i),
+  rating: item.ir || item.rating || "",
 });
+
+const addMovieRating = async (movie) => {
+  if (movie.rating || !hasOmdbConfig()) {
+    return movie;
+  }
+
+  const url = `https://www.omdbapi.com/?i=${encodeURIComponent(movie.id)}&apikey=${encodeURIComponent(window.QUICKFLIX_OMDB_API_KEY)}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    return movie;
+  }
+
+  const data = await response.json();
+  const rating = data.Response === "True" && data.imdbRating !== "N/A" ? data.imdbRating : "";
+
+  return {
+    ...movie,
+    rating,
+  };
+};
 
 const renderMovies = (movies) => {
   resultsEl.replaceChildren();
@@ -178,11 +204,17 @@ const renderMovies = (movies) => {
     const fallback = card.querySelector(".poster-fallback");
     const imdbLink = card.querySelector(".imdb-link");
     const playLink = card.querySelector(".play-link");
+    const rating = card.querySelector(".movie-rating");
 
     card.querySelector(".movie-title").textContent = movie.title;
     card.querySelector(".movie-type").textContent = movie.type;
     card.querySelector(".movie-year").textContent = movie.year;
     card.querySelector(".movie-cast").textContent = movie.cast;
+
+    if (movie.rating) {
+      rating.textContent = `IMDb ${movie.rating}`;
+      rating.hidden = false;
+    }
 
     if (movie.poster) {
       poster.src = movie.poster;
@@ -209,16 +241,15 @@ const searchMovies = async (query) => {
   }
 
   const data = await response.json();
-  return (data.d || [])
+  const movies = (data.d || [])
     .filter((item) => item.id?.startsWith("tt"))
     .slice(0, 8)
     .map(normalizeResult);
+
+  return Promise.all(movies.map(addMovieRating));
 };
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const query = input.value.trim();
+const runMovieSearch = async (query) => {
   if (!query) {
     input.focus();
     return;
@@ -240,6 +271,20 @@ form.addEventListener("submit", async (event) => {
   } catch (error) {
     setStatus("Could not reach IMDb right now. Please try again in a moment.");
   }
+};
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  await runMovieSearch(input.value.trim());
+});
+
+quickSearchButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const query = button.dataset.movie;
+
+    input.value = query;
+    await runMovieSearch(query);
+  });
 });
 
 input.addEventListener("focus", () => {
@@ -255,4 +300,5 @@ reportButton.addEventListener("click", () => {
   reportButton.setAttribute("aria-expanded", String(!isOpen));
 });
 
+copyrightYearEl.textContent = new Date().getFullYear();
 recordView();
