@@ -80,7 +80,7 @@ body::before {
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.34;
+  opacity: 0.45;
   pointer-events: none;
 }
 
@@ -94,7 +94,7 @@ body::before {
 .cinema-backdrop::before {
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(3, 16, 13, 0.96) 0%, rgba(3, 16, 13, 0.74) 42%, rgba(3, 16, 13, 0.52) 100%),
+    linear-gradient(90deg, rgba(3, 16, 13, 0.98) 0%, rgba(3, 16, 13, 0.85) 45%, rgba(3, 16, 13, 0.3) 100%),
     radial-gradient(circle at 78% 38%, rgba(143, 227, 196, 0.18), transparent 24rem);
 }
 
