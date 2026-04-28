@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuickFlix Report</title>
+    <link
+      rel="icon"
+      href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="%2304120e"/><circle cx="32" cy="32" r="24" fill="%23d7b56d"/><circle cx="32" cy="32" r="7" fill="%2304120e"/><circle cx="32" cy="14" r="5" fill="%2304120e"/><circle cx="50" cy="32" r="5" fill="%2304120e"/><circle cx="32" cy="50" r="5" fill="%2304120e"/><circle cx="14" cy="32" r="5" fill="%2304120e"/><circle cx="32" cy="32" r="29" fill="none" stroke="%238fe3c4" stroke-width="3"/></svg>'
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell report-shell">
+      <header class="report-hero">
+        <a class="brand-mark" href="./" aria-label="Back to QuickFlix">
+          <span class="brand-logo brand-logo--reel" aria-hidden="true">
+            <span class="brand-logo__play"></span>
+          </span>
+          <span class="eyebrow">QuickFlix</span>
+        </a>
+        <a class="report-back" href="./">Back to search</a>
+      </header>
+
+      <section class="report-page" aria-labelledby="report-title">
+        <div class="report-page__head">
+          <p class="eyebrow">Views Report</p>
+          <h1 id="report-title">Traffic pulse.</h1>
+        </div>
+
+        <div class="report-summary">
+          <div>
+            <span>Today</span>
+            <strong id="report-today">0</strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong id="report-total">0</strong>
+          </div>
+          <div>
+            <span>7 days</span>
+            <strong id="report-7">0</strong>
+          </div>
+          <div>
+            <span>14 days</span>
+            <strong id="report-14">0</strong>
+          </div>
+          <div>
+            <span>30 days</span>
+            <strong id="report-30">0</strong>
+          </div>
+        </div>
+
+        <div class="report-table" id="report-table" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script>
+      window.QUICKFLIX_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBwGNGPgTBComJB_2caHmFVybcauQiIBjQ",
+        authDomain: "quickflix-48b7d.firebaseapp.com",
+        projectId: "quickflix-48b7d",
+        storageBucket: "quickflix-48b7d.firebasestorage.app",
+        messagingSenderId: "53331035927",
+        appId: "1:53331035927:web:1d74cea32b978b7b051952",
+      };
+    </script>
+    <script type="module" src="report.js"></script>
+  </body>
+</html>

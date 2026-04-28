@@ -1,13 +1,12 @@
 const form = document.querySelector("#movie-form");
 const input = document.querySelector("#movie-input");
+const clearSearchButton = document.querySelector("#clear-search");
 const statusEl = document.querySelector("#status");
 const resultsEl = document.querySelector("#results");
 const template = document.querySelector("#movie-card-template");
 const quickSearchButtons = document.querySelectorAll(".quick-searches button");
 const dailyViewsEl = document.querySelector("#daily-views");
 const totalViewsEl = document.querySelector("#total-views");
-const reportButton = document.querySelector("#report-button");
-const reportPanel = document.querySelector("#report-panel");
 const views7El = document.querySelector("#views-7");
 const views14El = document.querySelector("#views-14");
 const views30El = document.querySelector("#views-30");
@@ -335,8 +334,13 @@ quickSearchButtons.forEach((button) => {
     const query = button.dataset.movie;
 
     input.value = query;
+    clearSearchButton.hidden = false;
     await runMovieSearch(query);
   });
+});
+
+input.addEventListener("input", () => {
+  clearSearchButton.hidden = !input.value.trim();
 });
 
 input.addEventListener("focus", () => {
@@ -345,12 +349,14 @@ input.addEventListener("focus", () => {
   }
 });
 
-reportButton.addEventListener("click", () => {
-  const isOpen = !reportPanel.hidden;
-
-  reportPanel.hidden = isOpen;
-  reportButton.setAttribute("aria-expanded", String(!isOpen));
+clearSearchButton.addEventListener("click", () => {
+  input.value = "";
+  clearSearchButton.hidden = true;
+  resultsEl.replaceChildren();
+  setStatus("Enter a title to begin your search.");
+  input.focus();
 });
 
+clearSearchButton.hidden = !input.value.trim();
 copyrightYearEl.textContent = new Date().getFullYear();
 recordView();

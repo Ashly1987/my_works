@@ -37,14 +37,13 @@
             <aside class="views-panel" aria-labelledby="views-title">
               <div class="views-panel__head">
                 <h2 id="views-title">Views</h2>
-                <button
+                <a
                   class="report-button"
                   id="report-button"
-                  type="button"
-                  aria-expanded="false"
+                  href="report.html"
                 >
                   Report
-                </button>
+                </a>
               </div>
 
               <div class="views-stats">
@@ -91,14 +90,19 @@
           <form class="search-panel" id="movie-form">
             <label for="movie-input">Movie title</label>
             <div class="search-row">
-              <input
-                id="movie-input"
-                name="movie"
-                type="search"
-                placeholder="Try Vickram, Inception, The Matrix"
-                autocomplete="off"
-                required
-              />
+              <div class="search-input-wrap">
+                <input
+                  id="movie-input"
+                  name="movie"
+                  type="search"
+                  placeholder="Try Vickram, Inception, The Matrix"
+                  autocomplete="off"
+                  required
+                />
+                <button class="clear-search" id="clear-search" type="button" aria-label="Clear search">
+                  &times;
+                </button>
+              </div>
               <button type="submit" aria-label="Search movie">
                 <span>Launch</span>
                 <svg aria-hidden="true" viewBox="0 0 24 24">
