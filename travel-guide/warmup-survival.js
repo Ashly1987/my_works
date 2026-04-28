@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import { GoogleGenAI } from '@google/genai';
+import { VertexAI } from '@google-cloud/vertexai'; // Using the Cloud SDK
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -9,12 +9,21 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
+// Initialize Vertex AI Client
+const vertex_ai = new VertexAI({
+    project: process.env.GCP_PROJECT_ID,
+    location: 'us-central1' // Standard region for Gemini
+});
 
+// Instantiate the model
+const generativeModel = vertex_ai.preview.getGenerativeModel({
+    model: 'gemini-2.5-flash',
+});
+
+const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
 const dataDir = path.join(__dirname, 'data', 'survival_kit');
 
+// Put your FULL list of 200+ countries back here
 const countries = [
   "Afghanistan", "Alabama, USA", "Alaska, USA", "Albania", "Alberta, Canada", "Algeria", "Andaman and Nicobar Islands, India", 
   "Andorra", "Andhra Pradesh, India", "Angola", "Antigua and Barbuda", "Argentina", "Arizona, USA", "Arkansas, USA", 
@@ -60,27 +69,6 @@ const countries = [
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// HELPER: Exponential Backoff for Rate Limits
-const fetchWithRetry = async (modelName, prompt, retries = 3, delay = 15000) => {
-    for (let i = 0; i < retries; i++) {
-        try {
-            return await ai.models.generateContent({ model: modelName, contents: prompt });
-        } catch (error) {
-            // Check for BOTH 429 Rate Limits and 503 Overloads
-            const isRateLimit = error.status === 429 || error.message.includes('429');
-            const isOverload = error.status === 503 || error.message.includes('503') || error.message.includes('504');
-
-            if ((isRateLimit || isOverload) && i < retries - 1) {
-                console.warn(`⚠️ Server busy (${error.status || '429/503'}) for model ${modelName}. Pausing ${delay / 1000}s before retry ${i + 1}/${retries}...`);
-                await sleep(delay);
-                delay *= 2; // Exponential backoff: 15s -> 30s -> 60s
-            } else {
-                throw error; // If out of retries or it's a permanent error (like 400 Bad Request)
-            }
-        }
-    }
-};
-
 async function runWarmup() {
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
@@ -93,8 +81,6 @@ async function runWarmup() {
             continue;
         }
 
-        console.log(`⏳ Generating Survival Kit for ${country}...`);
-        
         const prompt = `
 <SYSTEM_INSTRUCTION>
 You are an expert travel planner. You will generate a tailored survival kit by following the provided framework, strictly applying the overrides below.
@@ -106,7 +92,7 @@ ${survivalKitFramework}
 
 <STRICT_OVERRIDES>
 1. **STARTING LINE:** Do NOT print the country name as plain text at the top. The absolute first line of your output MUST be the H1 header exactly like this: # ${country} TRAVEL SURVIVAL KIT
-2. **REMOVE UPDATED DATE:** Completely omit the "Last Updated: October 26, 2023" line (or any date reference) from the introductory section.
+2. **REMOVE UPDATED DATE:** Completely omit the "Last Updated" line (or any date reference) from the introductory section.
 3. **CONDENSE SECTIONS 11, 12 & 13:** For Sections 11 (Festivals & Events), 12 (Customs & Etiquette), and 13 (Safety & Practical Info), you MUST keep all Markdown tables exactly as detailed in the framework. However, you must drastically shorten all surrounding paragraphs and bullet lists to be extremely brief (1-2 sentences maximum per subsection). 
 4. **THE SAFETY EXCEPTION:** Ignore the shortening rule for the "Personal Safety & Crime Awareness" section. You MUST keep this specific safety section at its full, original, detailed length, preserving all scam warnings, theft advice, and formatting exactly as they are.
 5. **COUNTRY NAME:** Replace [COUNTRY NAME] with ${country}.
@@ -120,31 +106,26 @@ Generate the survival kit for: ${country}.
         `;
 
         try {
-            let resultText = "";
-            try {
-                // First attempt: Gemini 2.5 Flash
-                const response = await fetchWithRetry('gemini-3-flash-preview', prompt);
-                resultText = response.text;
-                console.log(`✅ Success: ${country} Kit (Gemini 2.5 Flash)`);
-            } catch (e) {
-                console.warn(`⚠️ Primary model failed. Attempting fallback to Gemini 3 Flash Preview...`);
-                // Second attempt: Fallback to Gemini 3 Flash Preview
-                const fallback = await fetchWithRetry('gemini-3-flash-preview', prompt);
-                resultText = fallback.text;
-                console.log(`✅ Success: ${country} Kit (Gemini 3 Flash Preview)`);
-            }
-
-            // Save to disk
+            console.log(`⏳ Generating Survival Kit for ${country} via Vertex AI...`);
+            
+            // The Vertex AI call structure
+            const response = await generativeModel.generateContent({
+                contents: [{ role: 'user', parts: [{ text: prompt }] }]
+            });
+            
+            // Extract the text from the Vertex response object
+            const resultText = response.response.candidates[0].content.parts[0].text;
+            
+            console.log(`✅ Success: ${country} Kit`);
             fs.writeFileSync(filePath, JSON.stringify({ survivalKit: resultText }, null, 2));
             
-            // THE THROTTLE: Force a 10-second wait after EVERY success. 
-            // This guarantees you stay under the 15 Requests Per Minute limit.
-            await sleep(10000); 
+            // Vertex AI gives you massive enterprise rate limits out of the gate
+            // 1 second is plenty of breathing room.
+            await sleep(1000); 
 
         } catch (error) {
-            console.error(`❌ Fatal Error generating kit for ${country}:`, error.message);
-            // Penalty box: If a country totally fails all 6 attempts, wait 1 full minute before moving to the next country
-            await sleep(60000); 
+            console.error(`❌ Error generating kit for ${country}:`, error.message);
+            await sleep(15000);
         }
     }
     console.log("🏁 All survival kits processed!");
