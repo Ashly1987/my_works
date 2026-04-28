@@ -1,0 +1,10 @@
+Loading scopes…
+Searching for existing projects…
+> No framework detected. Default Project Settings:
+
+- Build Command: `npm run vercel-build` or `npm run build`
+- Development Command: None
+- Install Command: `yarn install`, `pnpm install`, `npm install`, or `bun install`
+- Output Directory: `public` if it exists, or `.`
+Linked to ashly1987s-projects/imdb-movie (created .vercel and added it to .gitignore)
+> Ready! Available at http://localhost:3000
