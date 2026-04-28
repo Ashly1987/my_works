@@ -12,6 +12,10 @@ const views14El = document.querySelector("#views-14");
 const views30El = document.querySelector("#views-30");
 
 const VIEWS_KEY = "playimdb-view-recorder";
+const FIREBASE_VIEWS_COLLECTION = "quickflixViews";
+const FIREBASE_SDK_VERSION = "10.12.5";
+
+let firebaseClientPromise;
 
 const setStatus = (message) => {
   statusEl.textContent = message;
@@ -25,7 +29,7 @@ const getDateKey = (date = new Date()) => {
   return `${year}-${month}-${day}`;
 };
 
-const readViews = () => {
+const readLocalViews = () => {
   try {
     const savedViews = JSON.parse(localStorage.getItem(VIEWS_KEY));
     return savedViews && typeof savedViews === "object" ? savedViews : {};
@@ -34,7 +38,7 @@ const readViews = () => {
   }
 };
 
-const saveViews = (views) => {
+const saveLocalViews = (views) => {
   localStorage.setItem(VIEWS_KEY, JSON.stringify(views));
 };
 
@@ -61,13 +65,83 @@ const updateViewReport = (views) => {
   views30El.textContent = getWindowViews(views, 30);
 };
 
-const recordView = () => {
-  const views = readViews();
+const hasFirebaseConfig = () => {
+  const config = window.QUICKFLIX_FIREBASE_CONFIG;
+
+  return Boolean(config?.apiKey && config?.projectId && config?.appId);
+};
+
+const getFirebaseClient = async () => {
+  if (!firebaseClientPromise) {
+    firebaseClientPromise = Promise.all([
+      import(`https://www.gstatic.com/firebasejs/${FIREBASE_SDK_VERSION}/firebase-app.js`),
+      import(`https://www.gstatic.com/firebasejs/${FIREBASE_SDK_VERSION}/firebase-firestore.js`),
+    ]).then(([firebaseApp, firestore]) => {
+      const app = firebaseApp.initializeApp(window.QUICKFLIX_FIREBASE_CONFIG);
+      const db = firestore.getFirestore(app);
+
+      return { db, firestore };
+    });
+  }
+
+  return firebaseClientPromise;
+};
+
+const readFirebaseViews = async () => {
+  const { db, firestore } = await getFirebaseClient();
+  const snapshot = await firestore.getDocs(
+    firestore.collection(db, FIREBASE_VIEWS_COLLECTION)
+  );
+
+  return snapshot.docs.reduce((views, viewDoc) => {
+    const { count } = viewDoc.data();
+    views[viewDoc.id] = Number.isFinite(count) ? count : 0;
+    return views;
+  }, {});
+};
+
+const recordFirebaseView = async () => {
+  const todayKey = getDateKey();
+  const { db, firestore } = await getFirebaseClient();
+  const viewRef = firestore.doc(db, FIREBASE_VIEWS_COLLECTION, todayKey);
+
+  await firestore.runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(viewRef);
+    const currentCount = snapshot.exists() ? snapshot.data().count || 0 : 0;
+
+    transaction.set(
+      viewRef,
+      {
+        count: currentCount + 1,
+        date: todayKey,
+      },
+      { merge: true }
+    );
+  });
+
+  updateViewReport(await readFirebaseViews());
+};
+
+const recordLocalView = () => {
+  const views = readLocalViews();
   const todayKey = getDateKey();
 
   views[todayKey] = (views[todayKey] || 0) + 1;
-  saveViews(views);
+  saveLocalViews(views);
   updateViewReport(views);
+};
+
+const recordView = async () => {
+  if (!hasFirebaseConfig()) {
+    recordLocalView();
+    return;
+  }
+
+  try {
+    await recordFirebaseView();
+  } catch (error) {
+    recordLocalView();
+  }
 };
 
 const toSlugLetter = (query) => {

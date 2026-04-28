@@ -66,7 +66,7 @@ https://www.playimdb.com/title/tt1375666/
 
 ## Views Recorder
 
-The current views recorder stores counts in the browser using `localStorage`.
+The views recorder can use Firebase Firestore for global counts.
 
 It records:
 
@@ -76,13 +76,63 @@ It records:
 - Last 14 days
 - Last 30 days
 
-This is useful for local demos, but it is not a real global traffic counter. Each visitor's browser has separate `localStorage`, so the counts are not shared between users.
+When Firebase is configured, each page load increments a Firestore document for the current date in the `quickflixViews` collection. The document id is the date, for example:
 
-For a deployed website, use a backend-backed counter instead. Good options include:
+```txt
+quickflixViews/2026-04-28
+```
+
+Example document:
+
+```json
+{
+  "count": 24,
+  "date": "2026-04-28"
+}
+```
+
+Firestore transactions are used so multiple visitors can load the page at the same time without overwriting each other's count.
+
+If Firebase config is missing or Firebase cannot be reached, the app falls back to `localStorage`. That fallback is useful for local demos, but it is not a real global traffic counter because each visitor's browser has separate storage.
+
+To enable global views:
+
+1. Create a Firebase project.
+2. Add a Web App in Firebase.
+3. Enable Firestore Database.
+4. Copy the Firebase web config into `window.QUICKFLIX_FIREBASE_CONFIG` in `index.html`.
+5. Deploy the site.
+
+Starting Firestore rules:
+
+```txt
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /quickflixViews/{viewDate} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasOnly(["count", "date"])
+        && request.resource.data.count == 1
+        && request.resource.data.date == viewDate;
+
+      allow update: if request.resource.data.keys().hasOnly(["count", "date"])
+        && request.resource.data.date == resource.data.date
+        && request.resource.data.count == resource.data.count + 1;
+
+      allow delete: if false;
+    }
+  }
+}
+```
+
+For a small personal website, direct Firestore writes are okay as a simple starting point. For stronger protection against fake view spam, use a Firebase Cloud Function or another serverless API to record views instead of allowing browser clients to write counts directly.
+
+Other good global view options include:
 
 - A serverless API with a database
 - Supabase
-- Firebase
 - An analytics tool such as Plausible, Umami, or Google Analytics
 
 A production-ready custom counter would usually use endpoints like:
