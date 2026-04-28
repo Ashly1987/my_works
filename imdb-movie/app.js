@@ -163,6 +163,7 @@ const getImdbUrl = (id) => `https://www.imdb.com/title/${id}/`;
 const getPlayUrl = (id) => getImdbUrl(id).replace("www.imdb.com", "www.playimdb.com");
 
 const hasOmdbConfig = () => Boolean(window.QUICKFLIX_OMDB_API_KEY);
+const isLocalHost = () => ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
 
 const normalizeResult = (item) => ({
   id: item.id,
@@ -172,6 +173,16 @@ const normalizeResult = (item) => ({
   cast: item.s || "IMDb title details",
   poster: getPosterUrl(item.i),
   rating: item.ir || item.rating || "",
+});
+
+const normalizeOmdbResult = (item) => ({
+  id: item.imdbID,
+  title: item.Title || "Untitled",
+  year: item.Year || "",
+  type: item.Type || "Title",
+  cast: "IMDb title details",
+  poster: item.Poster && item.Poster !== "N/A" ? item.Poster : "",
+  rating: item.imdbRating && item.imdbRating !== "N/A" ? item.imdbRating : "",
 });
 
 const addMovieRating = async (movie) => {
@@ -193,6 +204,32 @@ const addMovieRating = async (movie) => {
     ...movie,
     rating,
   };
+};
+
+const searchOmdbMovies = async (query) => {
+  if (!hasOmdbConfig()) {
+    return [];
+  }
+
+  const searchUrl = `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&type=movie&apikey=${encodeURIComponent(window.QUICKFLIX_OMDB_API_KEY)}`;
+  const searchResponse = await fetch(searchUrl);
+
+  if (!searchResponse.ok) {
+    throw new Error("OMDb search failed");
+  }
+
+  const searchData = await searchResponse.json();
+
+  if (searchData.Response !== "True") {
+    return [];
+  }
+
+  const movies = searchData.Search
+    .filter((item) => item.imdbID?.startsWith("tt"))
+    .slice(0, 8)
+    .map(normalizeOmdbResult);
+
+  return Promise.all(movies.map(addMovieRating));
 };
 
 const renderMovies = (movies) => {
@@ -240,7 +277,11 @@ const searchMovies = async (query) => {
       return data.results || [];
     }
   } catch (error) {
-    // Local static servers do not provide /api/search, so use the browser fallback below.
+    // Vercel provides /api/search after deployment; local static servers do not.
+  }
+
+  if (!isLocalHost()) {
+    return searchOmdbMovies(query);
   }
 
   const letter = toSlugLetter(query);
