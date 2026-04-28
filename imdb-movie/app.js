@@ -232,6 +232,17 @@ const renderMovies = (movies) => {
 };
 
 const searchMovies = async (query) => {
+  try {
+    const apiResponse = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+
+    if (apiResponse.ok) {
+      const data = await apiResponse.json();
+      return data.results || [];
+    }
+  } catch (error) {
+    // Local static servers do not provide /api/search, so use the browser fallback below.
+  }
+
   const letter = toSlugLetter(query);
   const url = `https://v3.sg.media-imdb.com/suggestion/${letter}/${encodeURIComponent(query)}.json`;
   const response = await fetch(url);
