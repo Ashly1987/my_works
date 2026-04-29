@@ -317,6 +317,12 @@ const runMovieSearch = async (query) => {
       return;
     }
 
+    movies.sort((a, b) => {
+      const yearA = parseInt(a.year, 10) || 0;
+      const yearB = parseInt(b.year, 10) || 0;
+      return yearB - yearA;
+    });
+
     renderMovies(movies);
     setStatus(`Showing ${movies.length} result${movies.length === 1 ? "" : "s"} for "${query}".`);
   } catch (error) {
