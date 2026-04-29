@@ -267,7 +267,7 @@ h1 {
   padding-left: 14px;
   border-left: 2px solid rgba(215, 181, 109, 0.42);
   color: var(--muted);
-  font-size: clamp(0.75rem, 0.8vw, 0.8rem);
+  font-size: clamp(0.88rem, 1.08vw, 0.96rem);
   font-weight: 600;
   line-height: 1.48;
 }
@@ -293,7 +293,7 @@ h1 {
   box-shadow:
     0 16px 36px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  font-size: 0.75rem;
+  font-size: 0.86rem;
   font-weight: 900;
   line-height: 1.35;
 }
@@ -1015,13 +1015,13 @@ button svg {
     margin-top: 16px;
     margin-left: 10px;
     padding-left: 12px;
-    font-size: 0.75rem;
+    font-size: 0.92rem;
     line-height: 1.5;
   }
 
   .disclaimer {
     margin-top: 12px;
-    font-size: 0.65rem;
+    font-size: 0.8rem;
   }
 
   .search-panel {
