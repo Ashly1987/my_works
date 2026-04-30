@@ -5,22 +5,6 @@ const report14El = document.querySelector("#report-14");
 const report30El = document.querySelector("#report-30");
 const reportTableEl = document.querySelector("#report-table");
 
-const THEME_KEY = "quickflix-theme-preference";
-
-const setTheme = (theme) => {
-  document.body.classList.remove("theme-midnight", "theme-golden", "theme-obsidian");
-  if (theme !== "emerald") {
-    document.body.classList.add(`theme-${theme}`);
-  }
-};
-
-const initTheme = () => {
-  const savedTheme = localStorage.getItem(THEME_KEY) || "emerald";
-  setTheme(savedTheme);
-};
-
-initTheme();
-
 const VIEWS_KEY = "playimdb-view-recorder";
 const FIREBASE_VIEWS_COLLECTION = "quickflixViews";
 const FIREBASE_SDK_VERSION = "12.12.1";

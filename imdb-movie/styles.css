@@ -1,66 +1,5 @@
 :root {
   color-scheme: dark;
-  --ink: #edf8ef;
-  --muted: #aac0b1;
-  --line: rgba(237, 248, 239, 0.15);
-  --panel: rgba(8, 31, 25, 0.8);
-  --panel-strong: rgba(14, 45, 36, 0.92);
-  --gold: #d7b56d;
-  --coral: #4bb28f;
-  --aqua: #8fe3c4;
-  --black: #04120e;
-  --glow-one: rgba(75, 178, 143, 0.2);
-  --glow-two: rgba(215, 181, 109, 0.13);
-  --page-start: #03100d;
-  --page-mid: #0c261f;
-  --page-end: #030807;
-  --button-ink: #06140f;
-  --shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
-  --heading-font: "Fraunces", serif;
-  --body-font: "Manrope", sans-serif;
-}
-
-body.theme-midnight {
-  --ink: #e2e8f0;
-  --muted: #94a3b8;
-  --line: rgba(226, 232, 240, 0.1);
-  --panel: rgba(15, 23, 42, 0.85);
-  --panel-strong: rgba(30, 41, 59, 0.95);
-  --gold: #94a3b8; /* Platinum/Silver */
-  --coral: #3b82f6; /* Royal Blue */
-  --aqua: #60a5fa;
-  --black: #020617;
-  --glow-one: rgba(59, 130, 246, 0.15);
-  --glow-two: rgba(148, 163, 184, 0.1);
-  --page-start: #020617;
-  --page-mid: #0f172a;
-  --page-end: #020617;
-  --button-ink: #ffffff;
-  --heading-font: "Playfair Display", serif;
-  --body-font: "Archivo", sans-serif;
-}
-
-body.theme-golden {
-  --ink: #fdf5e6;
-  --muted: #b5a48b;
-  --line: rgba(212, 175, 55, 0.15);
-  --panel: rgba(18, 18, 18, 0.9);
-  --panel-strong: rgba(28, 28, 28, 0.98);
-  --gold: #d4af37;
-  --coral: #c5a028;
-  --aqua: #e5c158;
-  --black: #050505;
-  --glow-one: rgba(212, 175, 55, 0.12);
-  --glow-two: rgba(197, 160, 40, 0.08);
-  --page-start: #050505;
-  --page-mid: #1a1a1a;
-  --page-end: #050505;
-  --button-ink: #000000;
-  --heading-font: "Cormorant Garamond", serif;
-  --body-font: "Archivo", sans-serif;
-}
-
-body.theme-obsidian {
   --ink: #ffffff;
   --muted: #888888;
   --line: rgba(255, 255, 255, 0.08);
@@ -76,6 +15,7 @@ body.theme-obsidian {
   --page-mid: #050505;
   --page-end: #000000;
   --button-ink: #ffffff;
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
   --heading-font: "Syne", sans-serif;
   --body-font: "Archivo", sans-serif;
 }
@@ -115,58 +55,6 @@ body::before {
     linear-gradient(90deg, rgba(247, 239, 225, 0.035) 1px, transparent 1px);
   background-size: 52px 52px;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 84%);
-}
-
-/* Theme Specific Refinements */
-body.theme-golden .hero {
-  background:
-    linear-gradient(115deg, rgba(212, 175, 55, 0.1), transparent 42%),
-    linear-gradient(rgba(28, 28, 28, 0.9), rgba(28, 28, 28, 0.9)),
-    url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0l30 30-30 30L0 30z" fill="%23d4af37" fill-opacity="0.03"/></svg>');
-}
-
-body.theme-obsidian .movie-card {
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(10, 10, 10, 0.6);
-}
-
-body.theme-obsidian .movie-card:hover {
-  border-color: var(--gold);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-}
-
-body.theme-midnight .movie-card {
-  border: 1px solid rgba(226, 232, 240, 0.08);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-
-body.theme-midnight .hero {
-  border-color: rgba(59, 130, 246, 0.2);
-}
-
-/* Base refinement for luxury tiles */
-.movie-card {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.movie-card:hover {
-  transform: translateY(-8px) scale(1.01);
-}
-
-.poster-wrap::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--black), transparent);
-  opacity: 0.4;
-}
-
-@media (max-width: 520px) {
-  .theme-switcher {
-    padding: 6px 10px;
-    gap: 8px;
-  }
 }
 
 .shell {
@@ -431,52 +319,10 @@ h1 {
   max-width: 100%;
   margin: 0;
   font-family: var(--heading-font);
-  font-size: clamp(3rem, 4.7vw, 4.65rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   line-height: 0.94;
   letter-spacing: -0.02em;
   white-space: nowrap;
-}
-
-.theme-switcher {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-self: center;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(10px);
-}
-
-.theme-btn {
-  position: relative;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.theme-btn:hover {
-  transform: scale(1.15);
-  border-color: var(--gold);
-}
-
-.theme-btn.active {
-  border-color: var(--gold);
-  box-shadow: 0 0 10px var(--gold);
-}
-
-.swatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
 }
 
 .hero__copy {
@@ -557,12 +403,10 @@ h1 {
   width: 150px;
   flex: 0 0 150px;
   padding: 7px;
-  border: 1px solid rgba(247, 239, 225, 0.17);
+  border: 1px solid var(--line);
   border-radius: 6px;
   opacity: 0.58;
-  background:
-    linear-gradient(135deg, rgba(85, 215, 198, 0.07), transparent 64%),
-    rgba(8, 9, 12, 0.5);
+  background: rgba(10, 10, 10, 0.6);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
   transition:
@@ -584,7 +428,7 @@ h1 {
 
 .views-panel h2 {
   margin: 0;
-  font-family: "Manrope", sans-serif;
+  font-family: var(--body-font);
   color: var(--muted);
   font-size: 0.66rem;
   font-weight: 900;
@@ -621,7 +465,7 @@ h1 {
 .views-stat {
   min-width: 0;
   padding: 6px;
-  border: 1px solid rgba(247, 239, 225, 0.12);
+  border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.055);
 }
 
@@ -659,8 +503,8 @@ h1 {
   justify-content: space-between;
   gap: 8px;
   padding: 5px 6px;
-  border-left: 2px solid var(--coral);
-  background: rgba(255, 112, 92, 0.08);
+  border-left: 2px solid var(--gold);
+  background: rgba(139, 92, 246, 0.1);
 }
 
 .report-row strong {
@@ -671,8 +515,9 @@ h1 {
 .search-panel {
   padding: 22px;
   border: 1px solid var(--line);
-  background: rgba(8, 9, 12, 0.56);
+  background: rgba(10, 10, 10, 0.6);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
 }
 
 .search-panel label {
@@ -698,11 +543,11 @@ h1 {
 input {
   width: 100%;
   min-width: 0;
-  border: 1px solid rgba(247, 239, 225, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
   padding: 16px 15px;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
   font: inherit;
   font-size: 1rem;
   outline: none;
@@ -721,10 +566,10 @@ input {
   height: 28px;
   min-height: 0;
   place-items: center;
-  border: 1px solid rgba(237, 248, 239, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
-  color: rgba(237, 248, 239, 0.74);
-  background: rgba(4, 18, 14, 0.54);
+  color: rgba(255, 255, 255, 0.74);
+  background: rgba(0, 0, 0, 0.54);
   font: inherit;
   font-size: 1.1rem;
   line-height: 1;
@@ -738,8 +583,8 @@ input {
 
 input:focus {
   border-color: var(--gold);
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 0 4px rgba(242, 196, 109, 0.13);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
 }
 
 .search-row > button,
@@ -760,7 +605,8 @@ input:focus {
   cursor: pointer;
   transition:
     transform 180ms ease,
-    filter 180ms ease;
+    filter 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .search-row > button:hover,
@@ -768,7 +614,8 @@ input:focus {
 .imdb-link:hover,
 .report-button:hover {
   transform: translateY(-2px);
-  filter: brightness(1.08);
+  filter: brightness(1.1);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
 }
 
 button svg {
@@ -792,22 +639,23 @@ button svg {
 
 .quick-searches button {
   min-height: 28px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 0 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.05);
   font: inherit;
   font-size: 0.75rem;
-  font-weight: normal;
+  font-weight: 600;
   cursor: pointer;
   transition: all 180ms ease;
 }
 
 .quick-searches button:hover,
 .quick-searches button:focus-visible {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
   background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold);
 }
 
 .results {
@@ -825,21 +673,16 @@ button svg {
   width: fit-content;
   margin: 28px auto 0;
   padding: 9px 14px;
-  border: 1px solid rgba(143, 227, 196, 0.18);
-  color: rgba(215, 181, 109, 0.92);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(75, 178, 143, 0.12),
-      rgba(215, 181, 109, 0.08)
-    ),
-    rgba(4, 18, 14, 0.52);
+  border: 1px solid var(--line);
+  color: var(--gold);
+  background: rgba(10, 10, 10, 0.6);
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.08em;
   text-align: center;
   text-transform: uppercase;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
 }
 
 .site-footer p {
@@ -859,52 +702,32 @@ button svg {
 }
 
 .report-back {
-  border: 1px solid rgba(215, 181, 109, 0.36);
+  border: 1px solid var(--line);
   padding: 10px 12px;
   color: var(--gold);
-  background: rgba(215, 181, 109, 0.08);
+  background: rgba(255, 255, 255, 0.05);
   font-size: 0.78rem;
   font-weight: 900;
   text-decoration: none;
   text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.report-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold);
 }
 
 .report-page {
   padding: clamp(24px, 5vw, 46px);
   border: 1px solid var(--line);
-  background:
-    linear-gradient(115deg, rgba(237, 248, 239, 0.08), transparent 42%),
-    rgba(8, 9, 12, 0.56);
+  background: rgba(10, 10, 10, 0.6);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
 }
 
 .report-page__head h1 {
   margin-top: 18px;
-}
-
-.report-summary {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 28px;
-}
-
-.report-summary div,
-.report-table__row {
-  border: 1px solid rgba(247, 239, 225, 0.13);
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.report-summary div {
-  padding: 14px;
-}
-
-.report-summary span,
-.report-table__row span {
-  color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 900;
-  text-transform: uppercase;
 }
 
 .report-summary strong {
@@ -925,10 +748,12 @@ button svg {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .report-table__row strong {
-  color: #ffe29a;
+  color: var(--gold);
 }
 
 .tile-grid {
@@ -943,15 +768,13 @@ button svg {
   grid-template-columns: 126px minmax(0, 1fr);
   overflow: hidden;
   min-height: 212px;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(10, 10, 10, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   animation: rise 420ms ease both;
   transform: translateY(0);
-  transition:
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    transform 220ms ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .movie-card::after {
@@ -962,7 +785,7 @@ button svg {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(143, 227, 196, 0.16) 45%,
+    rgba(139, 92, 246, 0.15) 45%,
     transparent 76%
   );
   opacity: 0;
@@ -974,9 +797,9 @@ button svg {
 
 .movie-card:hover,
 .movie-card:focus-within {
-  border-color: rgba(143, 227, 196, 0.42);
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.36);
-  transform: translateY(-6px);
+  border-color: var(--gold);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+  transform: translateY(-8px) scale(1.01);
 }
 
 .movie-card:hover::after,
@@ -990,10 +813,18 @@ button svg {
   min-height: 100%;
   background: linear-gradient(
     145deg,
-    rgba(242, 196, 109, 0.2),
-    rgba(85, 215, 198, 0.13)
+    rgba(139, 92, 246, 0.1),
+    rgba(0, 0, 0, 0.5)
   );
   overflow: hidden;
+}
+
+.poster-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--black), transparent);
+  opacity: 0.5;
 }
 
 .poster {
@@ -1009,8 +840,8 @@ button svg {
 
 .movie-card:hover .poster,
 .movie-card:focus-within .poster {
-  filter: saturate(1.08) contrast(1.08);
-  transform: scale(1.06);
+  filter: saturate(1.1) contrast(1.1);
+  transform: scale(1.08);
 }
 
 .poster[hidden],
@@ -1024,7 +855,7 @@ button svg {
   height: 100%;
   min-height: 212px;
   place-items: center;
-  color: rgba(247, 239, 225, 0.58);
+  color: var(--muted);
   font-family: var(--heading-font);
   font-size: 1.8rem;
   font-weight: 800;
@@ -1048,22 +879,23 @@ button svg {
 }
 
 .movie-meta span:not(:empty) {
-  border: 1px solid rgba(85, 215, 198, 0.28);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   padding: 5px 8px;
+  background: rgba(139, 92, 246, 0.05);
 }
 
 .movie-rating:not([hidden]) {
-  border-color: rgba(215, 181, 109, 0.42);
-  color: #ffe29a;
-  background: rgba(215, 181, 109, 0.1);
+  border-color: var(--gold);
+  color: #ffffff;
+  background: rgba(139, 92, 246, 0.2);
 }
 
 .movie-title {
   margin: 12px 0 10px;
   font-family: var(--heading-font);
-  font-size: clamp(1.45rem, 3vw, 2.15rem);
-  line-height: 1;
-  letter-spacing: 0;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
 .movie-cast {
@@ -1085,15 +917,15 @@ button svg {
 
 .imdb-link {
   min-height: 44px;
-  border: 1px solid rgba(247, 239, 225, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .play-link {
   min-height: 44px;
-  color: var(--black);
-  background: var(--coral);
+  color: var(--button-ink);
+  background: var(--gold);
 }
 
 .play-icon {
@@ -1130,21 +962,14 @@ button svg {
   }
 
   .hero-topline {
-    grid-template-columns: 1fr;
-    max-width: none;
-    margin-bottom: 0;
-  }
-
-  .views-panel {
-    justify-self: start;
-  }
-
-  .utility-rail {
-    justify-self: start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
 
   h1 {
     white-space: normal;
+    font-size: clamp(2rem, 8vw, 2.8rem);
   }
 
   .lede,
@@ -1163,7 +988,7 @@ button svg {
 
 @media (min-width: 821px) and (max-width: 1120px) {
   h1 {
-    font-size: clamp(2.65rem, 4.35vw, 3.4rem);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
   }
 }
 
@@ -1184,13 +1009,14 @@ button svg {
   }
 
   h1 {
-    font-size: clamp(2.45rem, 13vw, 3.25rem);
-    line-height: 0.96;
+    font-size: clamp(1.8rem, 10vw, 2.5rem);
+    line-height: 1;
   }
 
   .hero-topline {
-    grid-template-columns: minmax(0, max-content) minmax(112px, 1fr);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 14px;
   }
 
@@ -1216,15 +1042,14 @@ button svg {
   }
 
   .utility-rail {
-    width: auto;
-    justify-self: end;
+    width: 100%;
+    justify-self: stretch;
   }
 
   .views-panel {
-    width: 132px;
-    flex-basis: 132px;
-    justify-self: end;
-    opacity: 0.78;
+    width: 100%;
+    flex-basis: 100%;
+    opacity: 0.8;
   }
 
   .views-panel__head {
@@ -1232,7 +1057,7 @@ button svg {
   }
 
   .views-panel {
-    padding: 6px;
+    padding: 8px;
   }
 
   .views-panel h2 {
@@ -1241,7 +1066,7 @@ button svg {
 
   .report-button {
     min-height: 20px;
-    padding: 0 5px;
+    padding: 0 8px;
     font-size: 0.52rem;
   }
 
@@ -1251,23 +1076,23 @@ button svg {
   }
 
   .views-stat {
-    padding: 4px;
+    padding: 6px;
   }
 
   .views-stat span,
   .report-row span {
-    font-size: 0.46rem;
+    font-size: 0.5rem;
   }
 
   .views-stat strong {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
   }
 
   .lede {
     margin-top: 16px;
-    margin-left: 10px;
+    margin-left: 0;
     padding-left: 12px;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     line-height: 1.5;
   }
 
@@ -1285,12 +1110,12 @@ button svg {
   }
 
   .search-input-wrap {
-    flex: 1 1 70%;
+    flex: 1 1 65%;
   }
 
   .search-row > button {
     width: auto;
-    flex: 0 0 calc(30% - 4px);
+    flex: 0 0 35%;
     min-height: 52px;
     padding: 0 8px;
     font-size: 0.86rem;
@@ -1336,7 +1161,7 @@ button svg {
   }
 
   .movie-title {
-    font-size: clamp(1.25rem, 7vw, 1.7rem);
+    font-size: clamp(1.2rem, 6vw, 1.6rem);
   }
 
   .site-footer {
@@ -1356,7 +1181,7 @@ button svg {
   }
 
   .report-page__head h1 {
-    font-size: clamp(2.25rem, 13vw, 3rem);
+    font-size: clamp(2rem, 10vw, 2.5rem);
   }
 
   .report-summary {

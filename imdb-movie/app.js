@@ -11,35 +11,6 @@ const views7El = document.querySelector("#views-7");
 const views14El = document.querySelector("#views-14");
 const views30El = document.querySelector("#views-30");
 const copyrightYearEl = document.querySelector("#copyright-year");
-const themeButtons = document.querySelectorAll(".theme-btn");
-
-const THEME_KEY = "quickflix-theme-preference";
-
-const setTheme = (theme) => {
-  document.body.classList.remove("theme-midnight", "theme-golden", "theme-obsidian");
-  if (theme !== "emerald") {
-    document.body.classList.add(`theme-${theme}`);
-  }
-  
-  themeButtons.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.theme === theme);
-  });
-  
-  localStorage.setItem(THEME_KEY, theme);
-};
-
-const initTheme = () => {
-  const savedTheme = localStorage.getItem(THEME_KEY) || "emerald";
-  setTheme(savedTheme);
-};
-
-themeButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    setTheme(btn.dataset.theme);
-  });
-});
-
-initTheme();
 
 const VIEWS_KEY = "playimdb-view-recorder";
 const FIREBASE_VIEWS_COLLECTION = "quickflixViews";
