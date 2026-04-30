@@ -5,6 +5,17 @@ import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import admin from 'firebase-admin'; // Import firebase-admin
+import { readFile } from 'fs/promises';
+import axios from 'axios'; // Import axios
+
+const serviceAccount = JSON.parse(
+    await readFile(new URL('./travel-guide-key.json', import.meta.url))
+);
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+}); // Initialize Firebase Admin SDK with service account
 //import puppeteer from 'puppeteer';
 
 dotenv.config();
@@ -346,5 +357,115 @@ app.post('/api/download-pdf', async (req, res) => {
         res.status(500).send("Error generating PDF");
     }
 });
+
+const db = admin.firestore(); // Initialize Firestore
+
+app.post('/api/record-view', async (req, res) => {
+    console.log(`📥 Received view record request from ${req.ip}`);
+    try {
+        const todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const viewRef = db.collection('quickflixViews').doc(todayKey);
+
+        let ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        if (Array.isArray(ipAddress)) {
+            ipAddress = ipAddress[0];
+        }
+
+        let country = 'Unknown';
+        let city = 'Unknown';
+        try {
+            const geoResponse = await axios.get(`http://ip-api.com/json/${ipAddress}`);
+            if (geoResponse.data.status === 'success') {
+                country = geoResponse.data.country || 'Unknown';
+                city = geoResponse.data.city || 'Unknown';
+            }
+        } catch (geoError) {
+            console.error('IP Geolocation failed:', geoError.message);
+        }
+
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(viewRef);
+            const currentCount = doc.exists ? doc.data().count || 0 : 0;
+            const currentLocations = doc.exists ? doc.data().locations || {} : {};
+
+            transaction.set(viewRef, {
+                count: currentCount + 1,
+                date: todayKey,
+            }, { merge: true });
+
+            const locationKey = `${country}-${city}`;
+            currentLocations[locationKey] = (currentLocations[locationKey] || 0) + 1;
+
+            transaction.update(viewRef, { locations: currentLocations });
+        });
+
+        res.status(200).send('Page view recorded and location logged.');
+    } catch (error) {
+        console.error('Error recording page view:', error);
+        res.status(500).send('Error recording page view.');
+    }
+});
+
+app.get('/api/get-view-reports', async (req, res) => {
+    try {
+        const today = new Date();
+        const viewsSnapshot = await db.collection('quickflixViews').get();
+
+        const allViews = {};
+        viewsSnapshot.forEach(doc => {
+            allViews[doc.id] = doc.data();
+        });
+
+        const getDateKey = (date = new Date()) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const getWindowViewsAndLocations = (viewsData, days) => {
+            let totalCount = 0;
+            const aggregatedLocations = {};
+            for (let i = 0; i < days; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const key = getDateKey(date);
+                if (viewsData[key]) {
+                    totalCount += viewsData[key].count || 0;
+                    const dailyLocations = viewsData[key].locations || {};
+                    for (const locKey in dailyLocations) {
+                        if (dailyLocations.hasOwnProperty(locKey)) {
+                            aggregatedLocations[locKey] = (aggregatedLocations[locKey] || 0) + dailyLocations[locKey];
+                        }
+                    }
+                }
+            }
+            return { totalCount, aggregatedLocations };
+        };
+
+        const todayKey = getDateKey(today);
+        const todayViews = allViews[todayKey] ? allViews[todayKey].count || 0 : 0;
+
+        const totalViews = Object.values(allViews).reduce((sum, view) => sum + (view.count || 0), 0);
+
+        const { totalCount: views7Days, aggregatedLocations: locations7Days } = getWindowViewsAndLocations(allViews, 7);
+        const { totalCount: views14Days, aggregatedLocations: locations14Days } = getWindowViewsAndLocations(allViews, 14);
+        const { totalCount: views30Days, aggregatedLocations: locations30Days } = getWindowViewsAndLocations(allViews, 30);
+
+        res.status(200).json({
+            today: todayViews,
+            total: totalViews,
+            days7: { count: views7Days, locations: locations7Days },
+            days14: { count: views14Days, locations: locations14Days },
+            days30: { count: views30Days, locations: locations30Days },
+            allDailyViews: allViews // For detailed table in report
+        });
+
+    } catch (error) {
+        console.error('Error fetching view reports:', error);
+        res.status(500).send('Error fetching view reports.');
+    }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

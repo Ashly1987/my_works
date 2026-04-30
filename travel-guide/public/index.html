@@ -8,11 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Noto+Serif:ital,wght@0,300;0,400;0,600;1,400;1,600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0,24&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Noto+Serif:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
@@ -23,21 +19,23 @@
         theme: {
           extend: {
             fontFamily: {
-              serif: ["Noto Serif", "serif"],
-              sans: ["Manrope", "sans-serif"],
+              serif: ["var(--font-serif)", "Noto Serif", "serif"],
+              sans: ["var(--font-sans)", "Manrope", "sans-serif"],
+              display: ["var(--font-display)", "serif"],
             },
             colors: {
               monograph: {
-                bg: "#111111",
-                surface: "#171717",
-                surfaceSoft: "#1d1d1d",
-                border: "#2a2a2a",
-                text: "#f3eee7",
-                muted: "#b3a99d",
-                subtle: "#7c746a",
-                tagBg: "#1d2b21",
-                tagBorder: "#34513d",
-                tagText: "#a4d2a7",
+                bg: "var(--color-bg)",
+                surface: "var(--color-surface)",
+                surfaceSoft: "var(--color-surface-soft)",
+                border: "var(--color-border)",
+                text: "var(--color-text)",
+                muted: "var(--color-muted)",
+                subtle: "var(--color-subtle)",
+                tagBg: "var(--color-tag-bg)",
+                tagBorder: "var(--color-tag-border)",
+                tagText: "var(--color-tag-text)",
+                accent: "var(--color-accent)",
               },
             },
           },
@@ -46,15 +44,110 @@
     </script>
 
     <style>
-      body {
-        background:
+      :root {
+        /* Default: Noir (Original but refined) */
+        --font-serif: "Noto Serif";
+        --font-sans: "Manrope";
+        --font-display: "Noto Serif";
+
+        --color-bg: #0a0a0a;
+        --color-surface: #111111;
+        --color-surface-soft: #1a1a1a;
+        --color-border: #262626;
+        --color-text: #f5f0e8;
+        --color-muted: #a3a3a3;
+        --color-subtle: #737373;
+        --color-tag-bg: #1a1a1a;
+        --color-tag-border: #333333;
+        --color-tag-text: #d4d4d4;
+        --color-accent: #c5a059;
+        --bg-gradient:
           radial-gradient(
             circle at top,
-            rgba(110, 95, 79, 0.14),
-            transparent 34%
+            rgba(197, 160, 89, 0.08),
+            transparent 35%
           ),
-          linear-gradient(180deg, #111111 0%, #0d0d0d 100%);
-        color: #f3eee7;
+          linear-gradient(180deg, #0a0a0a 0%, #050505 100%);
+      }
+
+      [data-theme="obsidian"] {
+        --font-serif: "Playfair Display";
+        --font-sans: "Outfit";
+        --font-display: "Cinzel";
+        --color-bg: #0f1115;
+        --color-surface: #161a22;
+        --color-surface-soft: #1f242d;
+        --color-border: #2d343f;
+        --color-text: #e2e8f0;
+        --color-muted: #94a3b8;
+        --color-subtle: #64748b;
+        --color-tag-bg: #1e293b;
+        --color-tag-border: #334155;
+        --color-tag-text: #94a3b8;
+        --color-accent: #fbbf24;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(251, 191, 36, 0.08),
+            transparent 40%
+          ),
+          linear-gradient(180deg, #0f1115 0%, #080a0d 100%);
+      }
+
+      [data-theme="emerald"] {
+        --font-serif: "Cormorant Garamond";
+        --font-sans: "Manrope";
+        --font-display: "Playfair Display";
+        --color-bg: #061210;
+        --color-surface: #0a1d1a;
+        --color-surface-soft: #0f2b26;
+        --color-border: #163d37;
+        --color-text: #ecfdf5;
+        --color-muted: #a7f3d0;
+        --color-subtle: #34d399;
+        --color-tag-bg: #064e3b;
+        --color-tag-border: #065f46;
+        --color-tag-text: #6ee7b7;
+        --color-accent: #10b981;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(16, 185, 129, 0.1),
+            transparent 40%
+          ),
+          linear-gradient(180deg, #061210 0%, #020605 100%);
+      }
+
+      [data-theme="royal"] {
+        --font-serif: "Noto Serif";
+        --font-sans: "Outfit";
+        --font-display: "Cinzel";
+        --color-bg: #1a0f0f;
+        --color-surface: #261616;
+        --color-surface-soft: #331d1d;
+        --color-border: #4a2b2b;
+        --color-text: #fff5f5;
+        --color-muted: #fecaca;
+        --color-subtle: #f87171;
+        --color-tag-bg: #7f1d1d;
+        --color-tag-border: #991b1b;
+        --color-tag-text: #fca5a5;
+        --color-accent: #dc2626;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(220, 38, 38, 0.12),
+            transparent 45%
+          ),
+          linear-gradient(180deg, #1a0f0f 0%, #100808 100%);
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--color-text);
+        transition:
+          background 0.5s ease,
+          color 0.5s ease;
       }
 
       .material-symbols-outlined {
@@ -161,17 +254,140 @@
       }
 
       .destination-card {
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-        transition:
-          transform 220ms ease,
-          border-color 220ms ease,
-          box-shadow 220ms ease;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 2px;
+        overflow: hidden;
       }
 
       .destination-card:hover {
-        transform: translateY(-4px);
-        border-color: #3d362f;
-        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.34);
+        transform: translateY(-8px);
+        border-color: var(--color-accent);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      .destination-card__art {
+        position: relative;
+        overflow: hidden;
+        filter: grayscale(0.2) contrast(1.1);
+        transition: filter 0.4s ease;
+      }
+
+      .destination-card:hover .destination-card__art {
+        filter: grayscale(0) contrast(1);
+      }
+
+      .destination-card h2 {
+        font-family: var(--font-display);
+        letter-spacing: 0.02em;
+        color: var(--color-text);
+      }
+
+      .views-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background-color: var(--color-surface-soft);
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+        min-width: 140px;
+        margin-left: 20px;
+      }
+
+      .views-panel__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      #views-title {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-subtle);
+      }
+
+      .report-button {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--color-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 220ms ease;
+      }
+
+      .report-button:hover {
+        border-color: var(--color-accent);
+      }
+
+      .views-stats {
+        display: flex;
+        gap: 12px;
+        margin-top: 2px;
+      }
+
+      .views-stat {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+
+      .views-stat span {
+        font-size: 11px;
+        color: var(--color-subtle);
+      }
+
+      .views-stat strong {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      /* Theme Switcher Styles */
+      .theme-switcher {
+        display: flex;
+        gap: 12px;
+        background: var(--color-surface);
+        padding: 8px;
+        border-radius: 9999px;
+        border: 1px solid var(--color-border);
+      }
+
+      .theme-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .theme-dot:hover {
+        transform: scale(1.2);
+      }
+
+      .theme-dot.active {
+        border-color: var(--color-text);
+        box-shadow: 0 0 10px var(--color-accent);
+      }
+
+      .theme-dot[data-theme-id="noir"] {
+        background: #c5a059;
+      }
+      .theme-dot[data-theme-id="obsidian"] {
+        background: #fbbf24;
+      }
+      .theme-dot[data-theme-id="emerald"] {
+        background: #10b981;
+      }
+      .theme-dot[data-theme-id="royal"] {
+        background: #dc2626;
       }
     </style>
   </head>
@@ -186,6 +402,49 @@
         >
           THE MONOGRAPH
         </div>
+
+        <div class="theme-switcher">
+          <div
+            class="theme-dot active"
+            data-theme-id="noir"
+            title="Noir Gold"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="obsidian"
+            title="Obsidian Amber"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="emerald"
+            title="Emerald Velvet"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="royal"
+            title="Royal Crimson"
+          ></div>
+        </div>
+
+        <aside class="views-panel" aria-labelledby="views-title">
+          <div class="views-panel__head">
+            <h2 id="views-title">Views</h2>
+            <a class="report-button" id="report-button" href="report.html">
+              Report
+            </a>
+          </div>
+
+          <div class="views-stats">
+            <div class="views-stat">
+              <span>Today</span>
+              <strong id="daily-views">0</strong>
+            </div>
+            <div class="views-stat">
+              <span>Total</span>
+              <strong id="total-views">0</strong>
+            </div>
+          </div>
+        </aside>
 
         <!-- <div class="flex items-center gap-6 text-monograph-text">
           <button
@@ -272,7 +531,7 @@
           Search Destinations
         </label>
         <div
-          class="search-shadow mt-3 flex items-center border border-monograph-border bg-monograph-surfaceSoft transition-shadow"
+          class="mt-3 flex items-center border border-monograph-border bg-monograph-surfaceSoft transition-shadow focus-within:ring-1 focus-within:ring-monograph-accent"
         >
           <input
             id="destination-search"
@@ -280,12 +539,12 @@
             list="country-list"
             autocomplete="off"
             placeholder="Search for a country..."
-            class="h-[60px] w-full bg-transparent px-4 text-[15px] font-normal text-monograph-text placeholder:text-[#6d665f] focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert"
+            class="h-[60px] w-full bg-transparent px-4 text-[15px] font-normal text-monograph-text placeholder:text-monograph-subtle focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert"
           />
           <datalist id="country-list"></datalist>
           <button
             id="clear-search"
-            class="hidden px-4 text-[#6d665f] hover:text-monograph-text material-symbols-outlined transition-colors"
+            class="hidden px-4 text-monograph-subtle hover:text-monograph-text material-symbols-outlined transition-colors"
             onclick="clearSearch()"
           >
             close
@@ -314,19 +573,19 @@
           <div>
             <button
               id="view-itinerary-btn"
-              class="hidden px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+              class="hidden px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
             >
               View Itinerary
             </button>
             <button
               id="view-survival-kit-btn"
-              class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+              class="hidden ml-2 px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
             >
               View Survival Kit
             </button>
             <button
               id="view-visa-btn"
-              class="hidden ml-2 px-5 py-2 border border-[#8e8376] text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-[#111111] transition-colors"
+              class="hidden ml-2 px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
             >
               View Visa Info
             </button>
@@ -423,26 +682,26 @@
             </div>
 
             <div
-              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+              class="mt-auto grid gap-3 border-t border-dashed border-monograph-border pt-4 xl:grid-cols-3 mt-4"
             >
               <button
                 type="button"
                 onclick="generateItinerary('Cambodia')"
-                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:bg-monograph-text hover:text-monograph-bg"
               >
                 Itinerary
               </button>
               <button
                 type="button"
                 onclick="generateSurvivalKit('Cambodia')"
-                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent"
               >
                 Survival Kit
               </button>
               <button
                 type="button"
                 onclick="generateVisa('Cambodia')"
-                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent"
               >
                 Visa
               </button>
@@ -2846,6 +3105,32 @@
       ];
 
       document.addEventListener("DOMContentLoaded", () => {
+        // Theme Switching Logic
+        const themeDots = document.querySelectorAll(".theme-dot");
+        const savedTheme = localStorage.getItem("monograph-theme") || "noir";
+
+        const setTheme = (themeId) => {
+          document.documentElement.setAttribute("data-theme", themeId);
+          localStorage.setItem("monograph-theme", themeId);
+
+          themeDots.forEach((dot) => {
+            if (dot.dataset.themeId === themeId) {
+              dot.classList.add("active");
+            } else {
+              dot.classList.remove("active");
+            }
+          });
+        };
+
+        themeDots.forEach((dot) => {
+          dot.addEventListener("click", () => {
+            setTheme(dot.dataset.themeId);
+          });
+        });
+
+        // Initialize theme
+        setTheme(savedTheme);
+
         const datalist = document.getElementById("country-list");
 
         function populateDatalist(filteredCountries) {
@@ -3104,7 +3389,7 @@
           artStyle = `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/960px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg'); background-size: cover; background-position: center;"`;
         }
 
-        return `<article class="destination-card border border-monograph-border bg-monograph-surface flex flex-col" data-region="global" data-search="${name.toLowerCase()}">
+        return `<article class="destination-card flex flex-col" data-region="global" data-search="${name.toLowerCase()}">
           <div class="destination-card__art flex ${minHeight} items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" ${artStyle}>
             <div class="relative z-10 w-full">
               <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
@@ -3134,14 +3419,14 @@
                 </p>
               </div>
             </div>
-            <div class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4">
-              <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]">
+            <div class="mt-auto grid gap-3 border-t border-dashed border-monograph-border pt-4 xl:grid-cols-3 mt-4">
+              <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:bg-monograph-text hover:text-monograph-bg">
                 Itinerary
               </button>
-              <button type="button" onclick="generateSurvivalKit('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateSurvivalKit('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent">
                 Survival Kit
               </button>
-              <button type="button" onclick="generateVisa('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]">
+              <button type="button" onclick="generateVisa('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent">
                 Visa
               </button>
             </div>
@@ -3492,6 +3777,71 @@
         }
         document.body.removeChild(downloadLink);
       }
+    </script>
+    <script>
+      // Firebase configuration (from your project, copied from Firebase console)
+      window.MONOGRAPH_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBEETopTr4rT97s22WT4kZERN09notevuQ",
+        authDomain: "travel-guide-2c40f.firebaseapp.com",
+        projectId: "travel-guide-2c40f",
+        storageBucket: "travel-guide-2c40f.firebasestorage.app",
+        messagingSenderId: "120186895013",
+        appId: "1:120186895013:web:7fada33a9bd212d943eb4c",
+      };
+
+      const dailyViewsEl = document.querySelector("#daily-views");
+      const totalViewsEl = document.querySelector("#total-views");
+      const reportButton = document.querySelector("#report-button");
+
+      const getDateKey = (date = new Date()) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
+
+      const updateViewDisplay = async () => {
+        try {
+          const response = await fetch("/api/get-view-reports");
+          const data = await response.json();
+
+          if (data) {
+            dailyViewsEl.textContent = data.today || 0;
+            totalViewsEl.textContent = data.total || 0;
+          }
+        } catch (error) {
+          console.error("Error fetching view reports:", error);
+        }
+      };
+
+      const recordPageView = async () => {
+        try {
+          await fetch("/api/record-view", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}), // Empty body for a simple POST
+          });
+          updateViewDisplay(); // Update display after recording view
+        } catch (error) {
+          console.error("Error recording page view:", error);
+        }
+      };
+
+      // Initial load
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM Content Loaded - recording page view");
+        recordPageView();
+
+        // Open report page in a new window
+        if (reportButton) {
+          reportButton.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            window.open(reportButton.href, "_blank", "width=800,height=600");
+          });
+        }
+      });
     </script>
   </body>
 </html>

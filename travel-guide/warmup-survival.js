@@ -17,7 +17,7 @@ const vertex_ai = new VertexAI({
 
 // Instantiate the model
 const generativeModel = vertex_ai.preview.getGenerativeModel({
-    model: 'gemini-3.1-flash-preview',
+    model: 'gemini-2.5-flash',
 });
 
 const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
