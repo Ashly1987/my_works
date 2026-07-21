@@ -5,7 +5,7 @@ license: Proprietary. LICENSE.txt has complete terms
 version: 2.0
 ---
 
-# Travel Survival Kit Guide
+# Travel Survival Kit Guide - By Ash
 
 ## Overview
 
