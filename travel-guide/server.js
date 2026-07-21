@@ -8,7 +8,8 @@ import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
 import { readFile } from 'fs/promises';
 import axios from 'axios';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
 dotenv.config();
 
@@ -268,9 +269,21 @@ Generate the visa requirements for: ${userCountry}.
 
 app.post('/api/download-pdf', async (req, res) => {
     const { htmlContent, country } = req.body;
+    let browser = null;
     try {
-        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        console.log('DEBUG: Launching Puppeteer...');
+        
+        const isProd = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+        
+        browser = await puppeteer.launch({
+            args: isProd ? chromium.args : ['--no-sandbox', '--disable-setuid-sandbox'],
+            defaultViewport: chromium.defaultViewport,
+            executablePath: isProd ? await chromium.executablePath() : '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            headless: isProd ? chromium.headless : true,
+        });
+
         const page = await browser.newPage();
+        console.log('DEBUG: Page created, setting content...');
         await page.setContent(`
             <html>
                 <head>
@@ -289,6 +302,7 @@ app.post('/api/download-pdf', async (req, res) => {
                 </body>
             </html>
         `);
+        console.log('DEBUG: Content set, generating PDF...');
         const pdf = await page.pdf({
             format: 'A4',
             margin: { top: '0.5in', right: '0.5in', bottom: '0.8in', left: '0.5in' },
@@ -298,10 +312,13 @@ app.post('/api/download-pdf', async (req, res) => {
             footerTemplate: '<div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">COPYRIGHT &copy; 2026 ASH - INSTA: @ASHTAGRAM</div>'
         });
         await browser.close();
+        console.log('DEBUG: PDF generated successfully.');
         res.contentType("application/pdf");
         res.send(pdf);
     } catch (error) {
-        res.status(500).send("Error generating PDF");
+        console.error('DEBUG ERROR: PDF Generation failed:', error.message);
+        if (browser) await browser.close();
+        res.status(500).send("Error generating PDF: " + error.message);
     }
 });
 
