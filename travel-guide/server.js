@@ -5,55 +5,65 @@ import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import admin from 'firebase-admin'; // Import firebase-admin
+import admin from 'firebase-admin';
 import { readFile } from 'fs/promises';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
+import puppeteer from 'puppeteer';
 
-const serviceAccount = JSON.parse(
-    await readFile(new URL('./travel-guide-key.json', import.meta.url))
-);
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT 
+    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+    : JSON.parse(await readFile(new URL('./travel-guide-key.json', import.meta.url)));
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
-}); // Initialize Firebase Admin SDK with service account
-//import puppeteer from 'puppeteer';
-
-dotenv.config();
+});
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
-// Set up static file serving for the 'public' folder
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Initialize Gemini Client safely
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
 // Read the MD framework when the server starts
 const itineraryFramework = fs.readFileSync('UNIVERSAL_TRAVEL_ITINERARY_SKILL.md', 'utf8');
 const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
 const visaFramework = fs.readFileSync('visa_requirements_generic_template.md', 'utf8');
 
+// Helper to check for API key
+const checkAI = (res) => {
+    if (!ai) {
+        return res.status(404).json({ 
+            error: "This destination is not available in our offline database, and no API key was provided to generate it." 
+        });
+    }
+    return true;
+};
+
 app.post('/api/generate-itinerary', async (req, res) => {
     try {
         const userCountry = req.body.country;
         if (!userCountry) return res.status(400).json({ error: "Country is required" });
 
-        // Define the path for the data directory and the specific country file
         const dataDir = path.join(__dirname, 'data', 'itinerary');
         const safeCountryName = userCountry.toLowerCase().replace(/[^a-z0-9]/g, '_');
         const filePath = path.join(dataDir, `${safeCountryName}.json`);
 
-        // Check if the file already exists (Cache Hit)
         if (fs.existsSync(filePath)) {
             console.log(`⏩ Serving itinerary for ${userCountry} from cache...`);
             const cachedData = fs.readFileSync(filePath, 'utf8');
             return res.json({ itinerary: JSON.parse(cachedData).itinerary });
         }
+
+        if (checkAI(res) !== true) return;
 
 const prompt = `
 <SYSTEM_INSTRUCTION>
@@ -98,55 +108,20 @@ Generate the itinerary for: ${userCountry}.
 `;
 
         let generatedItinerary = "";
-
-        // ==========================================
-        // ATTEMPT 1: Try the fast 'flash-2.5' model first
-        // ==========================================
         try {
-            const flashResponse = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
+            const flashResponse = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
             generatedItinerary = flashResponse.text;
-            console.log(`✅ Success: Generated ${userCountry} using Flash 2.5 model.`);
-
         } catch (flashError) {
-            console.warn(`⚠️ Flash 2.5 model failed (${flashError.status || flashError.message}). Attempting seamless fallback to falsh preview 3 model...`);
-            
-            // ==========================================
-            // ATTEMPT 2: Fallback to the '3-flash-preview' model
-            // ==========================================
-            const proResponse = await ai.models.generateContent({
-                model: 'gemini-3-flash-preview',
-                contents: prompt,
-            });
+            const proResponse = await ai.models.generateContent({ model: 'gemini-3-flash-preview', contents: prompt });
             generatedItinerary = proResponse.text;
-            console.log(`✅ Success: Generated ${userCountry} using flash 3 preview model fallback.`);
         }
 
-        // Ensure the data directory exists
-        if (!fs.existsSync(dataDir)) {
-            fs.mkdirSync(dataDir, { recursive: true });
-        }
-
-        // Save the successfully generated itinerary to the cache
+        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
         fs.writeFileSync(filePath, JSON.stringify({ itinerary: generatedItinerary }, null, 2), 'utf8');
-        console.log(`💾 Saved new itinerary for ${userCountry} to local cache.`);
-
-        // Send to frontend
         res.json({ itinerary: generatedItinerary });
 
     } catch (error) {
-        // This catch block only triggers if BOTH Flash AND Pro completely fail
-        console.error("❌ Fatal Error: Both models failed.", error);
-        
-        // Handle rate limit (429) or Server Overload (503) errors gracefully
-        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
-            return res.status(error.status || 503).json({ 
-                error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
-            });
-        }
-        
+        console.error("❌ Fatal Error:", error);
         res.status(500).json({ error: "Failed to generate itinerary. Please try again later." });
     }
 });
@@ -161,10 +136,11 @@ app.post('/api/generate-survival-kit', async (req, res) => {
         const filePath = path.join(dataDir, `${safeCountryName}.json`);
 
         if (fs.existsSync(filePath)) {
-            console.log(`⏩ Serving survival kit for ${userCountry} from cache...`);
             const cachedData = fs.readFileSync(filePath, 'utf8');
             return res.json({ survivalKit: JSON.parse(cachedData).survivalKit });
         }
+
+        if (checkAI(res) !== true) return;
 
 const prompt = `
 <SYSTEM_INSTRUCTION>
@@ -191,46 +167,23 @@ Generate the survival kit for: ${userCountry}.
 `;
 
         let generatedSurvivalKit = "";
-
         try {
-            const flashResponse = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
+            const flashResponse = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
             generatedSurvivalKit = flashResponse.text;
-            console.log(`✅ Success: Generated survival kit for ${userCountry} using Flash 2.5 model.`);
         } catch (flashError) {
-            console.warn(`⚠️ Flash 2.5 model failed. Attempting seamless fallback to flash 3 preview model...`);
-            const proResponse = await ai.models.generateContent({
-                model: 'gemini-3-flash-preview',
-                contents: prompt,
-            });
+            const proResponse = await ai.models.generateContent({ model: 'gemini-3-flash-preview', contents: prompt });
             generatedSurvivalKit = proResponse.text;
-            console.log(`✅ Success: Generated survival kit for ${userCountry} using flash 3 preview model fallback.`);
         }
 
-        if (!fs.existsSync(dataDir)) {
-            fs.mkdirSync(dataDir, { recursive: true });
-        }
-
+        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
         fs.writeFileSync(filePath, JSON.stringify({ survivalKit: generatedSurvivalKit }, null, 2), 'utf8');
-        console.log(`💾 Saved new survival kit for ${userCountry} to local cache.`);
-
         res.json({ survivalKit: generatedSurvivalKit });
 
     } catch (error) {
-        console.error("❌ Fatal Error: Both models failed.", error);
-        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
-            return res.status(error.status || 503).json({ 
-                error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
-            });
-        }
-        res.status(500).json({ error: "Failed to generate survival kit. Please try again later." });
+        console.error("❌ Fatal Error:", error);
+        res.status(500).json({ error: "Failed to generate survival kit." });
     }
 });
-
-import puppeteer from 'puppeteer';
-
 
 app.post('/api/generate-visa', async (req, res) => {
     try {
@@ -242,10 +195,11 @@ app.post('/api/generate-visa', async (req, res) => {
         const filePath = path.join(dataDir, `${safeCountryName}.json`);
 
         if (fs.existsSync(filePath)) {
-            console.log(`⏩ Serving visa for ${userCountry} from cache...`);
             const cachedData = fs.readFileSync(filePath, 'utf8');
             return res.json({ visa: JSON.parse(cachedData).visa });
         }
+
+        if (checkAI(res) !== true) return;
 
 const prompt = `
 <SYSTEM_INSTRUCTION>
@@ -270,52 +224,29 @@ Generate the visa requirements for: ${userCountry}.
 `;
 
         let generatedVisa = "";
-
         try {
-            const flashResponse = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
+            const flashResponse = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
             generatedVisa = flashResponse.text;
-            console.log(`✅ Success: Generated visa requirements for ${userCountry} using Flash 2.5 model.`);
         } catch (flashError) {
-            console.warn(`⚠️ Flash 2.5 model failed. Attempting seamless fallback to flash 3 preview model...`);
-            const proResponse = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-            });
+            const proResponse = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
             generatedVisa = proResponse.text;
-            console.log(`✅ Success: Generated visa requirements for ${userCountry} using flash 3 preview model fallback.`);
         }
 
-        if (!fs.existsSync(dataDir)) {
-            fs.mkdirSync(dataDir, { recursive: true });
-        }
-
+        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
         fs.writeFileSync(filePath, JSON.stringify({ visa: generatedVisa }, null, 2), 'utf8');
-        console.log(`💾 Saved new visa requirements for ${userCountry} to local cache.`);
-
         res.json({ visa: generatedVisa });
 
     } catch (error) {
-        console.error("❌ Fatal Error: Both models failed.", error);
-        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
-            return res.status(error.status || 503).json({ 
-                error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
-            });
-        }
-        res.status(500).json({ error: "Failed to generate visa requirements. Please try again later." });
+        console.error("❌ Fatal Error:", error);
+        res.status(500).json({ error: "Failed to generate visa requirements." });
     }
 });
 
 app.post('/api/download-pdf', async (req, res) => {
     const { htmlContent, country } = req.body;
-    
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
-        
-        // Inject the "Perfect" PDF Styles
         await page.setContent(`
             <html>
                 <head>
@@ -334,22 +265,14 @@ app.post('/api/download-pdf', async (req, res) => {
                 </body>
             </html>
         `);
-
-        const footerHtml = `
-            <div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">
-                COPYRIGHT &copy; 2026 ASH - INSTA: <a href="https://www.instagram.com/ashlydeedward?igsh=MmQ1cG9uMTlmNWc1&amp;utm_source=qr" style="color: #999999; text-decoration: underline;">@ASHTAGRAM</a>
-            </div>
-        `;
-
         const pdf = await page.pdf({
             format: 'A4',
             margin: { top: '0.5in', right: '0.5in', bottom: '0.8in', left: '0.5in' },
             printBackground: true,
             displayHeaderFooter: true,
             headerTemplate: '<div></div>',
-            footerTemplate: footerHtml
+            footerTemplate: '<div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">COPYRIGHT &copy; 2026 ASH - INSTA: @ASHTAGRAM</div>'
         });
-
         await browser.close();
         res.contentType("application/pdf");
         res.send(pdf);
@@ -358,114 +281,47 @@ app.post('/api/download-pdf', async (req, res) => {
     }
 });
 
-const db = admin.firestore(); // Initialize Firestore
+const db = admin.firestore();
 
 app.post('/api/record-view', async (req, res) => {
-    console.log(`📥 Received view record request from ${req.ip}`);
     try {
-        const todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const todayKey = new Date().toISOString().slice(0, 10);
         const viewRef = db.collection('quickflixViews').doc(todayKey);
-
         let ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        if (Array.isArray(ipAddress)) {
-            ipAddress = ipAddress[0];
-        }
-
-        let country = 'Unknown';
-        let city = 'Unknown';
+        if (Array.isArray(ipAddress)) ipAddress = ipAddress[0];
+        let country = 'Unknown', city = 'Unknown';
         try {
             const geoResponse = await axios.get(`http://ip-api.com/json/${ipAddress}`);
             if (geoResponse.data.status === 'success') {
                 country = geoResponse.data.country || 'Unknown';
                 city = geoResponse.data.city || 'Unknown';
             }
-        } catch (geoError) {
-            console.error('IP Geolocation failed:', geoError.message);
-        }
-
+        } catch (e) {}
         await db.runTransaction(async (transaction) => {
             const doc = await transaction.get(viewRef);
             const currentCount = doc.exists ? doc.data().count || 0 : 0;
             const currentLocations = doc.exists ? doc.data().locations || {} : {};
-
-            transaction.set(viewRef, {
-                count: currentCount + 1,
-                date: todayKey,
-            }, { merge: true });
-
+            transaction.set(viewRef, { count: currentCount + 1, date: todayKey }, { merge: true });
             const locationKey = `${country}-${city}`;
             currentLocations[locationKey] = (currentLocations[locationKey] || 0) + 1;
-
             transaction.update(viewRef, { locations: currentLocations });
         });
-
-        res.status(200).send('Page view recorded and location logged.');
+        res.status(200).send('Recorded');
     } catch (error) {
-        console.error('Error recording page view:', error);
-        res.status(500).send('Error recording page view.');
+        res.status(500).send('Error');
     }
 });
 
 app.get('/api/get-view-reports', async (req, res) => {
     try {
-        const today = new Date();
         const viewsSnapshot = await db.collection('quickflixViews').get();
-
         const allViews = {};
-        viewsSnapshot.forEach(doc => {
-            allViews[doc.id] = doc.data();
-        });
-
-        const getDateKey = (date = new Date()) => {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        };
-
-        const getWindowViewsAndLocations = (viewsData, days) => {
-            let totalCount = 0;
-            const aggregatedLocations = {};
-            for (let i = 0; i < days; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                const key = getDateKey(date);
-                if (viewsData[key]) {
-                    totalCount += viewsData[key].count || 0;
-                    const dailyLocations = viewsData[key].locations || {};
-                    for (const locKey in dailyLocations) {
-                        if (dailyLocations.hasOwnProperty(locKey)) {
-                            aggregatedLocations[locKey] = (aggregatedLocations[locKey] || 0) + dailyLocations[locKey];
-                        }
-                    }
-                }
-            }
-            return { totalCount, aggregatedLocations };
-        };
-
-        const todayKey = getDateKey(today);
-        const todayViews = allViews[todayKey] ? allViews[todayKey].count || 0 : 0;
-
-        const totalViews = Object.values(allViews).reduce((sum, view) => sum + (view.count || 0), 0);
-
-        const { totalCount: views7Days, aggregatedLocations: locations7Days } = getWindowViewsAndLocations(allViews, 7);
-        const { totalCount: views14Days, aggregatedLocations: locations14Days } = getWindowViewsAndLocations(allViews, 14);
-        const { totalCount: views30Days, aggregatedLocations: locations30Days } = getWindowViewsAndLocations(allViews, 30);
-
-        res.status(200).json({
-            today: todayViews,
-            total: totalViews,
-            days7: { count: views7Days, locations: locations7Days },
-            days14: { count: views14Days, locations: locations14Days },
-            days30: { count: views30Days, locations: locations30Days },
-            allDailyViews: allViews // For detailed table in report
-        });
-
+        viewsSnapshot.forEach(doc => { allViews[doc.id] = doc.data(); });
+        res.status(200).json(allViews);
     } catch (error) {
-        console.error('Error fetching view reports:', error);
-        res.status(500).send('Error fetching view reports.');
+        res.status(500).send('Error');
     }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
