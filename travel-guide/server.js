@@ -15,13 +15,29 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT 
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-    : JSON.parse(await readFile(new URL('./travel-guide-key.json', import.meta.url)));
+const serviceAccount = await (async () => {
+    try {
+        if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+            console.log('DEBUG: Found FIREBASE_SERVICE_ACCOUNT env var.');
+            return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        }
+        console.log('DEBUG: FIREBASE_SERVICE_ACCOUNT env var not found, falling back to local file.');
+        const keyPath = new URL('./travel-guide-key.json', import.meta.url);
+        return JSON.parse(await readFile(keyPath));
+    } catch (err) {
+        console.error('DEBUG ERROR: Failed to parse service account:', err.message);
+        return null;
+    }
+})();
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+if (serviceAccount) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+    });
+    console.log('DEBUG: Firebase initialized successfully.');
+} else {
+    console.error('DEBUG ERROR: Firebase NOT initialized - check service account configuration.');
+}
 
 const app = express();
 app.use(cors());
@@ -31,12 +47,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize Gemini Client safely
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+console.log('DEBUG: GEMINI_API_KEY present:', !!GEMINI_API_KEY);
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
 // Read the MD framework when the server starts
-const itineraryFramework = fs.readFileSync('UNIVERSAL_TRAVEL_ITINERARY_SKILL.md', 'utf8');
-const survivalKitFramework = fs.readFileSync('TRAVEL_SURVIVAL_KIT_SKILL.md', 'utf8');
-const visaFramework = fs.readFileSync('visa_requirements_generic_template.md', 'utf8');
+let itineraryFramework, survivalKitFramework, visaFramework;
+try {
+    console.log('DEBUG: Attempting to read framework files...');
+    itineraryFramework = fs.readFileSync(path.join(__dirname, 'UNIVERSAL_TRAVEL_ITINERARY_SKILL.md'), 'utf8');
+    survivalKitFramework = fs.readFileSync(path.join(__dirname, 'TRAVEL_SURVIVAL_KIT_SKILL.md'), 'utf8');
+    visaFramework = fs.readFileSync(path.join(__dirname, 'visa_requirements_generic_template.md'), 'utf8');
+    console.log('DEBUG: Framework files read successfully.');
+} catch (err) {
+    console.error('DEBUG ERROR: Failed to read framework files:', err.message);
+}
 
 // Helper to check for API key
 const checkAI = (res) => {
