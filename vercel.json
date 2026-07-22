@@ -12,8 +12,12 @@
       "destination": "/travel-guide/api/:path*"
     },
     {
-      "source": "/:path*",
-      "destination": "/travel-guide/public/:path*"
+      "source": "/",
+      "destination": "/travel-guide/public/index.html"
+    },
+    {
+      "source": "/:path+",
+      "destination": "/travel-guide/public/:path+"
     }
   ]
 }
