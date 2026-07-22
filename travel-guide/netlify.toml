@@ -1,5 +1,8 @@
 [build]
+  base = "travel-guide"
   command = "npm install"
+  publish = "public"
+  functions = "functions"
 
 [[redirects]]
   from = "/*"
