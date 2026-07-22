@@ -10,9 +10,10 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
     }
-  ],
-  "env": {
-    "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "1"
-  }
+  ]
 }
