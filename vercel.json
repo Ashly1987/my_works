@@ -1,15 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "travel-guide/package.json",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "/travel-guide/api/:path*"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/travel-guide/public/favicon.ico"
     },
     {
       "source": "/",
