@@ -6,146 +6,171 @@ import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
-import { readFile } from 'fs/promises';
 import axios from 'axios';
 import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 
 dotenv.config();
 
-// Fix for Vercel pathing
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = process.cwd(); // This is the project root in Vercel
-
+const rootDir = process.cwd();
 console.log('DEBUG: Server starting. Root Dir:', rootDir);
 
 // Initialize Firebase
 const serviceAccount = await (async () => {
     try {
         if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-            console.log('DEBUG: Parsing FIREBASE_SERVICE_ACCOUNT from env.');
+            console.log('DEBUG: Parsing service account from env.');
             return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
         }
-        const localKeyPath = path.join(rootDir, 'travel-guide-key.json');
-        if (fs.existsSync(localKeyPath)) {
+        const keyPath = path.join(rootDir, 'travel-guide-key.json');
+        if (fs.existsSync(keyPath)) {
             console.log('DEBUG: Reading service account from local file.');
-            const fileData = fs.readFileSync(localKeyPath, 'utf8');
-            return JSON.parse(fileData);
+            return JSON.parse(fs.readFileSync(keyPath, 'utf8'));
         }
         return null;
     } catch (err) {
-        console.error('DEBUG ERROR: Firebase Service Account Parse Failed:', err.message);
+        console.error('DEBUG ERROR: Firebase Parse failed:', err.message);
         return null;
     }
 })();
 
-if (serviceAccount) {
-    if (!admin.apps.length) {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
-        });
-        console.log('DEBUG: Firebase Admin Initialized.');
-    }
-} else {
-    console.warn('DEBUG WARNING: Firebase Service Account NOT found. Views will not be recorded.');
+if (serviceAccount && !admin.apps.length) {
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    console.log('DEBUG: Firebase Admin Initialized.');
 }
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.static(path.join(rootDir, 'public')));
 
-// Framework loading - use rootDir
-let itineraryFramework = '', survivalKitFramework = '', visaFramework = '';
-try {
-    itineraryFramework = fs.readFileSync(path.join(rootDir, 'UNIVERSAL_TRAVEL_ITINERARY_SKILL.md'), 'utf8');
-    survivalKitFramework = fs.readFileSync(path.join(rootDir, 'TRAVEL_SURVIVAL_KIT_SKILL.md'), 'utf8');
-    visaFramework = fs.readFileSync(path.join(rootDir, 'visa_requirements_generic_template.md'), 'utf8');
-    console.log('DEBUG: Frameworks loaded successfully.');
-} catch (err) {
-    console.error('DEBUG ERROR: Framework loading failed:', err.message);
-}
+// Framework loading
+const loadFramework = (file) => {
+    try {
+        const p = path.join(rootDir, file);
+        return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';
+    } catch (e) { return ''; }
+};
 
-// Gemini Init
+const itineraryFramework = loadFramework('UNIVERSAL_TRAVEL_ITINERARY_SKILL.md');
+const survivalKitFramework = loadFramework('TRAVEL_SURVIVAL_KIT_SKILL.md');
+const visaFramework = loadFramework('visa_requirements_generic_template.md');
+
 const ai = process.env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null;
 
-app.post('/api/generate-itinerary', async (req, res) => {
+const getCachedData = (dir, country) => {
+    const safeName = country.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    const p = path.join(rootDir, 'data', dir, `${safeName}.json`);
+    return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : null;
+};
+
+app.post(['/api/generate-itinerary', '/generate-itinerary'], async (req, res) => {
     try {
         const { country } = req.body;
         if (!country) return res.status(400).json({ error: "Country is required" });
 
-        const dataDir = path.join(rootDir, 'data', 'itinerary');
-        const safeName = country.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        const filePath = path.join(dataDir, `${safeName}.json`);
+        const cached = getCachedData('itinerary', country);
+        if (cached) return res.json({ itinerary: cached.itinerary });
 
-        if (fs.existsSync(filePath)) {
-            const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-            return res.json({ itinerary: cached.itinerary });
-        }
+        if (!ai) return res.status(404).json({ error: "Destination not in offline database and AI key missing." });
 
-        if (!ai) return res.status(404).json({ error: "AI Key missing and country not in cache." });
-
-        const prompt = `Generate itinerary for ${country}...`; // Simplified for length, but keep logic
         const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const prompt = `Generate a high-depth travel itinerary for ${country} based on the following framework:\n${itineraryFramework}`;
         const result = await model.generateContent(prompt);
-        const text = result.response.text();
-
-        res.json({ itinerary: text });
+        res.json({ itinerary: result.response.text() });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Implementation of other routes... (keep them for completeness)
-
-app.post('/api/record-view', async (req, res) => {
-    console.log('DEBUG: record-view called');
-    if (!serviceAccount) {
-        console.error('DEBUG ERROR: Firebase service account missing in record-view');
-        return res.status(503).json({ error: "Firebase not configured" });
-    }
+app.post(['/api/generate-survival-kit', '/generate-survival-kit'], async (req, res) => {
     try {
+        const { country } = req.body;
+        if (!country) return res.status(400).json({ error: "Country is required" });
+
+        const cached = getCachedData('survival_kit', country);
+        if (cached) return res.json({ survivalKit: cached.survivalKit });
+
+        if (!ai) return res.status(404).json({ error: "Destination not in offline database." });
+
+        const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const prompt = `Generate a travel survival kit for ${country} using this framework:\n${survivalKitFramework}`;
+        const result = await model.generateContent(prompt);
+        res.json({ survivalKit: result.response.text() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post(['/api/generate-visa', '/generate-visa'], async (req, res) => {
+    try {
+        const { country } = req.body;
+        const cached = getCachedData('visa', country);
+        if (cached) return res.json({ visa: cached.visa });
+
+        if (!ai) return res.status(404).json({ error: "Visa data not found." });
+
+        const model = ai.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const prompt = `Generate visa requirements for ${country} using this template:\n${visaFramework}`;
+        const result = await model.generateContent(prompt);
+        res.json({ visa: result.response.text() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post(['/api/record-view', '/record-view'], async (req, res) => {
+    try {
+        if (!serviceAccount) return res.status(200).json({ status: "skipped (no firebase)" });
         const db = admin.firestore();
         const todayKey = new Date().toISOString().slice(0, 10);
-        console.log('DEBUG: Updating Firestore doc:', todayKey);
         const viewRef = db.collection('quickflixViews').doc(todayKey);
         
+        let ip = req.headers['x-forwarded-for'] || req.ip || '';
+        if (Array.isArray(ip)) ip = ip[0];
+        
+        let country = 'Unknown', city = 'Unknown';
+        if (ip && ip !== '::1' && ip !== '127.0.0.1' && !ip.startsWith('192.168')) {
+            try {
+                const geo = await axios.get(`http://ip-api.com/json/${ip}`);
+                if (geo.data.status === 'success') {
+                    country = geo.data.country;
+                    city = geo.data.city;
+                }
+            } catch (e) {}
+        }
+
         await viewRef.set({ 
             count: admin.firestore.FieldValue.increment(1),
             date: todayKey
         }, { merge: true });
-        
-        console.log('DEBUG: View recorded successfully');
+
         res.status(200).json({ status: "recorded" });
     } catch (error) {
-        console.error('DEBUG ERROR: View record failed:', error.message);
-        res.status(500).json({ error: "Internal Server Error: " + error.message });
+        res.status(200).json({ status: "error (silent)", error: error.message });
     }
 });
 
-app.get('/api/get-view-reports', async (req, res) => {
-    console.log('DEBUG: get-view-reports called');
-    if (!serviceAccount) {
-        return res.status(503).json({ error: "Firebase not configured" });
-    }
+app.get(['/api/get-view-reports', '/get-view-reports'], async (req, res) => {
     try {
+        if (!serviceAccount) return res.status(200).json({ today: 0, total: 0 });
         const db = admin.firestore();
         const snapshot = await db.collection('quickflixViews').get();
-        const data = {};
+        let total = 0, today = 0;
+        const todayKey = new Date().toISOString().slice(0, 10);
         snapshot.forEach(doc => {
-            data[doc.id] = doc.data();
+            const count = doc.data().count || 0;
+            total += count;
+            if (doc.id === todayKey) today = count;
         });
-        console.log('DEBUG: Fetched', Object.keys(data).length, 'reports');
-        res.json(data);
+        res.json({ today, total });
     } catch (error) {
-        console.error('DEBUG ERROR: Get view reports failed:', error.message);
-        res.status(500).json({ error: "Error fetching reports: " + error.message });
+        res.status(200).json({ today: 0, total: 0 });
     }
 });
 
-// PDF generation route
-app.post('/api/download-pdf', async (req, res) => {
+app.post(['/api/download-pdf', '/download-pdf'], async (req, res) => {
     const { htmlContent, country } = req.body;
     let browser = null;
     try {
@@ -156,7 +181,7 @@ app.post('/api/download-pdf', async (req, res) => {
             headless: true
         });
         const page = await browser.newPage();
-        await page.setContent(`<h1>${country}</h1>${htmlContent}`);
+        await page.setContent(`<html><body><h1>${country}</h1>${htmlContent}</body></html>`);
         const pdf = await page.pdf({ format: 'A4' });
         await browser.close();
         res.contentType("application/pdf");
@@ -167,7 +192,6 @@ app.post('/api/download-pdf', async (req, res) => {
     }
 });
 
-// Important for Vercel: DO NOT use app.listen in production
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
