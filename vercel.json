@@ -2,22 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "travel-guide/server.js",
+      "src": "travel-guide/package.json",
       "use": "@vercel/node"
-    },
-    {
-      "src": "travel-guide/public/**",
-      "use": "@vercel/static"
     }
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/travel-guide/server.js"
+      "source": "/api/:path*",
+      "destination": "/travel-guide/api/:path*"
     },
     {
-      "source": "/(.*)",
-      "destination": "/travel-guide/public/$1"
+      "source": "/:path*",
+      "destination": "/travel-guide/public/:path*"
     }
   ]
 }
