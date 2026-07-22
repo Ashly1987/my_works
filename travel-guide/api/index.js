@@ -100,29 +100,47 @@ app.post('/api/generate-itinerary', async (req, res) => {
 // Implementation of other routes... (keep them for completeness)
 
 app.post('/api/record-view', async (req, res) => {
-    if (!serviceAccount) return res.status(503).json({ error: "Firebase not configured" });
+    console.log('DEBUG: record-view called');
+    if (!serviceAccount) {
+        console.error('DEBUG ERROR: Firebase service account missing in record-view');
+        return res.status(503).json({ error: "Firebase not configured" });
+    }
     try {
         const db = admin.firestore();
         const todayKey = new Date().toISOString().slice(0, 10);
+        console.log('DEBUG: Updating Firestore doc:', todayKey);
         const viewRef = db.collection('quickflixViews').doc(todayKey);
-        await viewRef.set({ count: admin.firestore.FieldValue.increment(1) }, { merge: true });
+        
+        await viewRef.set({ 
+            count: admin.firestore.FieldValue.increment(1),
+            date: todayKey
+        }, { merge: true });
+        
+        console.log('DEBUG: View recorded successfully');
         res.status(200).json({ status: "recorded" });
     } catch (error) {
-        console.error('View record failed:', error);
-        res.status(500).json({ error: error.message });
+        console.error('DEBUG ERROR: View record failed:', error.message);
+        res.status(500).json({ error: "Internal Server Error: " + error.message });
     }
 });
 
 app.get('/api/get-view-reports', async (req, res) => {
-    if (!serviceAccount) return res.status(503).json({ error: "Firebase not configured" });
+    console.log('DEBUG: get-view-reports called');
+    if (!serviceAccount) {
+        return res.status(503).json({ error: "Firebase not configured" });
+    }
     try {
         const db = admin.firestore();
         const snapshot = await db.collection('quickflixViews').get();
         const data = {};
-        snapshot.forEach(doc => data[doc.id] = doc.data());
+        snapshot.forEach(doc => {
+            data[doc.id] = doc.data();
+        });
+        console.log('DEBUG: Fetched', Object.keys(data).length, 'reports');
         res.json(data);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('DEBUG ERROR: Get view reports failed:', error.message);
+        res.status(500).json({ error: "Error fetching reports: " + error.message });
     }
 });
 
