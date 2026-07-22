@@ -24,9 +24,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// In Netlify Functions, __dirname is not available. We need to resolve paths relative to the function file.
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 
 // The 'public' folder will be served directly by Netlify's CDN, so we don't need this in the function.
 // app.use(express.static(path.join(__dirname, 'public')));
