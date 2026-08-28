@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Monograph | Discover</title>
+    <title>Travel Easy With Ash</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -5433,7 +5433,10 @@
             body: JSON.stringify({ htmlContent: content, country: country }),
           });
 
-          if (!response.ok) throw new Error("PDF generation failed");
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.detail || errorData.error || `PDF generation failed (${response.status})`);
+          }
 
           const blob = await response.blob();
           const viewType =
@@ -5442,7 +5445,7 @@
           await saveGeneratedFile(blob, `${country}_${viewType}.pdf`);
         } catch (error) {
           console.error("PDF download failed:", error);
-          alert("Could not generate high-quality PDF.");
+          alert(`Could not generate PDF. ${error.message}`);
         }
       }
 

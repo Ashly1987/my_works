@@ -10,8 +10,8 @@
       "includeFiles": "data/**"
     },
     "api/download-pdf.js": {
-      "includeFiles": "data/**",
-      "maxDuration": 60
+      "includeFiles": "node_modules/@sparticuz/chromium/bin/**",
+      "maxDuration": 300
     },
     "api/get-view-reports.js": {
       "includeFiles": "data/**"
