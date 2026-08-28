@@ -5474,13 +5474,33 @@
 
       const recordPageView = async () => {
         try {
-          await fetch("/api/record-view", {
+          const location = await new Promise((resolve) => {
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const fallback = timeZone ? `Timezone: ${timeZone}` : "Location unavailable";
+
+            if (!navigator.geolocation) {
+              resolve(fallback);
+              return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+              ({ coords }) => {
+                // Store an approximate location only (about 1 km precision), not exact coordinates.
+                resolve(`Approx. location: ${coords.latitude.toFixed(2)}, ${coords.longitude.toFixed(2)}`);
+              },
+              () => resolve(fallback),
+              { enableHighAccuracy: false, timeout: 8000, maximumAge: 86400000 },
+            );
+          });
+
+          const response = await fetch("/api/record-view", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({}), // Empty body for a simple POST
+            body: JSON.stringify({ location }),
           });
+          if (!response.ok) throw new Error(`View recording failed (${response.status})`);
           updateViewDisplay(); // Update display after recording view
         } catch (error) {
           console.error("Error recording page view:", error);
