@@ -10,7 +10,8 @@
       "includeFiles": "data/**"
     },
     "api/download-pdf.js": {
-      "includeFiles": "data/**"
+      "includeFiles": "data/**",
+      "maxDuration": 60
     },
     "api/get-view-reports.js": {
       "includeFiles": "data/**"

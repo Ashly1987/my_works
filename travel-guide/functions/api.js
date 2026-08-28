@@ -390,9 +390,10 @@ Generate the survival kit for: ${userCountry}.
 
 app.post('/api/download-pdf', async (req, res) => {
     const { htmlContent, country } = req.body;
+    let browser;
     
     try {
-        const browser = await puppeteer.launch({
+        browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
@@ -417,7 +418,7 @@ app.post('/api/download-pdf', async (req, res) => {
                     ${htmlContent}
                 </body>
             </html>
-        `);
+        `, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
         const footerHtml = `
             <div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">
@@ -434,12 +435,13 @@ app.post('/api/download-pdf', async (req, res) => {
             footerTemplate: footerHtml
         });
 
-        await browser.close();
         res.contentType("application/pdf");
         res.send(pdf);
     } catch (error) {
         console.error('Error generating PDF:', error);
-        res.status(500).send("Error generating PDF");
+        res.status(500).json({ error: "Could not generate PDF. Check the Vercel function logs for the Chromium error." });
+    } finally {
+        if (browser) await browser.close().catch(() => {});
     }
 });
 
