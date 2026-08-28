@@ -2,7 +2,7 @@
   "version": 2,
   "installCommand": "cd travel-guide && npm ci",
   "functions": {
-    "api/[...path].js": {
+    "api/*.js": {
       "includeFiles": "travel-guide/data/**"
     }
   },
