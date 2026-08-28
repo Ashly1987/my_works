@@ -501,40 +501,51 @@
 
       @media (max-width: 768px) {
         header > div {
-          flex-wrap: wrap;
-          gap: 0.7rem;
+          flex-wrap: nowrap;
+          gap: 0.45rem;
         }
 
         .brand-lockup {
-          width: 100%;
+          width: auto;
+          min-width: 0;
+          flex: 1 1 auto;
         }
 
         .brand-lockup > div {
           white-space: nowrap;
+          font-size: 12px !important;
+          line-height: 1.05;
+        }
+
+        .brand-tagline {
+          font-size: 7px;
+          letter-spacing: 0.13em;
+          white-space: nowrap;
         }
 
         .header-controls {
-          width: 100%;
-          justify-content: space-between;
+          width: auto;
+          flex: 0 0 auto;
+          gap: 0.45rem;
         }
 
         .views-panel {
           min-width: auto;
-          padding: 6px 10px;
+          padding: 5px 8px;
         }
         .views-panel__head {
-          gap: 8px;
+          gap: 7px;
         }
         .views-stats {
-          gap: 8px;
+          gap: 7px;
         }
         .theme-switcher {
-          gap: 6px;
-          padding: 4px;
+          gap: 5px;
+          padding: 3px;
         }
         .theme-dot {
-          width: 16px;
-          height: 16px;
+          width: 14px;
+          height: 14px;
         }
 
         #result-container {
