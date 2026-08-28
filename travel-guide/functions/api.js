@@ -3,7 +3,8 @@ import express from 'express';
 import serverless from 'serverless-http';
 import cors from 'cors';
 import fs from 'fs';
-import { GoogleGenAI } from '@google/genai';
+// Gemini generation is intentionally disabled. The API serves prebuilt JSON only.
+// import { GoogleGenAI } from '@google/genai';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer-core';
@@ -32,14 +33,53 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // The 'public' folder will be served directly by Netlify's CDN, so we don't need this in the function.
 // app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const guideDirectories = {
+  itinerary: path.resolve(__dirname, '../data/itinerary'),
+  survivalKit: path.resolve(__dirname, '../data/survival_kit'),
+  visa: path.resolve(__dirname, '../data/visa'),
+};
 
-// Read frameworks. In a serverless environment, you might want to bundle these files or load them from a different source.
-// For now, we'll assume they are in the same directory.
-const itineraryFramework = fs.readFileSync(path.resolve(__dirname, '../UNIVERSAL_TRAVEL_ITINERARY_SKILL.md'), 'utf8');
-const survivalKitFramework = fs.readFileSync(path.resolve(__dirname, '../TRAVEL_SURVIVAL_KIT_SKILL.md'), 'utf8');
-const visaFramework = fs.readFileSync(path.resolve(__dirname, '../visa_requirements_generic_template.md'), 'utf8');
+const toFileSlug = (value) => String(value)
+  .normalize('NFKD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .trim()
+  .toLowerCase()
+  .replace(/\s/g, '_')
+  .replace(/[^a-z0-9_]/g, '_');
+
+const toComparableSlug = (value) => toFileSlug(value).replace(/_+/g, '_');
+
+// To re-enable AI generation in the future, restore the Gemini import above and
+// this client/helper. Keep it disabled while the JSON library is the source of truth.
+// const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// const generateWithGemini = async (prompt) => {
+//   const response = await ai.models.generateContent({
+//     model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+//     contents: prompt,
+//   });
+//   return response.text;
+// };
+
+const loadGuide = (guideType, country) => {
+  const directory = guideDirectories[guideType];
+  const requestedSlug = toFileSlug(country);
+  const exactPath = path.join(directory, `${requestedSlug}.json`);
+  let filePath = fs.existsSync(exactPath) ? exactPath : null;
+
+  if (!filePath) {
+    const comparableSlug = toComparableSlug(country);
+    const matches = fs.readdirSync(directory)
+      .filter((file) => file.endsWith('.json'))
+      .filter((file) => toComparableSlug(file.slice(0, -5)) === comparableSlug);
+
+    if (matches.length === 1) filePath = path.join(directory, matches[0]);
+  }
+
+  if (!filePath) return null;
+
+  const guide = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  return guide[guideType] || null;
+};
 
 const localViewReports = {
     total: 0,
@@ -101,9 +141,16 @@ app.post('/api/generate-itinerary', async (req, res) => {
         const userCountry = req.body.country;
         if (!userCountry) return res.status(400).json({ error: "Country is required" });
 
+        const itinerary = loadGuide('itinerary', userCountry);
+        if (!itinerary) {
+            return res.status(404).json({ error: `No itinerary data is available for ${userCountry}.` });
+        }
+        return res.json({ itinerary });
+
         // Caching in a serverless environment is tricky. We'll disable it for now.
         // A better approach would be to use a distributed cache like Redis.
 
+        /* Gemini prompt retained for future use (disabled).
         const prompt = `
 <SYSTEM_INSTRUCTION>
 You are an expert travel planner. You will generate a high-depth itinerary by following the provided framework but applying the STRICT OVERRIDES listed below.
@@ -146,22 +193,11 @@ Output in rich Markdown. Use H2 (##) and H3 (###) headers. Use bullet points for
 Generate the itinerary for: ${userCountry}.
 `;
 
-        let generatedItinerary = "";
+        // const generatedItinerary = await generateWithGemini(prompt);
+        // console.log(`✅ Success: Generated itinerary for ${userCountry}.`);
 
-        try {
-            const flashResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-flash' }).generateContent(prompt);
-            generatedItinerary = flashResponse.response.text();
-            console.log(`✅ Success: Generated ${userCountry} using Flash 1.5 model.`);
-
-        } catch (flashError) {
-            console.warn(`⚠️ Flash 1.5 model failed. Attempting seamless fallback to pro model...`);
-            
-            const proResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-pro' }).generateContent(prompt);
-            generatedItinerary = proResponse.response.text();
-            console.log(`✅ Success: Generated ${userCountry} using Pro 1.5 model fallback.`);
-        }
-
-        res.json({ itinerary: generatedItinerary });
+        // res.json({ itinerary: generatedItinerary });
+        */
 
     } catch (error) {
         console.error("❌ Fatal Error: Both models failed.", error);
@@ -181,6 +217,13 @@ app.post('/api/generate-visa', async (req, res) => {
         const userCountry = req.body.country;
         if (!userCountry) return res.status(400).json({ error: "Country is required" });
 
+        const visa = loadGuide('visa', userCountry);
+        if (!visa) {
+            return res.status(404).json({ error: `No visa data is available for ${userCountry}.` });
+        }
+        return res.json({ visa });
+
+        /* Gemini prompt retained for future use (disabled).
         const prompt = `
 <SYSTEM_INSTRUCTION>
 You are an expert travel planner and visa consultant. You will generate tailored visa requirements for the requested country by following the provided framework, strictly applying the overrides below.
@@ -203,20 +246,11 @@ Output entirely in rich Markdown. Use proper H2 (##) and H3 (###) headers. Use t
 Generate the visa requirements for: ${userCountry}.
 `;
 
-        let generatedVisa = "";
+        // const generatedVisa = await generateWithGemini(prompt);
+        // console.log(`✅ Success: Generated visa requirements for ${userCountry}.`);
 
-        try {
-            const flashResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-flash' }).generateContent(prompt);
-            generatedVisa = flashResponse.response.text();
-            console.log(`✅ Success: Generated visa requirements for ${userCountry} using Flash 1.5 model.`);
-        } catch (flashError) {
-            console.warn(`⚠️ Flash 1.5 model failed. Attempting seamless fallback to pro model...`);
-            const proResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-pro' }).generateContent(prompt);
-            generatedVisa = proResponse.response.text();
-            console.log(`✅ Success: Generated visa requirements for ${userCountry} using Pro 1.5 model fallback.`);
-        }
-
-        res.json({ visa: generatedVisa });
+        // res.json({ visa: generatedVisa });
+        */
 
     } catch (error) {
         console.error("❌ Fatal Error: Both models failed.", error);
@@ -235,6 +269,13 @@ app.post('/api/generate-survival-kit', async (req, res) => {
         const userCountry = req.body.country;
         if (!userCountry) return res.status(400).json({ error: "Country is required" });
 
+        const survivalKit = loadGuide('survivalKit', userCountry);
+        if (!survivalKit) {
+            return res.status(404).json({ error: `No survival-kit data is available for ${userCountry}.` });
+        }
+        return res.json({ survivalKit });
+
+        /* Gemini prompt retained for future use (disabled).
         const prompt = `
 <SYSTEM_INSTRUCTION>
 You are an expert travel planner. You will generate a tailored survival kit by following the provided framework, strictly applying the overrides below.
@@ -259,20 +300,11 @@ Output entirely in rich Markdown. Use proper H2 (##) and H3 (###) headers. Use t
 Generate the survival kit for: ${userCountry}.
 `;
 
-        let generatedSurvivalKit = "";
+        // const generatedSurvivalKit = await generateWithGemini(prompt);
+        // console.log(`✅ Success: Generated survival kit for ${userCountry}.`);
 
-        try {
-            const flashResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-flash' }).generateContent(prompt);
-            generatedSurvivalKit = flashResponse.response.text();
-            console.log(`✅ Success: Generated survival kit for ${userCountry} using Flash 1.5 model.`);
-        } catch (flashError) {
-            console.warn(`⚠️ Flash 1.5 model failed. Attempting seamless fallback to pro model...`);
-            const proResponse = await ai.getGenerativeModel({ model: 'gemini-1.5-pro' }).generateContent(prompt);
-            generatedSurvivalKit = proResponse.response.text();
-            console.log(`✅ Success: Generated survival kit for ${userCountry} using Pro 1.5 model fallback.`);
-        }
-
-        res.json({ survivalKit: generatedSurvivalKit });
+        // res.json({ survivalKit: generatedSurvivalKit });
+        */
 
     } catch (error) {
         console.error("❌ Fatal Error: Both models failed.", error);

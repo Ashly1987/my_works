@@ -4967,7 +4967,7 @@
         const timeSpan = tagsContainer.querySelector("span");
 
         try {
-          const response = await fetch("/.netlify/functions/api/generate-itinerary", {
+          const response = await fetch("/api/generate-itinerary", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ country: country }),
@@ -5134,7 +5134,7 @@
         grid.classList.add("hidden");
 
         try {
-          const response = await fetch("/.netlify/functions/api/generate-itinerary", {
+          const response = await fetch("/api/generate-itinerary", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ country: countryName }),
@@ -5202,7 +5202,7 @@
         grid.classList.add("hidden");
 
         try {
-          const response = await fetch("/.netlify/functions/api/generate-survival-kit", {
+          const response = await fetch("/api/generate-survival-kit", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ country: countryName }),
@@ -5278,7 +5278,7 @@
         grid.classList.add("hidden");
 
         try {
-          const response = await fetch("/.netlify/functions/api/generate-visa", {
+          const response = await fetch("/api/generate-visa", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ country: apiCountryName }),
@@ -5343,7 +5343,7 @@
           return;
         }
 
-        const response = await fetch("/.netlify/functions/api/download-pdf", {
+        const response = await fetch("/api/download-pdf", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ htmlContent: content, country: country }),
@@ -5452,7 +5452,7 @@
 
       const updateViewDisplay = async () => {
         try {
-          const response = await fetch("/.netlify/functions/api/get-view-reports");
+          const response = await fetch("/api/get-view-reports");
           const data = await response.json();
 
           if (data) {
@@ -5466,7 +5466,7 @@
 
       const recordPageView = async () => {
         try {
-          await fetch("/.netlify/functions/api/record-view", {
+          await fetch("/api/record-view", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
