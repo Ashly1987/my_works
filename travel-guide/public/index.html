@@ -327,6 +327,128 @@
         gap: 12px;
       }
 
+      .brand-lockup {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .brand-tagline {
+        color: var(--color-muted);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        line-height: 1.2;
+      }
+
+      .travel-pillars {
+        max-width: 760px;
+        margin-top: 2.25rem;
+        border-top: 1px solid var(--color-border);
+      }
+
+      .travel-pillar {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .travel-pillar__title {
+        color: var(--color-accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        line-height: 1.5;
+        text-transform: uppercase;
+      }
+
+      .travel-pillar__title strong {
+        color: var(--color-text);
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        text-transform: none;
+      }
+
+      .travel-pillar__description {
+        max-width: 680px;
+        margin-top: 0.35rem;
+        color: var(--color-muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .pillar-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-top: 0.85rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--color-accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        line-height: 1.5;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .intro-toggle {
+        margin: 0 0 0 0.4rem;
+        vertical-align: baseline;
+      }
+
+      .pillar-toggle:hover {
+        color: var(--color-text);
+      }
+
+      .pillar-toggle__icon {
+        font-size: 15px;
+        line-height: 1;
+        transition: transform 160ms ease;
+      }
+
+      .pillar-toggle[aria-expanded="true"] .pillar-toggle__icon {
+        transform: rotate(45deg);
+      }
+
+      @media (min-width: 769px) {
+        .views-panel {
+          min-width: 140px;
+          gap: 8px;
+          padding: 8px 12px;
+        }
+
+        .views-panel__head {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          padding-bottom: 7px;
+          border-bottom: 1px solid var(--color-border);
+        }
+
+        .report-button {
+          justify-self: end;
+        }
+
+        .views-panel .views-stats {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0;
+          margin-top: 0;
+        }
+
+        .views-panel .views-stat {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          gap: 8px;
+          align-items: baseline;
+        }
+
+        .views-panel .views-stat + .views-stat {
+          justify-self: end;
+        }
+      }
+
       .result-action-group {
         display: flex;
         align-items: center;
@@ -486,29 +608,28 @@
         class="mx-auto flex h-auto md:h-[82px] w-full max-w-[1120px] items-center justify-between px-4 py-4 md:px-8 md:py-0 relative"
       >
         <!-- Left: Branding -->
-        <div
-          class="font-serif text-[18px] md:text-[24px] font-semibold italic tracking-[-0.03em] text-monograph-accent"
-        >
-          TRAVEL EASE WITH ASH
+        <div class="brand-lockup">
+          <div
+            class="font-serif text-[18px] md:text-[24px] font-semibold italic tracking-[-0.03em] text-monograph-accent"
+          >
+            TRAVEL EASE WITH ASH
+          </div>
+          <p class="brand-tagline">KNOW BEFORE YOU GO</p>
         </div>
 
         <!-- Middle: Theme Switcher (Centered on Desktop) -->
         <div class="hidden md:flex absolute left-1/2 -translate-x-1/2">
           <div class="theme-switcher">
-            <div class="theme-dot" data-theme-id="noir" title="Noir Gold"></div>
             <div class="theme-dot active" data-theme-id="obsidian" title="Obsidian Amber"></div>
             <div class="theme-dot" data-theme-id="emerald" title="Emerald Velvet"></div>
-            <div class="theme-dot" data-theme-id="royal" title="Royal Crimson"></div>
           </div>
         </div>
 
         <!-- Right: Mobile Switcher + Stats Panel -->
         <div class="flex items-center gap-3">
           <div class="theme-switcher md:hidden !p-1.5 !gap-2">
-            <div class="theme-dot !w-3.5 !h-3.5" data-theme-id="noir"></div>
             <div class="theme-dot active !w-3.5 !h-3.5" data-theme-id="obsidian"></div>
             <div class="theme-dot !w-3.5 !h-3.5" data-theme-id="emerald"></div>
-            <div class="theme-dot !w-3.5 !h-3.5" data-theme-id="royal"></div>
           </div>
 
           <aside class="views-panel" aria-labelledby="views-title">
@@ -554,17 +675,32 @@
     </header>
 
     <main class="mx-auto w-full max-w-[1120px] px-6 pb-20 pt-14 md:px-8">
-      <section class="max-w-[560px]">
+      <section class="max-w-[760px]">
         <h1
-          class="font-serif text-[42px] font-normal leading-none tracking-[-0.04em] text-monograph-text md:text-[48px]"
+          class="font-serif text-[36px] font-normal leading-none tracking-[-0.04em] text-monograph-text md:text-[42px]"
         >
-          Discover
+          Travel Smarter. Travel Ready.
         </h1>
         <p
           class="mt-4 text-[17px] font-normal leading-[1.55] text-monograph-muted"
         >
-          Curated experiences for the discerning traveler.
+          From Visa to Vacation &mdash; Everything in One Place.<button id="visa-requirements-toggle" class="pillar-toggle intro-toggle" type="button" aria-expanded="false" aria-controls="travel-pillars"><span>See more</span><span class="pillar-toggle__icon" aria-hidden="true">+</span></button>
         </p>
+
+        <div id="travel-pillars" class="travel-pillars hidden" aria-label="How Travel Ease With Ash helps you prepare">
+          <article class="travel-pillar">
+            <p class="travel-pillar__title">Itinerary <span aria-hidden="true">&mdash;</span> <strong>Know where to go.</strong></p>
+            <p class="travel-pillar__description">Curated day-by-day plans with destinations, experiences, timing and practical travel details.</p>
+          </article>
+          <article class="travel-pillar">
+            <p class="travel-pillar__title">Survival Kit <span aria-hidden="true">&mdash;</span> <strong>Know what to expect.</strong></p>
+            <p class="travel-pillar__description">Essential country information covering connectivity, money, transport, food, customs and safety.</p>
+          </article>
+          <article class="travel-pillar">
+            <p class="travel-pillar__title">Visa Requirements <span aria-hidden="true">&mdash;</span> <strong>Know if you can go.</strong></p>
+            <p class="travel-pillar__description">Clear visa and entry guidance covering eligibility, documents, costs and requirements.</p>
+          </article>
+        </div>
       </section>
 
       <section class="mt-12">
@@ -4390,7 +4526,14 @@
         </nav>
 
         <div class="font-serif text-[13px] italic text-monograph-muted">
-          © 2024 TRAVEL EASE WITH ASH. A LUXURY TRAVEL CURATION.
+          © 2026.
+          <a
+            href="https://www.instagram.com/ashlydeedward?utm_source=qr"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-semibold not-italic text-monograph-accent underline decoration-monograph-accent underline-offset-4 transition-colors hover:text-monograph-text"
+            >INSTAGRAM: ASHTAGRAM</a
+          >
         </div>
       </div>
     </footer>
@@ -4802,7 +4945,11 @@
       document.addEventListener("DOMContentLoaded", () => {
         // Theme Switching Logic
         const themeDots = document.querySelectorAll(".theme-dot");
-        const savedTheme = localStorage.getItem("monograph-theme") || "noir";
+        const supportedThemes = new Set(["obsidian", "emerald"]);
+        const storedTheme = localStorage.getItem("monograph-theme");
+        const savedTheme = supportedThemes.has(storedTheme)
+          ? storedTheme
+          : "obsidian";
 
         const setTheme = (themeId) => {
           document.documentElement.setAttribute("data-theme", themeId);
@@ -4825,6 +4972,20 @@
 
         // Initialize theme
         setTheme(savedTheme);
+
+        const travelPillars = document.getElementById("travel-pillars");
+        const visaRequirementsToggle = document.getElementById(
+          "visa-requirements-toggle",
+        );
+        visaRequirementsToggle?.addEventListener("click", () => {
+          const isExpanded =
+            visaRequirementsToggle.getAttribute("aria-expanded") === "true";
+          travelPillars.classList.toggle("hidden", isExpanded);
+          visaRequirementsToggle.setAttribute("aria-expanded", String(!isExpanded));
+          visaRequirementsToggle.querySelector("span").textContent = isExpanded
+            ? "See more"
+            : "See less";
+        });
 
         const datalist = document.getElementById("country-list");
 
@@ -5459,9 +5620,12 @@
         const postHtml = `
           <div style="mso-element:footer" id="f1">
             <p class="footer-text">
-              COPYRIGHT &copy; 2026 ASH - INSTA: <a href="https://www.instagram.com/ashlydeedward?igsh=MmQ1cG9uMTlmNWc1&amp;utm_source=qr" style="color: #666666; text-decoration: underline;">@ASHTAGRAM</a>
+              COPYRIGHT &copy; 2026 ASH - <a href="https://www.instagram.com/ashlydeedward?utm_source=qr" target="_blank" style="color: #b8860b; text-decoration: underline; font-weight: 700;">INSTA: ASHTAGRAM</a>
             </p>
           </div>
+          <p class="footer-text">
+            COPYRIGHT &copy; 2026 ASH - <a href="https://www.instagram.com/ashlydeedward?utm_source=qr" target="_blank" style="color: #b8860b; text-decoration: underline; font-weight: 700;">INSTA: ASHTAGRAM</a>
+          </p>
         </div></body></html>`;
         const html = preHtml + content + postHtml;
 

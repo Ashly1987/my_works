@@ -416,18 +416,23 @@ app.post('/api/download-pdf', async (req, res) => {
                         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
                         th, td { border-bottom: 1px solid #333; padding: 12px; text-align: left; }
                         th { color: #d4af37; }
+                        .export-credit { margin-top: 42px; padding-top: 14px; border-top: 1px solid #333; text-align: center; color: #999999; font-size: 11px; font-weight: 500; }
+                        .export-credit a { color: #999999; text-decoration: underline; }
                     </style>
                 </head>
                 <body>
                     <h1>Lumière | ${country}</h1>
                     ${htmlContent}
+                    <div class="export-credit">
+                        COPYRIGHT &copy; 2026 - <a href="https://www.instagram.com/ashlydeedward?utm_source=qr" target="_blank" style="color: #d4af37; font-weight: 700;">INSTAGRAM: ASHTAGRAM</a>
+                    </div>
                 </body>
             </html>
         `, { waitUntil: 'domcontentloaded', timeout: 15000 });
 
         const footerHtml = `
             <div style="width: 100%; text-align: center; font-size: 11px; color: #999999; font-weight: 500; font-family: sans-serif; padding-bottom: 10px;">
-                COPYRIGHT &copy; 2026 ASH - INSTA: <a href="https://www.instagram.com/ashlydeedward?igsh=MmQ1cG9uMTlmNWc1&utm_source=qr" style="color: #999999; text-decoration: underline;">@ASHTAGRAM</a>
+                COPYRIGHT &copy; 2026 - <a href="https://www.instagram.com/ashlydeedward?utm_source=qr" style="color: #d4af37; text-decoration: underline; font-weight: 700;">INSTAGRAM: ASHTAGRAM</a>
             </div>
         `;
 
