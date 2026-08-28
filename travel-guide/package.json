@@ -14,7 +14,7 @@
   "dependencies": {
     "@google-cloud/vertexai": "*",
     "@google/genai": "*",
-    "@sparticuz/chromium": "*",
+    "@sparticuz/chromium": "^149.0.0",
     "axios": "*",
     "cors": "*",
     "dotenv": "*",
@@ -22,7 +22,7 @@
     "firebase": "*",
     "firebase-admin": "*",
     "jsdom": "*",
-    "puppeteer-core": "*",
+    "puppeteer-core": "^25.9.0",
     "serverless-http": "^4.0.0"
   }
 }
