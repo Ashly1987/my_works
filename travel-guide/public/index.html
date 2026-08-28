@@ -327,6 +327,12 @@
         gap: 12px;
       }
 
+      .result-action-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
       @media (max-width: 768px) {
         .views-panel {
           min-width: auto;
@@ -345,6 +351,44 @@
         .theme-dot {
           width: 16px;
           height: 16px;
+        }
+
+        #result-container {
+          margin-top: 2.5rem;
+          padding: 1.25rem;
+        }
+
+        #result-actions {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.75rem;
+        }
+
+        .result-action-group {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          width: 100%;
+          gap: 0.5rem;
+        }
+
+        .result-action-group button {
+          min-width: 0;
+          min-height: 44px;
+          margin-left: 0 !important;
+          padding: 0.65rem 0.5rem;
+          line-height: 1.25;
+          letter-spacing: 0.1em;
+        }
+
+        #result {
+          overflow-wrap: anywhere;
+        }
+
+        #result table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
         }
       }
 
@@ -610,9 +654,10 @@
         class="hidden mt-16 w-full max-w-[900px] border border-monograph-border bg-monograph-surface p-8 md:p-12 shadow-2xl"
       >
         <div
+          id="result-actions"
           class="flex justify-between items-center mb-8 border-b border-monograph-border pb-6"
         >
-          <div>
+          <div class="result-action-group">
             <button
               id="view-itinerary-btn"
               class="hidden px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
@@ -632,7 +677,7 @@
               View Visa Info
             </button>
           </div>
-          <div class="flex gap-4">
+          <div class="result-action-group">
             <button
               onclick="downloadPDF()"
               class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] uppercase tracking-[0.15em] hover:bg-monograph-border transition-colors"
@@ -5341,6 +5386,36 @@
         }
       }
 
+      async function saveGeneratedFile(blob, filename) {
+        const canUseShareSheet =
+          typeof File !== "undefined" &&
+          navigator.share &&
+          navigator.canShare;
+
+        if (canUseShareSheet) {
+          const file = new File([blob], filename, { type: blob.type });
+          if (navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({ files: [file], title: filename });
+              return;
+            } catch (error) {
+              // A cancelled share sheet should not trigger an unexpected download.
+              if (error.name === "AbortError") return;
+            }
+          }
+        }
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      }
+
       async function downloadPDF() {
         const content = document.getElementById("result").innerHTML;
         const country =
@@ -5351,31 +5426,27 @@
           return;
         }
 
-        const response = await fetch("/api/download-pdf", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ htmlContent: content, country: country }),
-        });
+        try {
+          const response = await fetch("/api/download-pdf", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ htmlContent: content, country: country }),
+          });
 
-        if (response.ok) {
+          if (!response.ok) throw new Error("PDF generation failed");
+
           const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-
           const viewType =
             document.getElementById("result-container").dataset.viewType ||
             "Itinerary";
-          const docType = viewType;
-
-          a.download = `${country}_${docType}.pdf`;
-          a.click();
-        } else {
+          await saveGeneratedFile(blob, `${country}_${viewType}.pdf`);
+        } catch (error) {
+          console.error("PDF download failed:", error);
           alert("Could not generate high-quality PDF.");
         }
       }
 
-      function downloadWord() {
+      async function downloadWord() {
         const content = document.getElementById("result").innerHTML;
 
         const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -5411,10 +5482,6 @@
 
         const blob = new Blob(["\ufeff", html], { type: "application/msword" });
 
-        const url =
-          "data:application/vnd.ms-word;charset=utf-8," +
-          encodeURIComponent(html);
-
         const country =
           document.getElementById("destination-search").value || "Itinerary";
         const viewType =
@@ -5423,17 +5490,11 @@
         const docType = viewType;
         const filename = `${country}_${docType}.doc`;
 
-        const downloadLink = document.createElement("a");
-        document.body.appendChild(downloadLink);
-
         if (navigator.msSaveOrOpenBlob) {
           navigator.msSaveOrOpenBlob(blob, filename);
         } else {
-          downloadLink.href = url;
-          downloadLink.download = filename;
-          downloadLink.click();
+          await saveGeneratedFile(blob, filename);
         }
-        document.body.removeChild(downloadLink);
       }
     </script>
     <script>
