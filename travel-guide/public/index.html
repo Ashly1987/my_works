@@ -5474,31 +5474,17 @@
 
       const recordPageView = async () => {
         try {
-          const location = await new Promise((resolve) => {
-            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const fallback = timeZone ? `Timezone: ${timeZone}` : "Location unavailable";
-
-            if (!navigator.geolocation) {
-              resolve(fallback);
-              return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-              ({ coords }) => {
-                // Store an approximate location only (about 1 km precision), not exact coordinates.
-                resolve(`Approx. location: ${coords.latitude.toFixed(2)}, ${coords.longitude.toFixed(2)}`);
-              },
-              () => resolve(fallback),
-              { enableHighAccuracy: false, timeout: 8000, maximumAge: 86400000 },
-            );
-          });
+          const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const fallbackLocation = timeZone ? `Timezone: ${timeZone}` : "Location unavailable";
 
           const response = await fetch("/api/record-view", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ location }),
+            // The server uses Vercel's city/region/country IP headers. This is
+            // only a fallback for local development or unavailable IP metadata.
+            body: JSON.stringify({ fallbackLocation }),
           });
           if (!response.ok) throw new Error(`View recording failed (${response.status})`);
           updateViewDisplay(); // Update display after recording view

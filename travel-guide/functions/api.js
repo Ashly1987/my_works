@@ -139,6 +139,26 @@ const recordLocalView = (location) => {
 
 const reportsDocument = () => firestoreDb.collection('analytics').doc('viewReports');
 
+const decodeHeader = (value) => {
+    if (!value) return '';
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
+};
+
+const getCityLevelLocation = (req) => {
+    const city = decodeHeader(req.get('x-vercel-ip-city'));
+    const region = decodeHeader(req.get('x-vercel-ip-country-region'));
+    const country = decodeHeader(req.get('x-vercel-ip-country'));
+    const parts = [city, region, country].filter(Boolean);
+
+    // Vercel derives this from the visitor's IP. It is city-level analytics,
+    // not precise browser GPS location.
+    return parts.length ? parts.join(', ') : '';
+};
+
 app.get('/api/get-view-reports', async (_req, res) => {
     try {
         if (!firestoreDb) return res.json(buildViewReport());
@@ -152,7 +172,9 @@ app.get('/api/get-view-reports', async (_req, res) => {
 });
 
 app.post('/api/record-view', async (req, res) => {
-    const location = String(req.body?.location || 'Location unavailable').slice(0, 120);
+    const location = String(
+        getCityLevelLocation(req) || req.body?.fallbackLocation || 'Location unavailable',
+    ).slice(0, 120);
 
     try {
         if (!firestoreDb) return res.status(201).json(buildViewReport(recordLocalView(location)));
