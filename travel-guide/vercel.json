@@ -1,6 +1,21 @@
 {
   "functions": {
-    "api/*.js": {
+    "api/generate-itinerary.js": {
+      "includeFiles": "data/**"
+    },
+    "api/generate-survival-kit.js": {
+      "includeFiles": "data/**"
+    },
+    "api/generate-visa.js": {
+      "includeFiles": "data/**"
+    },
+    "api/download-pdf.js": {
+      "includeFiles": "data/**"
+    },
+    "api/get-view-reports.js": {
+      "includeFiles": "data/**"
+    },
+    "api/record-view.js": {
       "includeFiles": "data/**"
     }
   }

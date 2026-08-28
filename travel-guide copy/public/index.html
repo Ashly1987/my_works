@@ -1,0 +1,3895 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Monograph | Discover</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Noto+Serif:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ["var(--font-serif)", "Noto Serif", "serif"],
+              sans: ["var(--font-sans)", "Manrope", "sans-serif"],
+              display: ["var(--font-display)", "serif"],
+            },
+            colors: {
+              monograph: {
+                bg: "var(--color-bg)",
+                surface: "var(--color-surface)",
+                surfaceSoft: "var(--color-surface-soft)",
+                border: "var(--color-border)",
+                text: "var(--color-text)",
+                muted: "var(--color-muted)",
+                subtle: "var(--color-subtle)",
+                tagBg: "var(--color-tag-bg)",
+                tagBorder: "var(--color-tag-border)",
+                tagText: "var(--color-tag-text)",
+                accent: "var(--color-accent)",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        /* Default: Noir (Original but refined) */
+        --font-serif: "Noto Serif", serif;
+        --font-sans: "Manrope", sans-serif;
+        --font-display: "Noto Serif", serif;
+
+        --color-bg: #111111;
+        --color-surface: #171717;
+        --color-surface-soft: #1d1d1d;
+        --color-border: #2a2a2a;
+        --color-text: #f3eee7;
+        --color-muted: #b3a99d;
+        --color-subtle: #7c746a;
+        --color-tag-bg: #1d2b21;
+        --color-tag-border: #34513d;
+        --color-tag-text: #a4d2a7;
+        --color-accent: #a4d2a7;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(110, 95, 79, 0.14),
+            transparent 34%
+          ),
+          linear-gradient(180deg, #111111 0%, #0d0d0d 100%);
+      }
+
+      [data-theme="obsidian"] {
+        --font-serif: "Playfair Display", serif;
+        --font-sans: "Outfit", sans-serif;
+        --font-display: "Cinzel", serif;
+        --color-bg: #0f1115;
+        --color-surface: #161a22;
+        --color-surface-soft: #1f242d;
+        --color-border: #2d343f;
+        --color-text: #e2e8f0;
+        --color-muted: #94a3b8;
+        --color-subtle: #64748b;
+        --color-tag-bg: #1e293b;
+        --color-tag-border: #334155;
+        --color-tag-text: #94a3b8;
+        --color-accent: #fbbf24;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(251, 191, 36, 0.08),
+            transparent 40%
+          ),
+          linear-gradient(180deg, #0f1115 0%, #080a0d 100%);
+      }
+
+      [data-theme="emerald"] {
+        --font-serif: "Cormorant Garamond", serif;
+        --font-sans: "Manrope", sans-serif;
+        --font-display: "Playfair Display", serif;
+        --color-bg: #061210;
+        --color-surface: #0a1d1a;
+        --color-surface-soft: #0f2b26;
+        --color-border: #163d37;
+        --color-text: #ecfdf5;
+        --color-muted: #a7f3d0;
+        --color-subtle: #34d399;
+        --color-tag-bg: #064e3b;
+        --color-tag-border: #065f46;
+        --color-tag-text: #6ee7b7;
+        --color-accent: #10b981;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(16, 185, 129, 0.1),
+            transparent 40%
+          ),
+          linear-gradient(180deg, #061210 0%, #020605 100%);
+      }
+
+      [data-theme="royal"] {
+        --font-serif: "Noto Serif", serif;
+        --font-sans: "Outfit", sans-serif;
+        --font-display: "Cinzel", serif;
+        --color-bg: #1a0f0f;
+        --color-surface: #261616;
+        --color-surface-soft: #331d1d;
+        --color-border: #4a2b2b;
+        --color-text: #fff5f5;
+        --color-muted: #fecaca;
+        --color-subtle: #f87171;
+        --color-tag-bg: #7f1d1d;
+        --color-tag-border: #991b1b;
+        --color-tag-text: #fca5a5;
+        --color-accent: #dc2626;
+        --bg-gradient:
+          radial-gradient(
+            circle at top,
+            rgba(220, 38, 38, 0.12),
+            transparent 45%
+          ),
+          linear-gradient(180deg, #1a0f0f 0%, #100808 100%);
+      }
+
+      body {
+        background: var(--bg-gradient);
+        color: var(--color-text);
+        transition:
+          background 0.5s ease,
+          color 0.5s ease;
+      }
+
+      .btn-luxury {
+        height: 40px;
+        border: 1px solid var(--color-border);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--color-text);
+        background: transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .btn-luxury:hover {
+        color: var(--color-bg);
+        background-color: var(--color-text);
+        border-color: var(--color-text);
+      }
+
+      .btn-luxury-outline {
+        height: 40px;
+        border: 1px solid var(--color-border);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--color-muted);
+        background: transparent;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .btn-luxury-outline:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+      }
+
+      .destination-card__art {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .destination-card__art::before {
+        display: none;
+      }
+
+      .destination-card--kyoto .destination-card__art::before {
+        background:
+          linear-gradient(
+            115deg,
+            rgba(49, 39, 39, 0.94),
+            rgba(49, 39, 39, 0.46) 45%,
+            rgba(79, 60, 63, 0.78)
+          ),
+          radial-gradient(
+            circle at 68% 22%,
+            rgba(255, 246, 240, 0.18) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 72% 27%,
+            rgba(255, 246, 240, 0.14) 0 5%,
+            transparent 5.5%
+          ),
+          radial-gradient(
+            circle at 78% 17%,
+            rgba(255, 246, 240, 0.14) 0 5%,
+            transparent 5.5%
+          ),
+          radial-gradient(
+            circle at 83% 23%,
+            rgba(255, 246, 240, 0.16) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 58% 65%,
+            rgba(138, 92, 102, 0.34) 0 8%,
+            transparent 8.5%
+          ),
+          radial-gradient(
+            circle at 64% 72%,
+            rgba(138, 92, 102, 0.3) 0 7%,
+            transparent 7.5%
+          ),
+          radial-gradient(
+            circle at 70% 60%,
+            rgba(138, 92, 102, 0.28) 0 6%,
+            transparent 6.5%
+          ),
+          radial-gradient(
+            circle at 79% 71%,
+            rgba(138, 92, 102, 0.24) 0 7%,
+            transparent 7.5%
+          ),
+          radial-gradient(
+            circle at 87% 58%,
+            rgba(138, 92, 102, 0.22) 0 6%,
+            transparent 6.5%
+          );
+      }
+
+      .destination-card--amalfi .destination-card__art::before {
+        background:
+          linear-gradient(
+            160deg,
+            rgba(33, 41, 49, 0.95),
+            rgba(56, 44, 35, 0.9)
+          ),
+          linear-gradient(
+            145deg,
+            transparent 28%,
+            rgba(255, 255, 255, 0.08) 35%,
+            transparent 43%,
+            transparent 49%,
+            rgba(255, 255, 255, 0.05) 57%,
+            transparent 65%
+          ),
+          linear-gradient(
+            145deg,
+            transparent 52%,
+            rgba(255, 230, 196, 0.08) 58%,
+            transparent 66%
+          );
+      }
+
+      .search-shadow:focus-within {
+        box-shadow: 0 0 0 1px #8e8376;
+      }
+
+      .destination-card {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .destination-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--color-accent);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      .destination-card__art {
+        position: relative;
+        overflow: hidden;
+        filter: grayscale(0.2) contrast(1.1);
+        transition: filter 0.4s ease;
+      }
+
+      .destination-card:hover .destination-card__art {
+        filter: grayscale(0) contrast(1);
+      }
+
+      .destination-card__art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 60%,
+          rgba(0, 0, 0, 0.9) 100%
+        );
+        z-index: 1;
+      }
+
+      .destination-card__art > div {
+        position: relative;
+        z-index: 2;
+      }
+
+      .views-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background-color: var(--color-surface-soft);
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid var(--color-border);
+        min-width: 160px;
+        margin-left: 20px;
+      }
+
+      .views-panel__head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      #views-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-muted);
+      }
+
+      .report-button {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 220ms ease;
+      }
+
+      .report-button:hover {
+        border-color: var(--color-accent);
+      }
+
+      .views-stats {
+        display: flex;
+        gap: 16px;
+      }
+
+      .views-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .views-stat span {
+        font-size: 12px;
+        color: var(--color-subtle);
+      }
+
+      .views-stat strong {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      /* Theme Switcher Styles */
+      .theme-switcher {
+        display: flex;
+        gap: 12px;
+        background: var(--color-surface);
+        padding: 8px;
+        border-radius: 9999px;
+        border: 1px solid var(--color-border);
+      }
+
+      .theme-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+      }
+
+      .theme-dot:hover {
+        transform: scale(1.2);
+      }
+
+      .theme-dot.active {
+        border-color: var(--color-text);
+        box-shadow: 0 0 10px var(--color-accent);
+      }
+
+      .theme-dot[data-theme-id="noir"] {
+        background-color: #a4d2a7;
+      }
+      .theme-dot[data-theme-id="obsidian"] {
+        background-color: #fbbf24;
+      }
+      .theme-dot[data-theme-id="emerald"] {
+        background-color: #10b981;
+      }
+      .theme-dot[data-theme-id="royal"] {
+        background-color: #dc2626;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen font-sans antialiased">
+    <header class="border-b border-monograph-border bg-monograph-surface">
+      <div
+        class="mx-auto flex h-[82px] w-full max-w-[1120px] items-center justify-between px-6 md:px-8"
+      >
+        <div
+          class="font-serif text-[24px] font-semibold italic tracking-[-0.03em] text-monograph-text"
+        >
+          THE MONOGRAPH
+        </div>
+
+        <div class="theme-switcher">
+          <div
+            class="theme-dot active"
+            data-theme-id="noir"
+            title="Noir Gold"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="obsidian"
+            title="Obsidian Amber"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="emerald"
+            title="Emerald Velvet"
+          ></div>
+          <div
+            class="theme-dot"
+            data-theme-id="royal"
+            title="Royal Crimson"
+          ></div>
+        </div>
+
+        <aside class="views-panel" aria-labelledby="views-title">
+          <div class="views-panel__head">
+            <h2 id="views-title">Views</h2>
+            <a class="report-button" id="report-button" href="report.html">
+              Report
+            </a>
+          </div>
+
+          <div class="views-stats">
+            <div class="views-stat">
+              <span>Today</span>
+              <strong id="daily-views">0</strong>
+            </div>
+            <div class="views-stat">
+              <span>Total</span>
+              <strong id="total-views">0</strong>
+            </div>
+          </div>
+        </aside>
+
+        <!-- <div class="flex items-center gap-6 text-monograph-text">
+          <button
+            type="button"
+            aria-label="Bookmarks"
+            class="transition-opacity hover:opacity-70"
+          >
+            <span class="material-symbols-outlined text-[26px]">bookmark</span>
+          </button>
+          <button
+            type="button"
+            aria-label="Account"
+            class="transition-opacity hover:opacity-70"
+          >
+            <span class="material-symbols-outlined text-[28px]"
+              >account_circle</span
+            >
+          </button>
+        </div>-->
+      </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-[1120px] px-6 pb-20 pt-14 md:px-8">
+      <section class="max-w-[560px]">
+        <h1
+          class="font-serif text-[42px] font-normal leading-none tracking-[-0.04em] text-monograph-text md:text-[48px]"
+        >
+          Discover
+        </h1>
+        <p
+          class="mt-4 text-[17px] font-normal leading-[1.55] text-monograph-muted"
+        >
+          Curated experiences for the discerning traveler.
+        </p>
+      </section>
+
+      <section class="mt-12">
+        <div
+          class="flex flex-wrap gap-6 text-[12px] font-semibold uppercase tracking-[0.1em] text-monograph-subtle"
+        >
+          <button
+            type="button"
+            id="tab-all"
+            class="tab-btn border-b-2 border-monograph-text pb-[9px] text-monograph-text"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            id="tab-global"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            Global
+          </button>
+          <button
+            type="button"
+            id="tab-india"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            India
+          </button>
+          <button
+            type="button"
+            id="tab-usa"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            USA
+          </button>
+          <button
+            type="button"
+            id="tab-canada"
+            class="tab-btn pb-[11px] transition-colors hover:text-monograph-text"
+          >
+            Canada
+          </button>
+        </div>
+      </section>
+
+      <section class="mt-10 max-w-[600px]">
+        <label
+          for="destination-search"
+          class="block text-[12px] uppercase tracking-[0.1em] text-monograph-muted"
+        >
+          Search Destinations
+        </label>
+        <div
+          class="mt-3 flex items-center border border-monograph-border bg-monograph-surfaceSoft transition-shadow focus-within:ring-1 focus-within:ring-monograph-accent"
+        >
+          <input
+            id="destination-search"
+            type="text"
+            list="country-list"
+            autocomplete="off"
+            placeholder="Search for a country..."
+            class="h-[60px] w-full bg-transparent px-4 text-[15px] font-normal text-monograph-text placeholder:text-monograph-subtle focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:invert"
+          />
+          <datalist id="country-list"></datalist>
+          <button
+            id="clear-search"
+            class="hidden px-4 text-monograph-subtle hover:text-monograph-text material-symbols-outlined transition-colors"
+            onclick="clearSearch()"
+          >
+            close
+          </button>
+        </div>
+      </section>
+
+      <!-- Loading State -->
+      <div id="loading" class="hidden mt-16 flex-col items-center">
+        <div
+          class="h-10 w-10 animate-spin rounded-full border-2 border-monograph-muted border-t-monograph-text mb-4"
+        ></div>
+        <p class="font-serif italic text-monograph-muted text-[18px]">
+          Curating your perfect journey...
+        </p>
+      </div>
+
+      <!-- Result Container -->
+      <div
+        id="result-container"
+        class="hidden mt-16 w-full max-w-[900px] border border-monograph-border bg-monograph-surface p-8 md:p-12 shadow-2xl"
+      >
+        <div
+          class="flex justify-between items-center mb-8 border-b border-monograph-border pb-6"
+        >
+          <div class="flex gap-3">
+            <button
+              id="view-itinerary-btn"
+              class="hidden px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
+            >
+              View Itinerary
+            </button>
+            <button
+              id="view-survival-kit-btn"
+              class="hidden px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
+            >
+              View Survival Kit
+            </button>
+            <button
+              id="view-visa-btn"
+              class="hidden px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
+            >
+              View Visa Info
+            </button>
+          </div>
+          <div class="flex gap-4">
+            <button
+              onclick="downloadPDF()"
+              class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
+            >
+              Download PDF
+            </button>
+            <button
+              onclick="downloadWord()"
+              class="px-5 py-2 border border-monograph-border text-monograph-text text-[11px] font-semibold uppercase tracking-[0.15em] hover:bg-monograph-text hover:text-monograph-bg transition-colors"
+            >
+              Download Word
+            </button>
+          </div>
+        </div>
+        <div
+          id="result"
+          class="prose prose-invert prose-p:text-[#b3a99d] prose-headings:font-serif prose-headings:font-normal prose-headings:text-[#f3eee7] prose-h1:text-4xl prose-h2:text-2xl prose-h2:border-b prose-h2:border-monograph-border prose-h2:pb-3 prose-a:text-[#a4d2a7] max-w-none"
+        ></div>
+      </div>
+
+      <section
+        id="destinations-grid"
+        class="mt-9 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+      >
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="cambodia kingdom of wonder"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: -1"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/960px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Cambodia
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Kingdom of Wonder
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$840-$1,750
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-monograph-border pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Cambodia')"
+                class="btn-luxury"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Cambodia')"
+                class="btn-luxury-outline"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Cambodia')"
+                class="btn-luxury-outline"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="thailand land of smiles"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 0"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Thailand,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Thailand
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Land of Smiles
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$800-$1,500
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Thailand')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Thailand')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Thailand')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="bali indonesia island of the gods"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 1"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Bali,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Bali, Indonesia
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Island of the Gods
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - Oct</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$500-$1000
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Bali, Indonesia')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Bali, Indonesia')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Bali, Indonesia')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="new york usa the empire state"
+          data-tab-all="true"
+          data-tab-usa="true"
+          style="order: 2"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/New%20York,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                New York, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                The Empire State
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - Jun</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,800-$3,500
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('New York, USA')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('New York, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('New York, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="goa india beach paradise"
+          data-tab-all="true"
+          data-tab-india="true"
+          style="order: 3"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Goa,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Goa, India
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Beach Paradise
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Feb</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$700-$1,300
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Goa, India')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Goa, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Goa, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="japan the ancient capital & beyond"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 4"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Japan,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Japan
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                The Ancient Capital & Beyond
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Mar – May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept – Nov</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$845–$1,950
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Japan')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Japan')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Japan')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="kerala india god's own country"
+          data-tab-all="true"
+          data-tab-india="true"
+          style="order: 5"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Kerala,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Kerala, India
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                God's Own Country
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Mar</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$600-$1,200
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Kerala, India')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Kerala, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Kerala, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="vietnam timeless charm"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 6"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Vietnam,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Vietnam
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Timeless Charm
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Feb - Apr</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Aug - Oct</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$600-$1,200
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Vietnam')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Vietnam')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Vietnam')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="france city of light & wine"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 7"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/France,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                France
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                City of Light & Wine
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun – Aug</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,620–$3,240
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('France')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('France')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('France')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="kenya safari capital"
+          data-tab-all="true"
+          data-tab-global="true"
+          style="order: 8"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Kenya,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Kenya
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Safari Capital
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jul - Oct</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$2,000-$4,000
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Kenya')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Kenya')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Kenya')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="rajasthan india land of kings"
+          data-tab-india="true"
+          style="display: none; order: 9"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Rajasthan,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Rajasthan, India
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Land of Kings
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Oct - Mar</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$500-$1,000
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Rajasthan, India')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Rajasthan, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Rajasthan, India')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="california usa the golden state"
+          data-tab-usa="true"
+          style="display: none; order: 10"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/California,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                California, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                The Golden State
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Sept</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,500-$3,000
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('California, USA')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('California, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('California, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="hawaii usa aloha spirit"
+          data-tab-usa="true"
+          style="display: none; order: 11"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Hawaii,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Hawaii, USA
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Aloha Spirit
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Apr - May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Nov</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$2,000-$4,000
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Hawaii, USA')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Hawaii, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Hawaii, USA')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="british columbia canada pacific to rockies"
+          data-tab-canada="true"
+          style="display: none; order: 12"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/British%20Columbia,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                British Columbia, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Pacific to Rockies
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Sept</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,200-$2,500
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('British Columbia, Canada')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('British Columbia, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('British Columbia, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="quebec canada french charm"
+          data-tab-canada="true"
+          style="display: none; order: 13"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Quebec,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Quebec, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                French Charm
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,100-$2,300
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Quebec, Canada')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Quebec, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Quebec, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="alberta canada wild rose country"
+          data-tab-canada="true"
+          style="display: none; order: 14"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Alberta,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Alberta, Canada
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Wild Rose Country
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,300-$2,600
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Alberta, Canada')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Alberta, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Alberta, Canada')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="italy mediterranean charm"
+          data-tab-global="true"
+          style="display: none; order: 15"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Italy,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Italy
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Mediterranean Charm
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Sep</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,300-$2,700
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Italy')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Italy')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Italy')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="greece aegean jewel"
+          data-tab-global="true"
+          style="display: none; order: 16"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Greece,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Greece
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Aegean Jewel
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun - Aug</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,100-$2,400
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Greece')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Greece')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Greece')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="south africa the rainbow nation"
+          data-tab-global="true"
+          style="display: none; order: 17"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/South%20Africa,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                South Africa
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                The Rainbow Nation
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Nov - Mar</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$800-$1,600
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('South Africa')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('South Africa')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('South Africa')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="iceland land of fire & ice"
+          data-tab-global="true"
+          style="display: none; order: 18"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Iceland,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Iceland
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Land of Fire & Ice
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Jun – Aug</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  $2,590-$4,690
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Iceland')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Iceland')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Iceland')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="morocco the red city & desert"
+          data-tab-global="true"
+          style="display: none; order: 19"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Morocco,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Morocco
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                The Red City & Desert
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Mar - May</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Nov</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$700-$1,400
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Morocco')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Morocco')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Morocco')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+        <article
+          class="destination-card border border-monograph-border bg-monograph-surface flex flex-col"
+          data-region="global"
+          data-search="spain flamenco & tapas"
+          data-tab-global="true"
+          style="display: none; order: 20"
+        >
+          <div
+            class="destination-card__art flex min-h-[180px] items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]"
+            style="
+              background-image:
+                linear-gradient(
+                  to bottom,
+                  rgba(0, 0, 0, 0.1) 0%,
+                  rgba(0, 0, 0, 0.85) 100%
+                ),
+                url(&quot;https://loremflickr.com/800/600/Spain,landmark/all&quot;);
+              background-size: cover;
+              background-position: center;
+            "
+          >
+            <div class="relative z-10 w-full">
+              <h2
+                class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg"
+              >
+                Spain
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">
+                Flamenco & Tapas
+              </p>
+            </div>
+            <div
+              class="relative z-10 text-[32px] opacity-90 drop-shadow-md"
+            ></div>
+          </div>
+
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >May - Jun</span
+                  ><span
+                    class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap"
+                    >Sept - Oct</span
+                  >
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p
+                  class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none"
+                >
+                  Est. Budget / 7 Days
+                </p>
+                <p
+                  class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]"
+                >
+                  ~$1,100-$2,200
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-auto grid gap-3 border-t border-dashed border-[#2e2a27] pt-4 xl:grid-cols-3 mt-4"
+            >
+              <button
+                type="button"
+                onclick="generateItinerary('Spain')"
+                class="h-[40px] border border-[#8e8376] text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:bg-monograph-text hover:text-[#111111]"
+              >
+                Itinerary
+              </button>
+              <button
+                type="button"
+                onclick="generateSurvivalKit('Spain')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Survival Kit
+              </button>
+              <button
+                type="button"
+                onclick="generateVisa('Spain')"
+                class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-colors hover:border-[#8e8376]"
+              >
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="border-t border-monograph-border bg-monograph-surface">
+      <div
+        class="mx-auto flex w-full max-w-[1120px] flex-col gap-5 px-6 py-12 md:px-8 lg:flex-row lg:items-center lg:justify-between"
+      >
+        <div
+          class="font-serif text-[17px] italic tracking-[0.05em] text-monograph-text"
+        >
+          THE MONOGRAPH
+        </div>
+
+        <nav
+          class="flex flex-wrap gap-6 font-serif text-[15px] italic text-monograph-muted"
+        >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >The Manifesto</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Curators</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Terms</a
+          >
+          <a href="#" class="transition-colors hover:text-monograph-text"
+            >Inquiry</a
+          >
+        </nav>
+
+        <div class="font-serif text-[13px] italic text-monograph-muted">
+          © 2024 THE MONOGRAPH. A LUXURY TRAVEL CURATION.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const countries = [
+        "Afghanistan",
+        "Agra, Uttar Pradesh, India",
+        "Ahmedabad, Gujarat, India",
+        "Alabama, USA",
+        "Alaska, USA",
+        "Albania",
+        "Alberta, Canada",
+        "Alibaug, Maharashtra, India",
+        "Algeria",
+        "Alleppey, Kerala, India",
+        "Amritsar, Punjab, India",
+        "Andaman and Nicobar Islands, India",
+        "Andorra",
+        "Andhra Pradesh, India",
+        "Angola",
+        "Antigua and Barbuda",
+        "Araku Valley, Andhra Pradesh, India",
+        "Argentina",
+        "Arizona, USA",
+        "Arkansas, USA",
+        "Armenia",
+        "Arunachal Pradesh, India",
+        "Assam, India",
+        "Auli, Uttarakhand, India",
+        "Aurangabad, Maharashtra, India",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+        "Bahamas",
+        "Bahrain",
+        "Bali, Indonesia",
+        "Bangalore, Karnataka, India",
+        "Bangladesh",
+        "Barbados",
+        "Belarus",
+        "Belgium",
+        "Belize",
+        "Benin",
+        "Bhopal, Madhya Pradesh, India",
+        "Bhutan",
+        "Bhubaneswar, Odisha, India",
+        "Bhuj, Gujarat, India",
+        "Bihar, India",
+        "Bikaner, Rajasthan, India",
+        "Bolivia",
+        "Bosnia and Herzegovina",
+        "Botswana",
+        "Brazil",
+        "British Columbia, Canada",
+        "Brunei",
+        "Bulgaria",
+        "Burkina Faso",
+        "Burundi",
+        "Cabo Verde",
+        "California, USA",
+        "Cambodia",
+        "Cameroon",
+        "Canada",
+        "Central African Republic",
+        "Chad",
+        "Chandigarh, India",
+        "Chennai, Tamil Nadu, India",
+        "Cherrapunji, Meghalaya, India",
+        "Chhattisgarh, India",
+        "Chikmagalur, Karnataka, India",
+        "Chile",
+        "China",
+        "Colombia",
+        "Colorado, USA",
+        "Comoros",
+        "Congo (Congo-Brazzaville)",
+        "Connecticut, USA",
+        "Coonoor, Tamil Nadu, India",
+        "Coorg, India",
+        "Coorg, Karnataka, India",
+        "Costa Rica",
+        "Croatia",
+        "Cuba",
+        "Cyprus",
+        "Czechia",
+        "Côte d'Ivoire",
+        "Dadra and Nagar Haveli and Daman and Diu, India",
+        "Dalhousie, Himachal Pradesh, India",
+        "Darjeeling, West Bengal, India",
+        "Dawki, Meghalaya, India",
+        "Dehradun, Uttarakhand, India",
+        "Delaware, USA",
+        "Delhi, India",
+        "Democratic Republic of the Congo",
+        "Denmark",
+        "Dharamshala, Himachal Pradesh, India",
+        "District of Columbia, USA",
+        "Djibouti",
+        "Dominica",
+        "Dominican Republic",
+        "Dwarka, Gujarat, India",
+        "Ecuador",
+        "Egypt",
+        "El Salvador",
+        "Equatorial Guinea",
+        "Eritrea",
+        "Estonia",
+        "Eswatini",
+        "Ethiopia",
+        "Fiji",
+        "Finland",
+        "Florida, USA",
+        "France",
+        "Gabon",
+        "Gambia",
+        "Gangtok, Sikkim, India",
+        "Gaya, Bihar, India",
+        "Georgia",
+        "Georgia, USA",
+        "Germany",
+        "Ghana",
+        "Goa, India",
+        "Gokarna, Karnataka, India",
+        "Greece",
+        "Grenada",
+        "Guatemala",
+        "Guinea",
+        "Guinea-Bissau",
+        "Gujarat, India",
+        "Gulmarg, Jammu & Kashmir, India",
+        "Guwahati, Assam, India",
+        "Guyana",
+        "Gwalior, Madhya Pradesh, India",
+        "Haiti",
+        "Hampi, Karnataka, India",
+        "Haridwar, Uttarakhand, India",
+        "Haryana, India",
+        "Hawaii, USA",
+        "Himachal Pradesh, India",
+        "Honduras",
+        "Hong Kong",
+        "Hungary",
+        "Hyderabad, Telangana, India",
+        "Iceland",
+        "Idaho, USA",
+        "Igatpuri, Maharashtra, India",
+        "Illinois, USA",
+        "India",
+        "Indiana, USA",
+        "Indore, Madhya Pradesh, India",
+        "Indonesia",
+        "Iowa, USA",
+        "Iran",
+        "Iraq",
+        "Ireland",
+        "Israel",
+        "Italy",
+        "Jaipur, Rajasthan, India",
+        "Jaisalmer, Rajasthan, India",
+        "Jamaica",
+        "Jammu and Kashmir, India",
+        "Japan",
+        "Jharkhand, India",
+        "Jodhpur, Rajasthan, India",
+        "Jordan",
+        "Jorhat, Assam, India",
+        "Kalimpong, West Bengal, India",
+        "Kansas, USA",
+        "Kanyakumari, Tamil Nadu, India",
+        "Karnataka, India",
+        "Kasauli, Himachal Pradesh, India",
+        "Kasol, Himachal Pradesh, India",
+        "Kazakhstan",
+        "Kentucky, USA",
+        "Kenya",
+        "Khajuraho, Madhya Pradesh, India",
+        "Kiribati",
+        "Kochi, Kerala, India",
+        "Kodaikanal, Tamil Nadu, India",
+        "Kohima, Nagaland, India",
+        "Kolkata, West Bengal, India",
+        "Konark, Odisha, India",
+        "Kosovo",
+        "Kovalam, Kerala, India",
+        "Kumarakom, Kerala, India",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Ladakh, India",
+        "Lakshadweep, India",
+        "Laos",
+        "Latvia",
+        "Lebanon",
+        "Leh, Ladakh, India",
+        "Lesotho",
+        "Liberia",
+        "Libya",
+        "Liechtenstein",
+        "Lithuania",
+        "Lonavala, Maharashtra, India",
+        "Louisiana, USA",
+        "Lucknow, Uttar Pradesh, India",
+        "Luxembourg",
+        "Macau",
+        "Madagascar",
+        "Madhya Pradesh, India",
+        "Madurai, Tamil Nadu, India",
+        "Mahabaleshwar, Maharashtra, India",
+        "Mahabalipuram, Tamil Nadu, India",
+        "Maharashtra, India",
+        "Maine, USA",
+        "Malawi",
+        "Malaysia",
+        "Maldives",
+        "Mali",
+        "Malta",
+        "Manali, Himachal Pradesh, India",
+        "Manipur, India",
+        "Manitoba, Canada",
+        "Marshall Islands",
+        "Maryland, USA",
+        "Massachusetts, USA",
+        "Mathura, Uttar Pradesh, India",
+        "Mauritania",
+        "Mauritius",
+        "Meghalaya, India",
+        "Mexico",
+        "Michigan, USA",
+        "Micronesia",
+        "Minnesota, USA",
+        "Mississippi, USA",
+        "Missouri, USA",
+        "Mizoram, India",
+        "Moldova",
+        "Monaco",
+        "Mongolia",
+        "Montana, USA",
+        "Montenegro",
+        "Morocco",
+        "Mount Abu, Rajasthan, India",
+        "Mozambique",
+        "Mumbai, Maharashtra, India",
+        "Munnar, Kerala, India",
+        "Mussoorie, Uttarakhand, India",
+        "Myanmar",
+        "Mysore, Karnataka, India",
+        "Nagaland, India",
+        "Nainital, Uttarakhand, India",
+        "Namibia",
+        "Nashik, Maharashtra, India",
+        "Nauru",
+        "Nebraska, USA",
+        "Nepal",
+        "Netherlands",
+        "Nevada, USA",
+        "New Brunswick, Canada",
+        "New Delhi, Delhi, India",
+        "New Hampshire, USA",
+        "New Jersey, USA",
+        "New Mexico, USA",
+        "New York, USA",
+        "New Zealand",
+        "Newfoundland and Labrador, Canada",
+        "Nicaragua",
+        "Niger",
+        "Nigeria",
+        "North Carolina, USA",
+        "North Dakota, USA",
+        "North Korea",
+        "North Macedonia",
+        "Northwest Territories, Canada",
+        "Norway",
+        "Nova Scotia, Canada",
+        "Nunavut, Canada",
+        "Odisha, India",
+        "Ohio, USA",
+        "Oklahoma, USA",
+        "Oman",
+        "Ontario, Canada",
+        "Ooty, Tamil Nadu, India",
+        "Orchha, Madhya Pradesh, India",
+        "Oregon, USA",
+        "Pachmarhi, Madhya Pradesh, India",
+        "Pahalgam, Jammu & Kashmir, India",
+        "Pakistan",
+        "Palau",
+        "Palestine State",
+        "Panama",
+        "Panchgani, Maharashtra, India",
+        "Papua New Guinea",
+        "Paraguay",
+        "Pelling, Sikkim, India",
+        "Pennsylvania, USA",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Pondicherry, India",
+        "Portugal",
+        "Prince Edward Island, Canada",
+        "Puducherry, India",
+        "Pune, Maharashtra, India",
+        "Punjab, India",
+        "Puri, Odisha, India",
+        "Pushkar, Rajasthan, India",
+        "Qatar",
+        "Quebec, Canada",
+        "Rajasthan, India",
+        "Rameswaram, Tamil Nadu, India",
+        "Ranchi, Jharkhand, India",
+        "Rhode Island, USA",
+        "Rishikesh, Uttarakhand, India",
+        "Romania",
+        "Russia",
+        "Rwanda",
+        "Saint Kitts and Nevis",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+        "Samoa",
+        "San Marino",
+        "Sao Tome and Principe",
+        "Saskatchewan, Canada",
+        "Saudi Arabia",
+        "Senegal",
+        "Serbia",
+        "Seychelles",
+        "Shillong, Meghalaya, India",
+        "Shimla, Himachal Pradesh, India",
+        "Shirdi, Maharashtra, India",
+        "Sierra Leone",
+        "Sikkim, India",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "Solomon Islands",
+        "Somalia",
+        "Somnath, Gujarat, India",
+        "South Africa",
+        "South Carolina, USA",
+        "South Dakota, USA",
+        "South Korea",
+        "South Sudan",
+        "Spain",
+        "Sri Lanka",
+        "Srinagar, Jammu & Kashmir, India",
+        "Sudan",
+        "Surat, Gujarat, India",
+        "Suriname",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+        "Taiwan",
+        "Tajikistan",
+        "Tamil Nadu, India",
+        "Tanzania",
+        "Tawang, Arunachal Pradesh, India",
+        "Telangana, India",
+        "Tennessee, USA",
+        "Texas, USA",
+        "Thailand",
+        "Timor-Leste",
+        "Tirupati, Andhra Pradesh, India",
+        "Togo",
+        "Tonga",
+        "Trinidad and Tobago",
+        "Tripura, India",
+        "Trivandrum, Kerala, India",
+        "Tunisia",
+        "Turkey",
+        "Turkmenistan",
+        "Tuvalu",
+        "Udaipur, Rajasthan, India",
+        "Udupi, Karnataka, India",
+        "Uganda",
+        "Ujjain, Madhya Pradesh, India",
+        "Ukraine",
+        "United Arab Emirates",
+        "United Kingdom",
+        "United States of America",
+        "Uruguay",
+        "Utah, USA",
+        "Uttar Pradesh, India",
+        "Uttarakhand, India",
+        "Uzbekistan",
+        "Vadodara, Gujarat, India",
+        "Vanuatu",
+        "Varanasi, Uttar Pradesh, India",
+        "Varkala, Kerala, India",
+        "Vatican City",
+        "Venezuela",
+        "Vermont, USA",
+        "Vietnam",
+        "Virginia, USA",
+        "Visakhapatnam, Andhra Pradesh, India",
+        "Vrindavan, Uttar Pradesh, India",
+        "Washington, USA",
+        "Wayanad, Kerala, India",
+        "West Bengal, India",
+        "West Virginia, USA",
+        "Western Sahara",
+        "Wisconsin, USA",
+        "Wyoming, USA",
+        "Yemen",
+        "Yercaud, Tamil Nadu, India",
+        "Yukon, Canada",
+        "Zambia",
+        "Zimbabwe",
+      ];
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Theme Switching Logic
+        const themeDots = document.querySelectorAll(".theme-dot");
+        const savedTheme = localStorage.getItem("monograph-theme") || "noir";
+
+        const setTheme = (themeId) => {
+          document.documentElement.setAttribute("data-theme", themeId);
+          localStorage.setItem("monograph-theme", themeId);
+
+          themeDots.forEach((dot) => {
+            if (dot.dataset.themeId === themeId) {
+              dot.classList.add("active");
+            } else {
+              dot.classList.remove("active");
+            }
+          });
+        };
+
+        themeDots.forEach((dot) => {
+          dot.addEventListener("click", () => {
+            setTheme(dot.dataset.themeId);
+          });
+        });
+
+        // Initialize theme
+        setTheme(savedTheme);
+
+        const datalist = document.getElementById("country-list");
+
+        function populateDatalist(filteredCountries) {
+          datalist.innerHTML = "";
+          filteredCountries.forEach((country) => {
+            const option = document.createElement("option");
+            option.value = country;
+            datalist.appendChild(option);
+          });
+        }
+
+        // Initial populate with all countries
+        populateDatalist(countries);
+
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        tabBtns.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            // Update active styles
+            tabBtns.forEach((b) => {
+              b.className =
+                "tab-btn pb-[11px] transition-colors hover:text-monograph-text text-monograph-subtle";
+            });
+            e.target.className =
+              "tab-btn border-b-2 border-monograph-text pb-[9px] text-monograph-text";
+
+            const tabId = e.target.id;
+            let filteredCountries = countries;
+
+            if (tabId === "tab-global") {
+              filteredCountries = countries.filter(
+                (c) =>
+                  !c.includes("USA") &&
+                  !c.includes("India") &&
+                  !c.includes("Canada") &&
+                  c !== "United States of America",
+              );
+            } else if (tabId === "tab-india") {
+              filteredCountries = countries.filter(
+                (c) => c.includes("India") && c !== "India",
+              );
+            } else if (tabId === "tab-usa") {
+              filteredCountries = countries.filter(
+                (c) =>
+                  c.includes("USA") &&
+                  c !== "USA" &&
+                  c !== "United States of America",
+              );
+            } else if (tabId === "tab-canada") {
+              filteredCountries = countries.filter(
+                (c) => c.includes("Canada") && c !== "Canada",
+              );
+            }
+
+            populateDatalist(filteredCountries);
+
+            // Reset UI state
+            const grid = document.getElementById("destinations-grid");
+            const resultContainer = document.getElementById("result-container");
+
+            grid.classList.remove("hidden");
+            resultContainer.classList.add("hidden");
+            document.getElementById("destination-search").value = "";
+
+            const allCards = Array.from(
+              grid.querySelectorAll(".destination-card"),
+            );
+
+            const tabName = tabId.replace("tab-", "");
+            allCards.forEach((card) => {
+              if (
+                card.dataset.search.includes("custom curated journey") ||
+                card
+                  .querySelector(".text-monograph-muted")
+                  .textContent.includes("Custom Curated Journey")
+              ) {
+                card.remove();
+              } else {
+                if (card.hasAttribute(`data-tab-${tabName}`)) {
+                  card.style.display = "";
+                } else {
+                  card.style.display = "none";
+                }
+              }
+            });
+          });
+        });
+      });
+
+      function clearSearch() {
+        const searchInput = document.getElementById("destination-search");
+        searchInput.value = "";
+        document.getElementById("clear-search").classList.add("hidden");
+
+        document.getElementById("result-container").classList.add("hidden");
+        const grid = document.getElementById("destinations-grid");
+        grid.classList.remove("hidden");
+
+        const activeTab = document.querySelector(".tab-btn.border-b-2");
+        const tabName = activeTab ? activeTab.id.replace("tab-", "") : "all";
+
+        const allCards = Array.from(grid.querySelectorAll(".destination-card"));
+        allCards.forEach((card) => {
+          if (
+            card.dataset.search.includes("custom curated journey") ||
+            card
+              .querySelector(".text-monograph-muted")
+              .textContent.includes("Custom Curated Journey")
+          ) {
+            card.remove();
+          } else {
+            if (card.hasAttribute(`data-tab-${tabName}`)) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          }
+        });
+      }
+
+      const searchInput = document.getElementById("destination-search");
+      searchInput.addEventListener("input", (e) => {
+        if (e.target.value.trim() !== "") {
+          document.getElementById("clear-search").classList.remove("hidden");
+        } else {
+          clearSearch();
+        }
+      });
+
+      const cards = Array.from(document.querySelectorAll(".destination-card"));
+
+      let cachedItineraryMarkdown = "";
+
+      // Trigger search when user selects a country from the datalist
+      searchInput.addEventListener("change", async (event) => {
+        document.getElementById("clear-search").classList.remove("hidden");
+        const country = event.target.value.trim();
+        if (!country) return;
+
+        const grid = document.getElementById("destinations-grid");
+        const resultContainer = document.getElementById("result-container");
+        resultContainer.classList.add("hidden");
+
+        const allCards = Array.from(grid.querySelectorAll(".destination-card"));
+        let exactMatch = false;
+
+        allCards.forEach((card) => {
+          if (card.dataset.search.includes(country.toLowerCase())) {
+            card.style.display = "";
+            exactMatch = true;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        if (exactMatch) {
+          grid.classList.remove("hidden");
+          return;
+        }
+
+        const existingCustom = grid.querySelector(
+          `[data-search="${country.toLowerCase()}"]`,
+        );
+        if (existingCustom) existingCustom.remove();
+
+        const loadingTileHTML = createTileHTML(
+          country,
+          "Curating...",
+          "Curating...",
+          "7",
+        );
+        grid.insertAdjacentHTML("afterbegin", loadingTileHTML);
+        grid.classList.remove("hidden");
+
+        const insertedTile = grid.querySelector(
+          `[data-search="${country.toLowerCase()}"]`,
+        );
+        const tagsContainer = insertedTile.querySelector(
+          ".mt-3.flex.flex-wrap.gap-2",
+        );
+        const budgetContainer = insertedTile.querySelector(
+          ".mt-3.text-\\[17px\\]",
+        );
+
+        const timeSpan = tagsContainer.querySelector("span");
+
+        try {
+          const response = await fetch("/api/generate-itinerary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: country }),
+          });
+
+          if (response.status === 429) {
+            timeSpan.textContent = "Service Busy";
+            budgetContainer.innerHTML = "Service Busy";
+            return;
+          }
+
+          const data = await response.json();
+          if (data.itinerary) {
+            cachedItineraryMarkdown = data.itinerary;
+
+            let bestTime = "Year Round";
+            const peakMatch = cachedItineraryMarkdown.match(
+              /\|\s*Peak\s*\|\s*([^|]+)\s*\|/,
+            );
+            if (peakMatch && peakMatch[1]) {
+              bestTime = peakMatch[1].trim();
+              // Shorten months to 3 letters
+              const months = {
+                january: "Jan",
+                february: "Feb",
+                march: "Mar",
+                april: "Apr",
+                may: "May",
+                june: "Jun",
+                july: "Jul",
+                august: "Aug",
+                september: "Sep",
+                october: "Oct",
+                november: "Nov",
+                december: "Dec",
+              };
+              bestTime = bestTime.replace(
+                /\b(January|February|March|April|May|June|July|August|September|October|November|December)\b/gi,
+                (match) => months[match.toLowerCase()] || match,
+              );
+            }
+
+            let budget = "~$1,500";
+            const budgetMatch = cachedItineraryMarkdown.match(
+              /\|\s*\*\*(?:[0-9]+-Day)?\s*Total\*\*\s*\|.*?\|\s*\*\*(.+?)\*\*\s*\|/,
+            );
+            if (budgetMatch && budgetMatch[1]) {
+              budget = budgetMatch[1].trim().replace(/\s*per person/i, "");
+            }
+
+            timeSpan.textContent = bestTime;
+            budgetContainer.innerHTML = `${budget} <span class="text-monograph-muted text-[14px]">/ 7 Days</span>`;
+          } else {
+            timeSpan.textContent = "Failed";
+            budgetContainer.innerHTML = "Failed";
+          }
+        } catch (error) {
+          timeSpan.textContent = "Error";
+          budgetContainer.innerHTML = "Error";
+        }
+      });
+
+      function createTileHTML(name, bestTime, budget, days = "7") {
+        const cleanName = encodeURIComponent(name.split(",")[0].trim());
+        let artStyle = `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://loremflickr.com/800/600/${cleanName},landmark/all'); background-size: cover; background-position: center;"`;
+        let minHeight = "min-h-[180px]";
+
+        if (name.toLowerCase().includes("cambodia")) {
+          artStyle = `style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%), url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Buddhist_monks_in_front_of_the_Angkor_Wat.jpg/960px-Buddhist_monks_in_front_of_the_Angkor_Wat.jpg'); background-size: cover; background-position: center;"`;
+        }
+
+        return `<article class="destination-card flex flex-col" data-region="global" data-search="${name.toLowerCase()}">
+          <div class="destination-card__art flex ${minHeight} items-end justify-between border-b border-monograph-border px-6 pb-5 pt-6 bg-gradient-to-br from-[#2a2a2c] to-[#1a1a1c]" ${artStyle}>
+            <div class="relative z-10 w-full">
+              <h2 class="font-serif text-[24px] font-normal leading-tight tracking-[-0.03em] text-monograph-text drop-shadow-lg">
+                ${name}
+              </h2>
+              <p class="mt-1 text-[14px] text-white/90 drop-shadow-md">Custom Curated Journey</p>
+            </div>
+            <div class="relative z-10 text-[32px] opacity-90 drop-shadow-md"></div>
+          </div>
+          
+          <div class="px-6 pb-6 pt-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Best Time
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <span class="border border-monograph-tagBorder bg-monograph-tagBg px-2 py-1 text-[11px] text-monograph-tagText leading-none whitespace-nowrap">${bestTime}</span>
+                </div>
+              </div>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-[11px] uppercase tracking-[0.1em] text-monograph-muted leading-none">
+                  Est. Budget / 7 Days
+                </p>
+                <p class="mt-3 text-[17px] text-monograph-text leading-none flex items-center h-[22px]">
+                  ${budget}
+                </p>
+              </div>
+            </div>
+            <div class="mt-auto grid gap-3 border-t border-dashed border-monograph-border pt-4 xl:grid-cols-3 mt-4">
+              <button type="button" onclick="showItinerary('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:bg-monograph-text hover:text-monograph-bg">
+                Itinerary
+              </button>
+              <button type="button" onclick="generateSurvivalKit('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent">
+                Survival Kit
+              </button>
+              <button type="button" onclick="generateVisa('${name}')" class="h-[40px] border border-monograph-border text-[11px] font-semibold uppercase tracking-[0.16em] text-monograph-text transition-all hover:border-monograph-accent hover:text-monograph-accent">
+                Visa
+              </button>
+            </div>
+          </div>
+        </article>`;
+      }
+
+      function showItinerary(name) {
+        // If the itinerary is already fetched (from custom search), just render it
+        if (
+          cachedItineraryMarkdown &&
+          document
+            .getElementById("destination-search")
+            .value.trim()
+            .toLowerCase() === name.toLowerCase()
+        ) {
+          const resultDiv = document.getElementById("result");
+          resultDiv.innerHTML = marked.parse(cachedItineraryMarkdown);
+
+          document.getElementById("destinations-grid").classList.add("hidden");
+          const resultContainer = document.getElementById("result-container");
+          resultContainer.classList.remove("hidden");
+          document.getElementById("view-itinerary-btn").classList.add("hidden");
+          const survivalBtn = document.getElementById("view-survival-kit-btn");
+          survivalBtn.classList.remove("hidden");
+          survivalBtn.onclick = () => generateSurvivalKit(name);
+          const visaBtn = document.getElementById("view-visa-btn");
+          visaBtn.classList.remove("hidden");
+          visaBtn.onclick = () => generateVisa(name);
+          document.getElementById("result-container").dataset.viewType =
+            "itinerary";
+
+          window.scrollTo({
+            top: resultContainer.offsetTop - 40,
+            behavior: "smooth",
+          });
+        } else {
+          // Fallback if clicked directly on default tiles without searching
+          generateItinerary(name);
+        }
+      }
+
+      async function generateItinerary(countryName) {
+        if (!countryName) return;
+
+        document.getElementById("destination-search").value = countryName;
+
+        const loadingEl = document.getElementById("loading");
+        const resultContainer = document.getElementById("result-container");
+        const grid = document.getElementById("destinations-grid");
+
+        loadingEl.classList.remove("hidden");
+        loadingEl.classList.add("flex");
+        resultContainer.classList.add("hidden");
+        grid.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/generate-itinerary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: countryName }),
+          });
+
+          if (response.status === 429) {
+            alert(
+              "Our service is currently experiencing high demand. Please wait a moment and try again.",
+            );
+            grid.classList.remove("hidden");
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.itinerary) {
+            cachedItineraryMarkdown = data.itinerary;
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = marked.parse(data.itinerary);
+            resultContainer.classList.remove("hidden");
+            document
+              .getElementById("view-itinerary-btn")
+              .classList.add("hidden");
+            const survivalBtn = document.getElementById(
+              "view-survival-kit-btn",
+            );
+            survivalBtn.classList.remove("hidden");
+            survivalBtn.onclick = () => generateSurvivalKit(countryName);
+            const visaBtn = document.getElementById("view-visa-btn");
+            visaBtn.classList.remove("hidden");
+            visaBtn.onclick = () => generateVisa(countryName);
+            document.getElementById("result-container").dataset.viewType =
+              "itinerary";
+
+            window.scrollTo({
+              top: resultContainer.offsetTop - 40,
+              behavior: "smooth",
+            });
+          } else {
+            alert("Failed to curate the itinerary.");
+            grid.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Unable to reach the curation service. Please try again.");
+          grid.classList.remove("hidden");
+        } finally {
+          loadingEl.classList.add("hidden");
+          loadingEl.classList.remove("flex");
+        }
+      }
+
+      async function generateSurvivalKit(countryName) {
+        if (!countryName) return;
+
+        document.getElementById("destination-search").value = countryName;
+
+        const loadingEl = document.getElementById("loading");
+        const resultContainer = document.getElementById("result-container");
+        const grid = document.getElementById("destinations-grid");
+
+        loadingEl.classList.remove("hidden");
+        loadingEl.classList.add("flex");
+        resultContainer.classList.add("hidden");
+        grid.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/generate-survival-kit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: countryName }),
+          });
+
+          if (response.status === 429) {
+            alert(
+              "Our service is currently experiencing high demand. Please wait a moment and try again.",
+            );
+            grid.classList.remove("hidden");
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.survivalKit) {
+            cachedItineraryMarkdown = data.survivalKit; // Cache it for PDF/Word downloads
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = marked.parse(data.survivalKit);
+            resultContainer.classList.remove("hidden");
+            document
+              .getElementById("view-survival-kit-btn")
+              .classList.add("hidden");
+            const itineraryBtn = document.getElementById("view-itinerary-btn");
+            itineraryBtn.classList.remove("hidden");
+            itineraryBtn.onclick = () => generateItinerary(countryName);
+            const visaBtn = document.getElementById("view-visa-btn");
+            visaBtn.classList.remove("hidden");
+            visaBtn.onclick = () => generateVisa(countryName);
+            document.getElementById("result-container").dataset.viewType =
+              "survival_kit";
+
+            window.scrollTo({
+              top: resultContainer.offsetTop - 40,
+              behavior: "smooth",
+            });
+          } else {
+            alert("Failed to curate the survival kit.");
+            grid.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Unable to reach the curation service. Please try again.");
+          grid.classList.remove("hidden");
+        } finally {
+          loadingEl.classList.add("hidden");
+          loadingEl.classList.remove("flex");
+        }
+      }
+
+      async function generateVisa(countryName) {
+        if (!countryName) return;
+
+        let apiCountryName = countryName;
+        const lowerName = countryName.toLowerCase();
+        if (lowerName.includes(", usa") || lowerName === "usa") {
+          apiCountryName = "USA";
+        } else if (lowerName.includes(", india") || lowerName === "india") {
+          apiCountryName = "India";
+        } else if (lowerName.includes(", canada") || lowerName === "canada") {
+          apiCountryName = "Canada";
+        }
+
+        document.getElementById("destination-search").value = countryName;
+
+        const loadingEl = document.getElementById("loading");
+        const resultContainer = document.getElementById("result-container");
+        const grid = document.getElementById("destinations-grid");
+
+        loadingEl.classList.remove("hidden");
+        loadingEl.classList.add("flex");
+        resultContainer.classList.add("hidden");
+        grid.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/generate-visa", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ country: apiCountryName }),
+          });
+
+          if (response.status === 429) {
+            alert(
+              "Our service is currently experiencing high demand. Please wait a moment and try again.",
+            );
+            grid.classList.remove("hidden");
+            return;
+          }
+
+          const data = await response.json();
+
+          if (data.visa) {
+            cachedItineraryMarkdown = data.visa; // Cache it for PDF/Word downloads
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = marked.parse(data.visa);
+            resultContainer.classList.remove("hidden");
+
+            document.getElementById("view-visa-btn").classList.add("hidden");
+
+            const itineraryBtn = document.getElementById("view-itinerary-btn");
+            itineraryBtn.classList.remove("hidden");
+            itineraryBtn.onclick = () => generateItinerary(countryName);
+
+            const survivalBtn = document.getElementById(
+              "view-survival-kit-btn",
+            );
+            survivalBtn.classList.remove("hidden");
+            survivalBtn.onclick = () => generateSurvivalKit(countryName);
+
+            document.getElementById("result-container").dataset.viewType =
+              "visa";
+
+            window.scrollTo({
+              top: resultContainer.offsetTop - 40,
+              behavior: "smooth",
+            });
+          } else {
+            alert("Failed to curate the visa information.");
+            grid.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Unable to reach the curation service. Please try again.");
+          grid.classList.remove("hidden");
+        } finally {
+          loadingEl.classList.add("hidden");
+          loadingEl.classList.remove("flex");
+        }
+      }
+
+      async function downloadPDF() {
+        const content = document.getElementById("result").innerHTML;
+        const country =
+          document.getElementById("destination-search").value || "Itinerary";
+
+        if (!content.trim()) {
+          alert("Please generate an itinerary first.");
+          return;
+        }
+
+        const response = await fetch("/api/download-pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ htmlContent: content, country: country }),
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+
+          const viewType =
+            document.getElementById("result-container").dataset.viewType ||
+            "Itinerary";
+          const docType = viewType;
+
+          a.download = `${country}_${docType}.pdf`;
+          a.click();
+        } else {
+          alert("Could not generate high-quality PDF.");
+        }
+      }
+
+      function downloadWord() {
+        const content = document.getElementById("result").innerHTML;
+
+        const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>Lumiere Itinerary</title>
+          <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6; }
+            h1, h2, h3 { color: #b8860b; font-family: 'Georgia', serif; }
+            h1 { text-align: center; margin-bottom: 24px; }
+            h2 { border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-top: 30px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+            th { background-color: #f9f9f9; color: #b8860b; }
+            blockquote { border-left: 3px solid #b8860b; padding-left: 15px; font-style: italic; }
+            @page WordSection1 {
+              mso-footer: f1;
+            }
+            div.WordSection1 { page: WordSection1; }
+            p.footer-text { text-align: center; font-size: 11px; color: #666666; font-weight: 500; }
+          </style>
+        </head><body><div class="WordSection1">`;
+
+        const currentYear = new Date().getFullYear();
+        const postHtml = `
+          <div style="mso-element:footer" id="f1">
+            <p class="footer-text">
+              COPYRIGHT &copy; 2026 ASH - INSTA: <a href="https://www.instagram.com/ashlydeedward?igsh=MmQ1cG9uMTlmNWc1&amp;utm_source=qr" style="color: #666666; text-decoration: underline;">@ASHTAGRAM</a>
+            </p>
+          </div>
+        </div></body></html>`;
+        const html = preHtml + content + postHtml;
+
+        const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+
+        const url =
+          "data:application/vnd.ms-word;charset=utf-8," +
+          encodeURIComponent(html);
+
+        const country =
+          document.getElementById("destination-search").value || "Itinerary";
+        const viewType =
+          document.getElementById("result-container").dataset.viewType ||
+          "Itinerary";
+        const docType = viewType;
+        const filename = `${country}_${docType}.doc`;
+
+        const downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+          navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+          downloadLink.href = url;
+          downloadLink.download = filename;
+          downloadLink.click();
+        }
+        document.body.removeChild(downloadLink);
+      }
+    </script>
+    <script>
+      // Firebase configuration (from your project, copied from Firebase console)
+      window.MONOGRAPH_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBEETopTr4rT97s22WT4kZERN09notevuQ",
+        authDomain: "travel-guide-2c40f.firebaseapp.com",
+        projectId: "travel-guide-2c40f",
+        storageBucket: "travel-guide-2c40f.firebasestorage.app",
+        messagingSenderId: "120186895013",
+        appId: "1:120186895013:web:7fada33a9bd212d943eb4c",
+      };
+
+      const dailyViewsEl = document.querySelector("#daily-views");
+      const totalViewsEl = document.querySelector("#total-views");
+      const reportButton = document.querySelector("#report-button");
+
+      const getDateKey = (date = new Date()) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      };
+
+      const updateViewDisplay = async () => {
+        try {
+          const response = await fetch("/api/get-view-reports");
+          const data = await response.json();
+
+          if (data) {
+            dailyViewsEl.textContent = data.today || 0;
+            totalViewsEl.textContent = data.total || 0;
+          }
+        } catch (error) {
+          console.error("Error fetching view reports:", error);
+        }
+      };
+
+      const recordPageView = async () => {
+        try {
+          await fetch("/api/record-view", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}), // Empty body for a simple POST
+          });
+          updateViewDisplay(); // Update display after recording view
+        } catch (error) {
+          console.error("Error recording page view:", error);
+        }
+      };
+
+      // Initial load
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM Content Loaded - recording page view");
+        recordPageView();
+
+        // Open report page in a new window
+        if (reportButton) {
+          reportButton.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default link behavior
+            window.open(reportButton.href, "_blank", "width=800,height=600");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

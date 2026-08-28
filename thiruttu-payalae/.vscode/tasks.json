@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "package-shaded-jar",
+      "type": "shell",
+      "command": "mvn clean package",
+      "args": [],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "run-mcp-shaded-jar",
+      "type": "shell",
+      "command": "java",
+      "args": ["-jar", "target/movies-mcp-server-1.0.0.jar", "--db=movies.db"],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

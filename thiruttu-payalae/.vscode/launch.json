@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run MCP Server (Shaded Jar)",
+      "request": "launch",
+      "mainClass": "com.example.moviesmcp.Main",
+      "projectName": "movies-mcp-server",
+      "cwd": "${workspaceFolder}",
+      "args": "--db=movies.db",
+      "vmArgs": "",
+      "console": "integratedTerminal",
+      "preLaunchTask": "package-shaded-jar"
+    }
+  ]
+}
