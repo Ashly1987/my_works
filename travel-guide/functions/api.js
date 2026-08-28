@@ -10,6 +10,9 @@ import puppeteer from 'puppeteer-core';
 import chromium from '@sparticuz/chromium';
 import admin from 'firebase-admin';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Initialize Firebase Admin SDK
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
@@ -19,7 +22,7 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
   });
 }
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -37,6 +40,60 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const itineraryFramework = fs.readFileSync(path.resolve(__dirname, '../UNIVERSAL_TRAVEL_ITINERARY_SKILL.md'), 'utf8');
 const survivalKitFramework = fs.readFileSync(path.resolve(__dirname, '../TRAVEL_SURVIVAL_KIT_SKILL.md'), 'utf8');
 const visaFramework = fs.readFileSync(path.resolve(__dirname, '../visa_requirements_generic_template.md'), 'utf8');
+
+const localViewReports = {
+    total: 0,
+    allDailyViews: {},
+};
+
+const getDateKey = (date = new Date()) => date.toISOString().slice(0, 10);
+
+const buildViewReport = () => {
+    const todayKey = getDateKey();
+    const report = {
+        today: localViewReports.allDailyViews[todayKey]?.count || 0,
+        total: localViewReports.total,
+        days7: { count: 0 },
+        days14: { count: 0 },
+        days30: { count: 0 },
+        allDailyViews: localViewReports.allDailyViews,
+    };
+
+    for (let index = 0; index < 30; index += 1) {
+        const date = new Date();
+        date.setDate(date.getDate() - index);
+        const count = localViewReports.allDailyViews[getDateKey(date)]?.count || 0;
+
+        if (index < 7) report.days7.count += count;
+        if (index < 14) report.days14.count += count;
+        report.days30.count += count;
+    }
+
+    return report;
+};
+
+app.get('/api/get-view-reports', (_req, res) => {
+    res.json(buildViewReport());
+});
+
+app.post('/api/record-view', (req, res) => {
+    const todayKey = getDateKey();
+    const location = req.body?.location || 'Unknown';
+
+    if (!localViewReports.allDailyViews[todayKey]) {
+        localViewReports.allDailyViews[todayKey] = {
+            count: 0,
+            locations: {},
+        };
+    }
+
+    localViewReports.total += 1;
+    localViewReports.allDailyViews[todayKey].count += 1;
+    localViewReports.allDailyViews[todayKey].locations[location] =
+        (localViewReports.allDailyViews[todayKey].locations[location] || 0) + 1;
+
+    res.status(201).json(buildViewReport());
+});
 
 
 app.post('/api/generate-itinerary', async (req, res) => {

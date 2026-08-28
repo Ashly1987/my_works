@@ -23,6 +23,6 @@
     "firebase-admin": "*",
     "jsdom": "*",
     "puppeteer-core": "*",
-    "serverless-http": "*"
+    "serverless-http": "^4.0.0"
   }
 }
