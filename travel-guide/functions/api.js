@@ -419,9 +419,15 @@ app.post('/api/download-pdf', async (req, res) => {
                         body { background: #1a1a1a; color: #f0f0f0; font-family: 'Montserrat', sans-serif; padding: 50px; }
                         h1, h2, h3 { color: #d4af37; font-family: 'Cormorant Garamond', serif; }
                         p, li { color: #a0a0a0; line-height: 1.6; }
+                        a { color: #d7b86d; text-decoration: underline; text-underline-offset: 2px; }
                         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
                         th, td { border-bottom: 1px solid #333; padding: 12px; text-align: left; }
                         th { color: #d4af37; }
+                        .content-toc { margin: 20px 0 30px; padding: 16px 18px; border: 1px solid #3b3b3b; background: #202020; }
+                        .content-toc__title { margin: 0 0 10px; color: #d7b86d; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+                        .content-toc__links { columns: 2; column-gap: 28px; margin: 0; padding-left: 18px; }
+                        .content-toc__links li { break-inside: avoid; margin: 0 0 6px; }
+                        .content-toc__links a { color: #d7b86d; text-decoration: none; }
                         .export-credit { margin-top: 42px; padding-top: 14px; border-top: 1px solid #333; text-align: center; color: #999999; font-size: 11px; font-weight: 500; }
                         .export-credit a { color: #999999; text-decoration: underline; }
                     </style>

@@ -5393,6 +5393,11 @@
           }
           usedIds.add(id);
           heading.id = id;
+          const wordBookmark = document.createElement("a");
+          wordBookmark.name = id;
+          wordBookmark.setAttribute("aria-hidden", "true");
+          wordBookmark.className = "content-toc__bookmark";
+          heading.insertAdjacentElement("beforebegin", wordBookmark);
         });
 
         const toc = document.createElement("nav");
@@ -5414,7 +5419,12 @@
         });
 
         toc.append(title, links);
-        resultDiv.insertBefore(toc, resultDiv.firstChild);
+        const documentTitle = resultDiv.querySelector("h1");
+        if (documentTitle) {
+          documentTitle.insertAdjacentElement("afterend", toc);
+        } else {
+          resultDiv.insertBefore(toc, resultDiv.firstChild);
+        }
       }
 
       async function generateItinerary(countryName) {
@@ -5704,6 +5714,11 @@
             }
             div.WordSection1 { page: WordSection1; }
             p.footer-text { text-align: center; font-size: 11px; color: #666666; font-weight: 500; }
+            .content-toc { margin: 20px 0 28px; padding: 14px 16px; border: 1px solid #ded6c8; background: #faf8f3; }
+            .content-toc__title { margin: 0 0 10px; color: #8d6b2d; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+            .content-toc__links { margin: 0; padding-left: 20px; }
+            .content-toc__links li { margin: 4px 0; }
+            .content-toc__links a, a { color: #8d6b2d; text-decoration: underline; }
           </style>
         </head><body><div class="WordSection1">`;
 
