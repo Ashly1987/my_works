@@ -4979,6 +4979,10 @@
             return;
           }
 
+          if (!response.ok) {
+            throw new Error(`Itinerary request failed (${response.status}): ${await response.text()}`);
+          }
+
           const data = await response.json();
           if (data.itinerary) {
             cachedItineraryMarkdown = data.itinerary;
@@ -5146,6 +5150,10 @@
             );
             grid.classList.remove("hidden");
             return;
+          }
+
+          if (!response.ok) {
+            throw new Error(`Itinerary request failed (${response.status}): ${await response.text()}`);
           }
 
           const data = await response.json();
