@@ -500,6 +500,24 @@
       }
 
       @media (max-width: 768px) {
+        header > div {
+          flex-wrap: wrap;
+          gap: 0.7rem;
+        }
+
+        .brand-lockup {
+          width: 100%;
+        }
+
+        .brand-lockup > div {
+          white-space: nowrap;
+        }
+
+        .header-controls {
+          width: 100%;
+          justify-content: space-between;
+        }
+
         .views-panel {
           min-width: auto;
           padding: 6px 10px;
@@ -550,11 +568,27 @@
           overflow-wrap: anywhere;
         }
 
-        #result table {
-          display: block;
+        #result .table-scroll {
           width: 100%;
+          margin: 1.25rem 0;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
+          overscroll-behavior-x: contain;
+          border: 1px solid var(--color-border);
+        }
+
+        #result .table-scroll table {
+          display: table;
+          width: max-content;
+          min-width: 680px;
+          max-width: none;
+          margin: 0;
+        }
+
+        #result .table-scroll th,
+        #result .table-scroll td {
+          white-space: normal;
+          overflow-wrap: normal;
         }
       }
 
@@ -670,7 +704,7 @@
         </div>
 
         <!-- Right: Mobile Switcher + Stats Panel -->
-        <div class="flex items-center gap-3">
+        <div class="header-controls flex items-center gap-3">
           <div class="theme-switcher md:hidden !p-1.5 !gap-2">
             <div class="theme-dot active !w-3.5 !h-3.5" data-theme-id="obsidian"></div>
             <div class="theme-dot !w-3.5 !h-3.5" data-theme-id="emerald"></div>
@@ -5425,6 +5459,14 @@
         } else {
           resultDiv.insertBefore(toc, resultDiv.firstChild);
         }
+
+        resultDiv.querySelectorAll("table").forEach((table) => {
+          if (table.parentElement?.classList.contains("table-scroll")) return;
+          const scrollArea = document.createElement("div");
+          scrollArea.className = "table-scroll";
+          table.parentNode.insertBefore(scrollArea, table);
+          scrollArea.appendChild(table);
+        });
       }
 
       async function generateItinerary(countryName) {
