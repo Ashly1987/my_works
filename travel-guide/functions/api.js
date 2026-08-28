@@ -14,13 +14,23 @@ import admin from 'firebase-admin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Firebase Admin SDK
+let firestoreDb = null;
+
+// Firebase is optional locally, but required in production for persistent reports.
+// A bad environment variable must not prevent the rest of the site from starting.
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    projectId: process.env.GCP_PROJECT_ID,
-  });
+  try {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    const firebaseApp = admin.apps.length
+      ? admin.app()
+      : admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+          projectId: process.env.GCP_PROJECT_ID || serviceAccount.project_id,
+        });
+    firestoreDb = firebaseApp.firestore();
+  } catch (error) {
+    console.error('Firebase Admin initialization failed. Reports will use temporary memory.', error);
+  }
 }
 
 export const app = express();
@@ -88,21 +98,21 @@ const localViewReports = {
 
 const getDateKey = (date = new Date()) => date.toISOString().slice(0, 10);
 
-const buildViewReport = () => {
+const buildViewReport = (viewData = localViewReports) => {
     const todayKey = getDateKey();
     const report = {
-        today: localViewReports.allDailyViews[todayKey]?.count || 0,
-        total: localViewReports.total,
+        today: viewData.allDailyViews?.[todayKey]?.count || 0,
+        total: viewData.total || 0,
         days7: { count: 0 },
         days14: { count: 0 },
         days30: { count: 0 },
-        allDailyViews: localViewReports.allDailyViews,
+        allDailyViews: viewData.allDailyViews || {},
     };
 
     for (let index = 0; index < 30; index += 1) {
         const date = new Date();
         date.setDate(date.getDate() - index);
-        const count = localViewReports.allDailyViews[getDateKey(date)]?.count || 0;
+        const count = viewData.allDailyViews?.[getDateKey(date)]?.count || 0;
 
         if (index < 7) report.days7.count += count;
         if (index < 14) report.days14.count += count;
@@ -112,19 +122,11 @@ const buildViewReport = () => {
     return report;
 };
 
-app.get('/api/get-view-reports', (_req, res) => {
-    res.json(buildViewReport());
-});
-
-app.post('/api/record-view', (req, res) => {
+const recordLocalView = (location) => {
     const todayKey = getDateKey();
-    const location = req.body?.location || 'Unknown';
 
     if (!localViewReports.allDailyViews[todayKey]) {
-        localViewReports.allDailyViews[todayKey] = {
-            count: 0,
-            locations: {},
-        };
+        localViewReports.allDailyViews[todayKey] = { count: 0, locations: {} };
     }
 
     localViewReports.total += 1;
@@ -132,7 +134,54 @@ app.post('/api/record-view', (req, res) => {
     localViewReports.allDailyViews[todayKey].locations[location] =
         (localViewReports.allDailyViews[todayKey].locations[location] || 0) + 1;
 
-    res.status(201).json(buildViewReport());
+    return localViewReports;
+};
+
+const reportsDocument = () => firestoreDb.collection('analytics').doc('viewReports');
+
+app.get('/api/get-view-reports', async (_req, res) => {
+    try {
+        if (!firestoreDb) return res.json(buildViewReport());
+
+        const snapshot = await reportsDocument().get();
+        return res.json(buildViewReport(snapshot.exists ? snapshot.data() : undefined));
+    } catch (error) {
+        console.error('Unable to read view reports from Firestore.', error);
+        return res.status(500).json({ error: 'Unable to load view reports.' });
+    }
+});
+
+app.post('/api/record-view', async (req, res) => {
+    const location = String(req.body?.location || 'Location unavailable').slice(0, 120);
+
+    try {
+        if (!firestoreDb) return res.status(201).json(buildViewReport(recordLocalView(location)));
+
+        const updatedData = await firestoreDb.runTransaction(async (transaction) => {
+            const document = reportsDocument();
+            const snapshot = await transaction.get(document);
+            const viewData = snapshot.exists ? snapshot.data() : { total: 0, allDailyViews: {} };
+            const todayKey = getDateKey();
+            const allDailyViews = { ...(viewData.allDailyViews || {}) };
+            const todayViews = { ...(allDailyViews[todayKey] || { count: 0, locations: {} }) };
+            const locations = { ...(todayViews.locations || {}) };
+
+            locations[location] = (locations[location] || 0) + 1;
+            allDailyViews[todayKey] = { count: (todayViews.count || 0) + 1, locations };
+
+            const nextData = { total: (viewData.total || 0) + 1, allDailyViews };
+            transaction.set(document, {
+                ...nextData,
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+            return nextData;
+        });
+
+        return res.status(201).json(buildViewReport(updatedData));
+    } catch (error) {
+        console.error('Unable to record view in Firestore.', error);
+        return res.status(500).json({ error: 'Unable to record view.' });
+    }
 });
 
 
