@@ -412,6 +412,50 @@
         transform: rotate(45deg);
       }
 
+      .content-toc {
+        margin: 0 0 2.5rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--color-border);
+        background: var(--color-surface-soft);
+      }
+
+      .content-toc__title {
+        margin: 0 0 0.7rem;
+        color: var(--color-accent);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .content-toc__links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 0.45rem 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .content-toc__links a {
+        display: block;
+        color: var(--color-muted);
+        font-size: 13px;
+        line-height: 1.4;
+        text-decoration: none;
+      }
+
+      .content-toc__links a:hover {
+        color: var(--color-accent);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      #result h2,
+      #result h3 {
+        scroll-margin-top: 110px;
+      }
+
       @media (min-width: 769px) {
         .views-panel {
           min-width: 140px;
@@ -5305,6 +5349,7 @@
         ) {
           const resultDiv = document.getElementById("result");
           resultDiv.innerHTML = marked.parse(cachedItineraryMarkdown);
+          addContentTableOfContents(resultDiv);
 
           document.getElementById("destinations-grid").classList.add("hidden");
           const resultContainer = document.getElementById("result-container");
@@ -5327,6 +5372,49 @@
           // Fallback if clicked directly on default tiles without searching
           generateItinerary(name);
         }
+      }
+
+      function addContentTableOfContents(resultDiv) {
+        resultDiv.querySelector(".content-toc")?.remove();
+        const headings = Array.from(resultDiv.querySelectorAll("h2, h3"));
+        if (headings.length < 2) return;
+
+        const usedIds = new Set();
+        headings.forEach((heading, index) => {
+          const baseId = (heading.textContent || `section-${index + 1}`)
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "") || `section-${index + 1}`;
+          let id = baseId;
+          let suffix = 2;
+          while (usedIds.has(id) || document.getElementById(id)) {
+            id = `${baseId}-${suffix++}`;
+          }
+          usedIds.add(id);
+          heading.id = id;
+        });
+
+        const toc = document.createElement("nav");
+        toc.className = "content-toc";
+        toc.setAttribute("aria-label", "On this page");
+        const title = document.createElement("p");
+        title.className = "content-toc__title";
+        title.textContent = "On this page";
+        const links = document.createElement("ul");
+        links.className = "content-toc__links";
+
+        headings.forEach((heading) => {
+          const item = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = `#${heading.id}`;
+          link.textContent = heading.textContent;
+          item.appendChild(link);
+          links.appendChild(item);
+        });
+
+        toc.append(title, links);
+        resultDiv.insertBefore(toc, resultDiv.firstChild);
       }
 
       async function generateItinerary(countryName) {
@@ -5368,6 +5456,7 @@
             cachedItineraryMarkdown = data.itinerary;
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.itinerary);
+            addContentTableOfContents(resultDiv);
             resultContainer.classList.remove("hidden");
             document
               .getElementById("view-itinerary-btn")
@@ -5436,6 +5525,7 @@
             cachedItineraryMarkdown = data.survivalKit; // Cache it for PDF/Word downloads
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.survivalKit);
+            addContentTableOfContents(resultDiv);
             resultContainer.classList.remove("hidden");
             document
               .getElementById("view-survival-kit-btn")
@@ -5512,6 +5602,7 @@
             cachedItineraryMarkdown = data.visa; // Cache it for PDF/Word downloads
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = marked.parse(data.visa);
+            addContentTableOfContents(resultDiv);
             resultContainer.classList.remove("hidden");
 
             document.getElementById("view-visa-btn").classList.add("hidden");

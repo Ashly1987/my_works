@@ -272,14 +272,20 @@ Generate the itinerary for: ${userCountry}.
 
     } catch (error) {
         console.error("❌ Fatal Error: Both models failed.", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorStatus = Number(error?.status);
         
-        if (error.status === 429 || error.status === 503 || error.message.includes("429") || error.message.includes("503")) {
-            return res.status(error.status || 503).json({ 
+        if (errorStatus === 429 || errorStatus === 503 || errorMessage.includes("429") || errorMessage.includes("503")) {
+            return res.status(errorStatus || 503).json({
                 error: "Our service is currently experiencing high demand. Please wait about 60 seconds and try again." 
             });
         }
         
-        res.status(500).json({ error: "Failed to generate itinerary. Please try again later." });
+        res.status(500).json({
+            error: "Failed to generate itinerary. Please try again later.",
+            // Keep production responses minimal, but make a local setup issue actionable.
+            ...(process.env.VERCEL ? {} : { detail: errorMessage }),
+        });
     }
 });
 
