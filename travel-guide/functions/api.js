@@ -446,7 +446,9 @@ app.post('/api/download-pdf', async (req, res) => {
         console.error('Error generating PDF:', error);
         res.status(500).json({
             error: 'Could not generate PDF.',
-            detail: process.env.NODE_ENV === 'production' ? undefined : error.message,
+            // This error is surfaced to the site owner to diagnose a missing
+            // Chromium runtime dependency. It contains no request content.
+            detail: error instanceof Error ? error.message : String(error),
         });
     } finally {
         if (browser) await browser.close().catch(() => {});
