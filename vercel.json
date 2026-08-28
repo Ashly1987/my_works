@@ -1,21 +1,26 @@
 {
   "version": 2,
-  "rewrites": [
+  "installCommand": "cd travel-guide && npm ci",
+  "functions": {
+    "api/[...path].js": {
+      "includeFiles": "travel-guide/data/**"
+    }
+  },
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "/travel-guide/api/:path*"
+      "handle": "filesystem"
     },
     {
-      "source": "/favicon.ico",
-      "destination": "/travel-guide/public/favicon.ico"
+      "src": "/favicon.ico",
+      "dest": "/travel-guide/public/favicon.ico"
     },
     {
-      "source": "/",
-      "destination": "/travel-guide/public/index.html"
+      "src": "/",
+      "dest": "/travel-guide/public/index.html"
     },
     {
-      "source": "/:path+",
-      "destination": "/travel-guide/public/:path+"
+      "src": "/(.*)",
+      "dest": "/travel-guide/public/$1"
     }
   ]
 }
