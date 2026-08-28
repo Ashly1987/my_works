@@ -393,6 +393,11 @@ app.post('/api/download-pdf', async (req, res) => {
     let browser;
     
     try {
+        if (!htmlContent) return res.status(400).json({ error: 'Document content is required.' });
+
+        // PDF rendering does not use WebGL. Disabling it makes Chromium lighter
+        // and more reliable in Vercel's serverless environment.
+        chromium.setGraphicsMode = false;
         browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
@@ -439,7 +444,10 @@ app.post('/api/download-pdf', async (req, res) => {
         res.send(pdf);
     } catch (error) {
         console.error('Error generating PDF:', error);
-        res.status(500).json({ error: "Could not generate PDF. Check the Vercel function logs for the Chromium error." });
+        res.status(500).json({
+            error: 'Could not generate PDF.',
+            detail: process.env.NODE_ENV === 'production' ? undefined : error.message,
+        });
     } finally {
         if (browser) await browser.close().catch(() => {});
     }
