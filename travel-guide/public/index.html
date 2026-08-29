@@ -327,6 +327,12 @@
         gap: 12px;
       }
 
+      .site-shell {
+        box-sizing: border-box;
+        width: min(100%, 1120px);
+        margin-inline: auto;
+      }
+
       .brand-lockup {
         display: flex;
         flex-direction: column;
@@ -457,6 +463,10 @@
       }
 
       @media (min-width: 769px) {
+        .site-header__inner {
+          padding-inline: 2rem;
+        }
+
         .views-panel {
           min-width: 140px;
           gap: 8px;
@@ -500,13 +510,12 @@
       }
 
       @media (max-width: 768px) {
-        header > div {
+        .site-header__inner {
           display: grid !important;
           grid-template-columns: minmax(0, 60fr) minmax(0, 10fr) minmax(0, 30fr);
           align-items: center;
           gap: 0;
-          padding-right: 8px !important;
-          padding-left: 8px !important;
+          padding: 0.75rem 0.5rem !important;
         }
 
         .brand-lockup {
@@ -545,7 +554,7 @@
         .views-panel {
           min-width: auto;
           width: 100%;
-          padding: 4px 5px;
+          padding: 5px;
         }
         .views-panel__head {
           display: flex;
@@ -560,12 +569,17 @@
         }
         .theme-switcher {
           justify-self: center;
-          gap: 3px;
-          padding: 2px;
+          gap: 2px !important;
+          padding: 1px !important;
         }
         .theme-dot {
-          width: 14px;
-          height: 14px;
+          width: 11px !important;
+          height: 11px !important;
+          border-width: 1px;
+        }
+
+        .theme-dot.active {
+          box-shadow: 0 0 5px var(--color-accent);
         }
 
         #views-title,
@@ -580,6 +594,10 @@
 
         .views-stat strong {
           font-size: 12px;
+        }
+
+        main.site-shell {
+          padding-top: 2.75rem;
         }
 
         #result-container {
@@ -728,7 +746,7 @@
   <body class="min-h-screen font-sans antialiased">
     <header class="border-b border-monograph-border bg-monograph-surface sticky top-0 z-50">
       <div
-        class="mx-auto flex h-auto md:h-[82px] w-full max-w-[1120px] items-center justify-between px-4 py-4 md:px-8 md:py-0 relative"
+        class="site-shell site-header__inner flex h-auto md:h-[82px] items-center justify-between px-4 py-4 md:py-0 relative"
       >
         <!-- Left: Branding -->
         <div class="brand-lockup">
@@ -776,28 +794,7 @@
       </div>
     </header>
 
-        <!-- <div class="flex items-center gap-6 text-monograph-text">
-          <button
-            type="button"
-            aria-label="Bookmarks"
-            class="transition-opacity hover:opacity-70"
-          >
-            <span class="material-symbols-outlined text-[26px]">bookmark</span>
-          </button>
-          <button
-            type="button"
-            aria-label="Account"
-            class="transition-opacity hover:opacity-70"
-          >
-            <span class="material-symbols-outlined text-[28px]"
-              >account_circle</span
-            >
-          </button>
-        </div>-->
-      </div>
-    </header>
-
-    <main class="mx-auto w-full max-w-[1120px] px-6 pb-20 pt-14 md:px-8">
+    <main class="site-shell px-6 pb-20 pt-14 md:px-8">
       <section class="max-w-[760px]">
         <h1
           class="font-serif text-[36px] font-normal leading-none tracking-[-0.04em] text-monograph-text md:text-[42px]"
