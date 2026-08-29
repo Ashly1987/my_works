@@ -195,6 +195,7 @@ const countries = [
   "Kazakhstan",
   "Kentucky, USA",
   "Kenya",
+  "Kerala, India",
   "Khajuraho, Madhya Pradesh, India",
   "Kiribati",
   "Kochi, Kerala, India",
