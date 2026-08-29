@@ -512,18 +512,16 @@
       @media (max-width: 768px) {
         .site-header__inner {
           display: grid !important;
-          grid-template-columns: minmax(0, 1fr) max-content;
+          grid-template-columns: minmax(0, 60fr) minmax(0, 10fr) minmax(0, 30fr);
           align-items: center;
-          column-gap: 0.75rem;
-          row-gap: 0.625rem;
-          padding: 0.75rem 1rem !important;
+          gap: 0;
+          padding: 0.75rem 0.5rem !important;
         }
 
         .brand-lockup {
           width: 100%;
           min-width: 0;
           grid-column: 1;
-          grid-row: 1;
         }
 
         .brand-lockup > div {
@@ -535,6 +533,7 @@
         .brand-tagline {
           font-size: 8px;
           letter-spacing: 0.13em;
+          margin-top: 4px;
           white-space: nowrap;
         }
 
@@ -544,24 +543,19 @@
 
         .header-controls > .theme-switcher {
           grid-column: 2;
-          grid-row: 1;
           justify-self: center;
+          min-width: 0;
         }
 
         .header-controls > .views-panel {
-          grid-column: 1 / -1;
-          grid-row: 2;
+          grid-column: 3;
           min-width: 0;
         }
 
         .views-panel {
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
           min-width: auto;
           width: 100%;
-          gap: 0.5rem;
-          padding: 0.4rem 0.55rem;
+          padding: 4px 5px;
         }
         .views-panel__head {
           display: flex;
@@ -572,10 +566,7 @@
           white-space: nowrap;
         }
         .views-stats {
-          flex: 1;
-          justify-content: flex-end;
-          gap: 0.5rem;
-          margin-top: 0;
+          gap: 4px;
         }
         .theme-switcher {
           justify-self: center;
