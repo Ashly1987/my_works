@@ -553,6 +553,7 @@
         }
 
         .views-panel {
+          box-sizing: border-box;
           min-width: auto;
           width: 100%;
           padding: 4px 5px;
@@ -566,7 +567,8 @@
           white-space: nowrap;
         }
         .views-stats {
-          gap: 4px;
+          gap: 2px;
+          min-width: 0;
         }
         .theme-switcher {
           justify-self: center;
@@ -586,15 +588,17 @@
         #views-title,
         .report-button,
         .views-stat span {
-          font-size: 9px;
+          font-size: 8px;
         }
 
         .views-stat {
-          gap: 3px;
+          min-width: 0;
+          gap: 2px;
         }
 
         .views-stat strong {
-          font-size: 12px;
+          font-size: 10px;
+          line-height: 1;
         }
 
         main.site-shell {
