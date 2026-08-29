@@ -512,10 +512,10 @@
       @media (max-width: 768px) {
         .site-header__inner {
           display: grid !important;
-          grid-template-columns: minmax(0, 60fr) minmax(0, 10fr) minmax(0, 30fr);
+          grid-template-columns: minmax(0, 1fr) max-content minmax(108px, 30%);
           align-items: center;
-          gap: 0;
-          padding: 0.75rem 0.5rem !important;
+          column-gap: 10px;
+          padding: 0.75rem 1rem !important;
         }
 
         .brand-lockup {
@@ -549,7 +549,7 @@
 
         .header-controls > .views-panel {
           grid-column: 3;
-          min-width: 0;
+          min-width: 108px;
         }
 
         .views-panel {
