@@ -501,51 +501,85 @@
 
       @media (max-width: 768px) {
         header > div {
-          flex-wrap: nowrap;
-          gap: 0.45rem;
+          display: grid !important;
+          grid-template-columns: minmax(0, 60fr) minmax(0, 10fr) minmax(0, 30fr);
+          align-items: center;
+          gap: 0;
+          padding-right: 8px !important;
+          padding-left: 8px !important;
         }
 
         .brand-lockup {
-          width: auto;
+          width: 100%;
           min-width: 0;
-          flex: 1 1 auto;
+          grid-column: 1;
         }
 
         .brand-lockup > div {
           white-space: nowrap;
-          font-size: 12px !important;
+          font-size: 14px !important;
           line-height: 1.05;
         }
 
         .brand-tagline {
-          font-size: 7px;
+          font-size: 8px;
           letter-spacing: 0.13em;
           white-space: nowrap;
         }
 
         .header-controls {
-          width: auto;
-          flex: 0 0 auto;
-          gap: 0.45rem;
+          display: contents !important;
+        }
+
+        .header-controls > .theme-switcher {
+          grid-column: 2;
+          justify-self: center;
+          min-width: 0;
+        }
+
+        .header-controls > .views-panel {
+          grid-column: 3;
+          min-width: 0;
         }
 
         .views-panel {
           min-width: auto;
-          padding: 5px 8px;
+          width: 100%;
+          padding: 4px 5px;
         }
         .views-panel__head {
-          gap: 7px;
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 4px;
+          white-space: nowrap;
         }
         .views-stats {
-          gap: 7px;
+          gap: 4px;
         }
         .theme-switcher {
-          gap: 5px;
-          padding: 3px;
+          justify-self: center;
+          gap: 3px;
+          padding: 2px;
         }
         .theme-dot {
           width: 14px;
           height: 14px;
+        }
+
+        #views-title,
+        .report-button,
+        .views-stat span {
+          font-size: 9px;
+        }
+
+        .views-stat {
+          gap: 3px;
+        }
+
+        .views-stat strong {
+          font-size: 12px;
         }
 
         #result-container {
@@ -4799,6 +4833,7 @@
         "Kazakhstan",
         "Kentucky, USA",
         "Kenya",
+        "Kerala, India",
         "Khajuraho, Madhya Pradesh, India",
         "Kiribati",
         "Kochi, Kerala, India",
