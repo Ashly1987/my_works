@@ -484,6 +484,12 @@
         text-underline-offset: 3px;
       }
 
+      .search-message {
+        margin-top: 0.75rem;
+        color: var(--color-accent);
+        font-size: 13px;
+      }
+
       #result h2,
       #result h3 {
         scroll-margin-top: 110px;
@@ -941,6 +947,7 @@
             Canada
           </button>
         </div>
+        <p id="search-message" class="search-message hidden" role="status"></p>
       </section>
 
       <section class="mt-10 max-w-[600px]">
@@ -5281,6 +5288,9 @@
         const searchInput = document.getElementById("destination-search");
         searchInput.value = "";
         document.getElementById("clear-search").classList.add("hidden");
+        const searchMessage = document.getElementById("search-message");
+        searchMessage.classList.add("hidden");
+        searchMessage.textContent = "";
 
         document.getElementById("result-container").classList.add("hidden");
         const grid = document.getElementById("destinations-grid");
@@ -5326,6 +5336,22 @@
         document.getElementById("clear-search").classList.remove("hidden");
         const country = event.target.value.trim();
         if (!country) return;
+
+        const searchMessage = document.getElementById("search-message");
+        searchMessage.classList.add("hidden");
+        searchMessage.textContent = "";
+
+        if (!countries.includes(country)) {
+          const grid = document.getElementById("destinations-grid");
+          grid.querySelectorAll(".destination-card").forEach((card) => {
+            card.style.display = "none";
+          });
+          grid.classList.remove("hidden");
+          searchMessage.textContent =
+            "Please search only the countries or Indian States/UTs or USA/Canada provinces.";
+          searchMessage.classList.remove("hidden");
+          return;
+        }
 
         const grid = document.getElementById("destinations-grid");
         const resultContainer = document.getElementById("result-container");
