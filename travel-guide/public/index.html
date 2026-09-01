@@ -5330,6 +5330,13 @@
       const cards = Array.from(document.querySelectorAll(".destination-card"));
 
       let cachedItineraryMarkdown = "";
+      const schengenVisaCountries = new Set([
+        "Austria", "Belgium", "Bulgaria", "Croatia", "Czechia", "Czech Republic",
+        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
+        "Iceland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
+        "Malta", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia",
+        "Slovenia", "Spain", "Sweden", "Switzerland",
+      ]);
 
       // Trigger search when user selects a country from the datalist
       searchInput.addEventListener("change", async (event) => {
@@ -5769,7 +5776,9 @@
 
         let apiCountryName = countryName;
         const lowerName = countryName.toLowerCase();
-        if (lowerName.includes(", usa") || lowerName === "usa") {
+        if (schengenVisaCountries.has(countryName)) {
+          apiCountryName = "Schengen";
+        } else if (lowerName.includes(", usa") || lowerName === "usa") {
           apiCountryName = "USA";
         } else if (lowerName.includes(", india") || lowerName === "india") {
           apiCountryName = "India";
