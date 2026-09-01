@@ -59,6 +59,14 @@ const toFileSlug = (value) => String(value)
 
 const toComparableSlug = (value) => toFileSlug(value).replace(/_+/g, '_');
 
+const schengenVisaCountries = new Set([
+  'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Czechia', 'Czech Republic',
+  'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary',
+  'Iceland', 'Italy', 'Latvia', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+  'Malta', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Slovakia',
+  'Slovenia', 'Spain', 'Sweden', 'Switzerland',
+]);
+
 // To re-enable AI generation in the future, restore the Gemini import above and
 // this client/helper. Keep it disabled while the JSON library is the source of truth.
 // const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -72,7 +80,10 @@ const toComparableSlug = (value) => toFileSlug(value).replace(/_+/g, '_');
 
 const loadGuide = (guideType, country) => {
   const directory = guideDirectories[guideType];
-  const requestedSlug = toFileSlug(country);
+  const visaCountry = guideType === 'visa' && schengenVisaCountries.has(String(country).trim())
+    ? 'Schengen'
+    : country;
+  const requestedSlug = toFileSlug(visaCountry);
   const exactPath = path.join(directory, `${requestedSlug}.json`);
   let filePath = fs.existsSync(exactPath) ? exactPath : null;
 
