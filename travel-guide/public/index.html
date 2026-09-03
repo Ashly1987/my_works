@@ -5368,7 +5368,8 @@
         let exactMatch = false;
 
         allCards.forEach((card) => {
-          if (card.dataset.search.includes(country.toLowerCase())) {
+          const cardName = card.querySelector("h2")?.textContent.trim().toLowerCase();
+          if (cardName === country.toLowerCase()) {
             card.style.display = "";
             exactMatch = true;
           } else {
