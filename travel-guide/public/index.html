@@ -16,10 +16,10 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://travel-ash.vercel.app/" />
-    <meta
+    <!--<meta 
       property="og:image"
       content="https://travel-ash.vercel.app/og-image.png"
-    />
+    /> -->
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Travel Easy With Ash" />
@@ -5331,11 +5331,36 @@
 
       let cachedItineraryMarkdown = "";
       const schengenVisaCountries = new Set([
-        "Austria", "Belgium", "Bulgaria", "Croatia", "Czechia", "Czech Republic",
-        "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary",
-        "Iceland", "Italy", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
-        "Malta", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Slovakia",
-        "Slovenia", "Spain", "Sweden", "Switzerland",
+        "Austria",
+        "Belgium",
+        "Bulgaria",
+        "Croatia",
+        "Czechia",
+        "Czech Republic",
+        "Denmark",
+        "Estonia",
+        "Finland",
+        "France",
+        "Germany",
+        "Greece",
+        "Hungary",
+        "Iceland",
+        "Italy",
+        "Latvia",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+        "Malta",
+        "Netherlands",
+        "Norway",
+        "Poland",
+        "Portugal",
+        "Romania",
+        "Slovakia",
+        "Slovenia",
+        "Spain",
+        "Sweden",
+        "Switzerland",
       ]);
 
       // Trigger search when user selects a country from the datalist
@@ -5368,7 +5393,10 @@
         let exactMatch = false;
 
         allCards.forEach((card) => {
-          const cardName = card.querySelector("h2")?.textContent.trim().toLowerCase();
+          const cardName = card
+            .querySelector("h2")
+            ?.textContent.trim()
+            .toLowerCase();
           if (cardName === country.toLowerCase()) {
             card.style.display = "";
             exactMatch = true;
